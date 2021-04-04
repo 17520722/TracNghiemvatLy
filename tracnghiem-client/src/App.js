@@ -11,14 +11,11 @@ import {
 export default function App() {
   return (
     <Router>
-      <div>
-        <Header/>
         <Switch>
           {routes.map((route, i) => (
             <RouteWithSubRoutes key={i} {...route} />
           ))}
         </Switch>
-      </div>
     </Router>
   );
 }
