@@ -25,7 +25,7 @@ const routes = [
   },
   {
     path: "/admin",
-    exact: true,
+    exact: false,
     component: AdminPage,
     routes: [
       {

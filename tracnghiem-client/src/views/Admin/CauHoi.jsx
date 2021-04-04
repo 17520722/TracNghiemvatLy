@@ -1,4 +1,5 @@
 import { Component } from "react";
+import callApi from "../../utils/apiCalller";
 
 export default class CauHoiPage extends Component {
   constructor(props) {
@@ -41,9 +42,15 @@ export default class CauHoiPage extends Component {
   }
 
   handleSubmit = (event) => {
-
+    var {txt_noidung, dapan, select_doKho, select_dangToan} = this.state;
     event.preventDefault();
-    localStorage.setItem("CauHoi", JSON.stringify(this.state));
+
+    callApi("cau-hoi", "POST", {
+      txt_noidung: txt_noidung,
+      dapan: [dapan.dapan1, dapan.dapan2, dapan.dapan3, dapan.dapan4],
+      select_doKho: select_doKho,
+      select_dangToan: select_dangToan,
+    });
     
   };
 

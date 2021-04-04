@@ -1,0 +1,33 @@
+.footer-prop {
+    background-color: black;
+    color: white;
+    height: 200px;
+}
+
+.logo-prop {
+    font-size: 36pt;
+    text-align: center;
+}
+
+.footer-title-test {
+    font-size: 13pt;
+    font-weight: 500;
+}
+
+.linked {
+    color: white;
+}
+.linked:hover {
+    color: #AAA;
+}
+
+li {
+    list-style-type: none;
+    color: #AAA;
+    margin-left: 0;
+}
+
+i {
+    font-size: 18pt;
+    margin-right: 16px;
+}

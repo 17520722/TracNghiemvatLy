@@ -1,11 +1,10 @@
 import React from "react";
-import Header from "./components/Header";
 import routes from "./routes"
+import "./App.css"
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 
 export default function App() {
@@ -15,14 +14,11 @@ export default function App() {
           {routes.map((route, i) => (
             <RouteWithSubRoutes key={i} {...route} />
           ))}
-        </Switch>
+        </Switch>        
     </Router>
   );
 }
 
-// A special wrapper for <Route> that knows how to
-// handle "sub"-routes by passing them in a `routes`
-// prop to the component it renders.
 function RouteWithSubRoutes(route) {
   return (
     <Route

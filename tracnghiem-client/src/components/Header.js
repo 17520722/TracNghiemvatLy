@@ -36,6 +36,11 @@ export default class Header extends Component {
                 DeThi
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/login">
+                DeThi
+              </Link>
+            </li>
           </ul>
         </div>
       </nav>
