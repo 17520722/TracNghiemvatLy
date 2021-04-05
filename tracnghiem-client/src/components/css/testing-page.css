@@ -1,0 +1,50 @@
+.btn {
+    border-radius: 20px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.list-question-part {
+    background-color: #FFF;
+    margin-bottom: 5px;
+}
+
+.list-ques-wrapper {
+    padding: 1rem;
+    border: 1px solid #2AA367;
+    border-radius: 20px;
+}
+
+.list-number-wrapper {
+    padding: 1rem;
+    border: 1px solid #2AA367;
+    border-radius: 20px;
+}
+
+.one-answer {
+    font-size: 14pt;
+    width: fit-content;
+}
+
+.number-of-list {
+    height: 30px;
+    width: 30px;
+    margin: 2px;
+    border-radius: 50%;
+    background-color: #FFF;
+    border: 1px solid green;
+    text-align: center;
+}
+
+.time-finnish {
+    margin-top: 5px;
+}
+
+.time-title {
+    font-size: 13pt;
+    font-weight: 500;
+}
+
+.finnish {
+    text-align: center;
+}

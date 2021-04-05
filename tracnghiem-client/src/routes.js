@@ -5,12 +5,23 @@ import CauHoiPage from "./views/Admin/CauHoi";
 import LoginPage from "./views/login-page";
 import Page404 from "./views/404";
 import SignInPage from "./views/sign-in";
+import TestingPage from "./views/TestingPage";
+import Home from "./views/Home";
 
 const routes = [
-  
   {
-    path: "/home",
+    path: "/",
     exact: true,
+    component: Home,
+  },
+  {
+    path: "/home/testing",
+    exact: false,
+    component: TestingPage,
+  },
+  {
+    path: "/home/welcome",
+    exact: false,
     component: HomePage,
   },
   {
@@ -25,25 +36,18 @@ const routes = [
   },
   {
     path: "/admin",
-    exact: false,
+    exact: true,
     component: AdminPage,
-    routes: [
-      {
-        path: "/admin/de-thi",
-        exact: false,
-        component: DeThiPage,
-      },
-      {
-        path: "/admin/cau-hoi",
-        exact: false,
-        component: CauHoiPage,
-      },
-    ]
   },
   {
-    path: "/",
-    exact: true,
-    component: HomePage,
+    path: "/admin/cau-hoi",
+    exact: false,
+    component: CauHoiPage,
+  },
+  {
+    path: "/admin/de-thi",
+    exact: false,
+    component: DeThiPage,
   },
   {
     path: "**",
@@ -52,4 +56,6 @@ const routes = [
   },
 ];
 
-export default routes;
+export {
+  routes,
+};

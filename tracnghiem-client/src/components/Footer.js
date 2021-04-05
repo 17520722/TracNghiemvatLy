@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import { URL_FACEBOOK, URL_TELEGRAM, URL_TWITTER } from "../constants/linked";
 
 import "./css/footer.css";

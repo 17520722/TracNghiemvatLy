@@ -5,7 +5,7 @@ export default class Header extends Component {
   render() {
     return (
       <nav className="navbar navbar-expand-md navbar-light bg-light">
-        <a className="navbar-brand" href="." aria-disabled>
+        <a className="navbar-brand" href="/" aria-disabled>
           Navbar
         </a>
         <button
@@ -22,7 +22,7 @@ export default class Header extends Component {
         <div className="collapse navbar-collapse" id="collapsibleNavId">
           <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
             <li className="nav-item active">
-              <Link className="nav-link" to="/home">
+              <Link className="nav-link" to="/">
                 Home <span className="sr-only">(current)</span>
               </Link>
             </li>
@@ -33,12 +33,12 @@ export default class Header extends Component {
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/admin/de-thi">
-                DeThi
+                Đề thi
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/login">
-                DeThi
+                Đăng nhập
               </Link>
             </li>
           </ul>
