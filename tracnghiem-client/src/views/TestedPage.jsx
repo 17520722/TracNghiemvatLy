@@ -3,7 +3,7 @@ import "../css/testing-page.css";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
-import Question from "../components/Question";
+import MathJax from "react-mathjax-preview";
 
 const questions = [
   {
@@ -80,13 +80,25 @@ const questions = [
   },
 ];
 
-export default class TestingPage extends Component {
+const abcArr = ["A", "B", "C", "D"];
 
-  renderQuestion = (questions) => {
+export default class TestedPage extends Component {
+  renderQuestion = (cauhoi) => {
     var result = null;
-    if (questions.length > 0) {
-      result = questions.map((question, index) => {
-        return <Question key={index} question={question} number={index + 1} />;
+    if (cauhoi.length > 0) {
+      result = cauhoi.map((c, index) => {
+        return (
+          <div>
+            <p>
+              <MathJax math={`Câu ${index + 1}: ${c.content}`}/>
+            </p>
+            {c.setOfAnswer.map((da, i) => {
+              return <p className="one-answer">
+                <MathJax math={`${abcArr[i]}. ${da.content} `}/>
+              </p>;
+            })}
+          </div>
+        );
       });
     }
     return result;
@@ -95,11 +107,7 @@ export default class TestingPage extends Component {
   showListNumber = () => {
     var result = [];
     for (var i = 1; i <= 40; i++) {
-      result.push(
-        <div key={i} id={`num${i}`} className="number-of-list">
-          {i}
-        </div>
-      );
+      result.push(<div key={i} className="number-of-list">{i}</div>);
     }
     return result;
   };
@@ -114,15 +122,28 @@ export default class TestingPage extends Component {
               {this.renderQuestion(questions)}
             </div>
           </div>
-          <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3 list-num-position">
+          <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <div className="list-number-wrapper row">
               {this.showListNumber()}
             </div>
             <div className="time-finnish row">
-              <div className="col-6 time-title">Thời gian 60:00</div>
-              <div className="col-6 finnish">
-                <Link to="/home/tested">
-                  <button className="btn btn-danger">Kết thúc</button>
+              <div className="col-12 time-title">Kết quả đúng: 50/50</div>
+              <div className="col-12 time-title">Điểm: 10</div>
+              <div className="col-12 time-title">Thời gian làm bài: 10:34</div>
+
+              <div className="col-6 time-title">
+                <Link to="/home/statistic">
+                  <button className="btn btn-primary mt-2">Thống kê</button>
+                </Link>
+              </div>
+              <div className="col-6 time-title">
+                <Link to="/home/welcome">
+                  <button className="btn btn-danger mt-2">Thoát</button>
+                </Link>
+              </div>
+              <div className="col-6 time-title">
+                <Link to="/home/evaluated">
+                  <button className="btn btn-primary mt-2">Đánh giá</button>
                 </Link>
               </div>
             </div>

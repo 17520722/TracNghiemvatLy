@@ -12,7 +12,7 @@ export default class HomePage extends Component {
         <div className="home-page-prop">
           <div className="container-fluid banner-prop">
             <img src={banner} alt="banner" />
-            <button className="btn btn-start">Bắt đầu</button>
+            <Link className="btn btn-start" to="/home/create-test">Bắt đầu</Link>
           </div>
           <div className="botton-content">
             <div className="class-button-wrapper">

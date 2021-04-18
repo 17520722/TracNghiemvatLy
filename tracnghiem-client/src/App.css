@@ -39,6 +39,11 @@
 
 /*CSS for app*/
 
+a:hover {
+  color: white;
+  opacity: 80%;
+}
+
 .center {
   margin-left: 25%;
 }
@@ -49,6 +54,10 @@
 
 .margin-16 {
   margin: 16px;
+}
+
+.pad-right-16 {
+  padding-right: 16px;
 }
 
 .banner-prop {

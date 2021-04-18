@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "node index.js",
-    "client": "npm run start --prefix tracnghiem-client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "server": "node index.js"
   },
   "keywords": [],
   "author": "",

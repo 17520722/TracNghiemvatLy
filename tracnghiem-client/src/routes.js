@@ -7,6 +7,10 @@ import Page404 from "./views/404";
 import SignInPage from "./views/sign-in";
 import TestingPage from "./views/TestingPage";
 import Home from "./views/Home";
+import TestedPage from "./views/TestedPage";
+import EvaluatedPage from "./views/EvaluatedPage";
+import StatisticPage from "./views/StatisticPage";
+import CreatedPage from "./views/CreatedTestPage";
 
 const routes = [
   {
@@ -15,14 +19,39 @@ const routes = [
     component: Home,
   },
   {
-    path: "/home/testing",
-    exact: false,
-    component: TestingPage,
+    path: "/home",
+    exact: true,
+    component: Home,
   },
   {
     path: "/home/welcome",
     exact: false,
     component: HomePage,
+  },
+  {
+    path: "/home/testing",
+    exact: false,
+    component: TestingPage,
+  },
+  {
+    path: "/home/tested",
+    exact: false,
+    component: TestedPage,
+  },
+  {
+    path: "/home/evaluated",
+    exact: false,
+    component: EvaluatedPage,
+  },
+  {
+    path: "/home/statistic",
+    exact: false,
+    component: StatisticPage,
+  },
+  {
+    path: "/home/create-test",
+    exact: false,
+    component: CreatedPage,
   },
   {
     path: "/login",

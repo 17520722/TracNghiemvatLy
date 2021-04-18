@@ -1,3 +1,4 @@
+
 .btn {
     border-radius: 20px;
     padding-left: 16px;
@@ -26,12 +27,17 @@
     width: fit-content;
 }
 
+.list-num-position {
+    position: fixed;
+    top: auto;
+    right: 0;
+}
+
 .number-of-list {
     height: 30px;
     width: 30px;
     margin: 2px;
     border-radius: 50%;
-    background-color: #FFF;
     border: 1px solid green;
     text-align: center;
 }

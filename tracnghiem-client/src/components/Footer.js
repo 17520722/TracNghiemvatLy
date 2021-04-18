@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { URL_FACEBOOK, URL_TELEGRAM, URL_TWITTER } from "../constants/linked";
 
-import "./css/footer.css";
+import "../css/footer.css";
 
 export default class Footer extends Component {
   render() {
