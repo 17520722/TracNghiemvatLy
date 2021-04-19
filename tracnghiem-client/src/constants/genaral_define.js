@@ -55,4 +55,6 @@ export const term = [
         id: "2",
         term: "Học kỳ 2"
     }
-]
+];
+
+export const QUESTIONS_PER_PAGE = 10;

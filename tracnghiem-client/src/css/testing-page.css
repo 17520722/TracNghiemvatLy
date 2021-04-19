@@ -14,6 +14,8 @@
     padding: 1rem;
     border: 1px solid #2AA367;
     border-radius: 20px;
+    margin-left: 2rem;
+    margin-right: 1rem;
 }
 
 .list-number-wrapper {
@@ -23,8 +25,8 @@
 }
 
 .one-answer {
-    font-size: 14pt;
     width: fit-content;
+    height: auto;
 }
 
 .list-num-position {
