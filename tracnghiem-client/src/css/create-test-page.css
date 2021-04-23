@@ -1,0 +1,61 @@
+.title-create-test {
+  font-size: 16pt;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 0.3rem;
+  color: #165636;
+}
+
+.side-block {
+  background-color: white;
+  height: 600px;
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.side-block-content {
+  border: 1px solid #2aa367;
+  border-radius: 10px;
+  height: 100%;
+  margin-left: 1rem;
+}
+
+.form-wrapper {
+  margin-bottom: 1rem;
+}
+
+.form-content {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.topic-props option {
+  border-top: 1px solid #165636;
+}
+
+.topic-props option:hover {
+  background-color: #3FA32A;
+  color: white;
+}
+
+.selected-topic-btn {
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+.selected-topic-btn:hover {
+  transition: 0.3s;
+  background-color: #d9534f;
+  border: 1px solid #d9534f;
+}
+
+.deleted_topic_wrapper i {
+  color: black;
+  font-size: 12pt;
+  visibility: hidden;
+}
+
+.deleted_topic_wrapper:hover i{
+  visibility: visible;
+}
+

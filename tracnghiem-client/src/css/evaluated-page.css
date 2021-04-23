@@ -1,0 +1,39 @@
+.side-block {
+  background-color: white;
+  height: 200px;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.side-block-content {
+  border: 1px solid #2aa367;
+  border-radius: 10px;
+  height: 100%;
+  margin-left: 1rem;
+}
+
+.info-test {
+  font-weight: 500;
+  font-size: 13pt;
+  margin-top: 0.3rem;
+}
+
+.title-table {
+  width: 200px;
+}
+
+.btn-nav-bottom {
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+  height: 50px;
+}
+
+.btn-wrapper {
+  position: absolute;
+  right: 2rem;
+}
+
+.btn-prop {
+  margin-left: 1rem;
+}
