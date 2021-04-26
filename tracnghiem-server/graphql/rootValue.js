@@ -127,12 +127,10 @@ const findQuestion = async(id) => {
 }
 
 const findQuestions = async(ids) => {
-	let objectRespone = [];
-
-	for (let index = 0; index < ids.length; index++) {
+	const promises = ids.map(async(id) => {
 		try {
 			//tim cau hoi
-			let object = await QuestionModel.findOne({_id: ids[index]});
+			let object = await QuestionModel.findOne({_id: id});
 			let jsonObj = JSON.parse(JSON.stringify(object));
 			//neu tim duoc thi tim ca cau tra loi trong truong setOfAnswer
 			if (object) {
@@ -142,14 +140,14 @@ const findQuestions = async(ids) => {
 				jsonObj.topic = await findItem(jsonObj.topicId, TopicModel);
 			}
 
-			objectRespone.push(jsonObj);
+			return jsonObj;
 		}
 		catch(e) {
 			console.log(e);
 		}
-	}
-
-	return objectRespone;
+	}); 
+	const arrPromises = await Promise.all(promises);
+	return arrPromises;
 }
 
 const root = {
@@ -276,42 +274,61 @@ const root = {
 
 	//------------------For Test Model--------------------------
 	test: async({id}) => {
-		
+		try {
+			//tim cau hoi
+			let object = await TestModel.findOne({_id: id});
+			let jsonObj = JSON.parse(JSON.stringify(object));
+			//neu tim duoc thi tim ca cau tra loi trong truong setOfAnswer
+			findQuestions(jsonObj.setOfRemember).then((res) => {
+				jsonObj.setOfRemember = res;
+			});
+			findQuestions(jsonObj.setOfUnderstand).then((res) => {
+				jsonObj.setOfUnderstand = res;
+			});
+			findQuestions(jsonObj.setOfApply).then((res) => {
+				jsonObj.setOfApply = res;
+			});
+			findQuestions(jsonObj.setOfAnalyzing).then((res) => {
+				jsonObj.setOfAnalyzing = res;
+			});
+			console.log(jsonObj);
+			return jsonObj;
+		}
+		catch(e) {
+			console.log(e);
+			return null;
+		}
 	},
 
-	tests: async({ids}) => {
-		let objectRespone = [];
-
-		for (let index = 0; index < ids.length; index++) {
+	tests: async({ids = []}) => {
+		const promises = ids.map(async(id) => {
 			try {
 				//tim cau hoi
-				let object = await TestModel.findOne({_id: ids[index]});
+				let object = await TestModel.findOne({_id: id});
 				let jsonObj = JSON.parse(JSON.stringify(object));
 				//neu tim duoc thi tim ca cau tra loi trong truong setOfAnswer
-				const _1 = await findQuestions(jsonObj.setOfRemember).then((res) => {
+				await findQuestions(jsonObj.setOfRemember).then((res) => {
 					jsonObj.setOfRemember = res;
 				});
-				const _2 = await findQuestions(jsonObj.setOfRemember).then((res) => {
+				await findQuestions(jsonObj.setOfUnderstand).then((res) => {
 					jsonObj.setOfUnderstand = res;
 				});
-				const _3 = await findQuestions(jsonObj.setOfRemember).then((res) => {
+				await findQuestions(jsonObj.setOfApply).then((res) => {
 					jsonObj.setOfApply = res;
 				});
-				const _4 = await findQuestions(jsonObj.setOfRemember).then((res) => {
+				await findQuestions(jsonObj.setOfAnalyzing).then((res) => {
 					jsonObj.setOfAnalyzing = res;
 				});
-
-				await Promise.all([_1, _2, _3, _4]);
-
 				console.log(jsonObj);
-				objectRespone.push(jsonObj);
+				return jsonObj;
 			}
 			catch(e) {
 				console.log(e);
 			}
-		}
+		});
 
-		return objectRespone;
+		const arrPromises = await Promise.all(promises);
+		return arrPromises;
 	},
 
 	createTest: async({input}) => {
