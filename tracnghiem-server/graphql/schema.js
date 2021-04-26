@@ -28,17 +28,19 @@ const answerSchema = `
 const questionSchema = `
      input QuestionInput {
           content: String
-          setOfAnswer: [String]
+          setOfAnswerId: [ID]
           level: Int
-          topic: String
+          topic: ID
      }
 
      type Question {
           _id: ID
           content: String
-          setOfAnswer: [String]
+          setOfAnswerId: [ID]
+          setOfAnswer: [Answer]
           level: Int
-          topic: String
+          topicId: ID
+          topic: Topic
      }
 `
 
@@ -82,12 +84,12 @@ const testSchema = `
 const evaluatedDoc = `
      input EvaluatedDocInput {
           content: String
-          test: ID
+          testId: ID
      }
      type EvaluatedDoc {
           _id: ID
           content: String
-          test: Test
+          testId: Test
      }
 `
 
@@ -108,17 +110,17 @@ const userSchema = `
           _id: ID
           username: String
           info: String
-          listOfTest: [Test]
-          listOfEvaluatedDoc: [EvaluatedDoc]
+          listOfTest: [ID]
+          listOfEvaluatedDoc: [ID]
      }
 `
 
 const abilitySchema = `
      type Ability {
           _id: ID
-          topic: Topic
+          topicId: ID
           ability: String
-          user: User
+          userId: ID
      }
 `
 
@@ -127,7 +129,7 @@ const generatedTestSchema = `
           _id: ID
           numberOfQuestion: Int
           levelOfDifficult: Int
-          setOfTopic: [Topic]
+          setOfTopic: [ID]
      }
 `
 
@@ -145,12 +147,20 @@ const specialSchema = `
           answers(ids: [ID]): [Answer]
           allAnswer: [Answer]
 
-          questions: [Question]
+          allQuestion: [Question]
+          questions(ids: [ID]): [Question]
           question(id: ID!): Question
 
           user(id: ID): User
           allUser: [User]
           users(setOfId: [ID]): [User]
+
+          answered(id: ID): Answered
+          answereds(ids: [ID]): [Answered]
+
+          test(id: ID): Test
+          tests(ids: [ID]): [Test]
+
      }
 
      type Mutation {
@@ -165,6 +175,12 @@ const specialSchema = `
 
           createUser(input: UserInput): Response
           updateUser(id: ID!, input: UserUpdate): Response
+
+          createAnswered(input: AnsweredInput): Response
+          updateAnswered(id: ID!, input: AnsweredInput): Response
+
+          createTest(input: TestInput): Response
+          updateTest(id: ID!, input: TestInput): Response
      }
 `
 

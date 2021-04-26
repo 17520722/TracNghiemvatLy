@@ -2,6 +2,27 @@ const QuestionModel = require("../models/Question");
 const UserModel = require("../models/User");
 const TopicModel = require("../models/Topic");
 const AnswerModel = require("../models/Answer");
+const AnsweredModel = require("../models/Answered");
+const TestModel = require("../models/Test")
+
+const findItem = async(id, modelName) => {
+	return await modelName.findOne({_id: id});
+}
+
+const findItems = async (ids = [], modelName) => {
+	const promise = ids.map(async (item) => {
+		try {
+			const res = await modelName.findOne({_id: item});
+			return res;
+		}
+		catch(e) {
+			console.log(e);
+		}
+	});
+
+	const respone = await Promise.all(promise);
+	return respone;
+}
 
 const createItem = async (input, modelName, objectName=null, exact=true) => {
 	const query = {
@@ -90,8 +111,43 @@ const findAllItem = async(modelName) => {
 		if (err) console.log(err);
 	});
 
-	console.log(objectRespone);
 	return objectRespone;
+}
+
+const findQuestion = async(id) => {
+	const objectResponse = await QuestionModel.findOne({_id: id});
+	let jsonObj = JSON.parse(JSON.stringify(objectResponse));
+
+	await findItems(jsonObj.setOfAnswerId, AnswerModel).then((res) => {
+		jsonObj.setOfAnswer = res;
+	});
+	jsonObj.topic = await findItem(jsonObj.topicId, TopicModel);
+
+	return jsonObj;
+}
+
+const findQuestions = async(ids) => {
+	const promises = ids.map(async(id) => {
+		try {
+			//tim cau hoi
+			let object = await QuestionModel.findOne({_id: id});
+			let jsonObj = JSON.parse(JSON.stringify(object));
+			//neu tim duoc thi tim ca cau tra loi trong truong setOfAnswer
+			if (object) {
+				await findItems(jsonObj.setOfAnswerId, AnswerModel).then((res) => {
+					jsonObj.setOfAnswer = res;
+				});
+				jsonObj.topic = await findItem(jsonObj.topicId, TopicModel);
+			}
+
+			return jsonObj;
+		}
+		catch(e) {
+			console.log(e);
+		}
+	}); 
+	const arrPromises = await Promise.all(promises);
+	return arrPromises;
 }
 
 const root = {
@@ -130,18 +186,9 @@ const root = {
 	answers: async({ids}) => {
 		let objectRespone = [];
 
-		await ids.forEach(item => {
-			try {
-				objectRespone.push(AnswerModel.findOne({_id: item}));
-
-				console.log("inserted");
-				console.log(objectRespone);
-			}
-			catch {
-				console.log("err find item");
-			}
+		await findItems(ids, AnswerModel).then((res) => {
+			objectRespone = res;
 		});
-		console.log("end");
 		return objectRespone;
 	},
 
@@ -166,13 +213,26 @@ const root = {
 		}
 	}
 	*/
-	questions: async() => {
+	allQuestion: async() => {
 		const objectRespone = await QuestionModel.find({}, (err, result) => {
 			if (err) console.log(err);
 		});
 
-		console.log(objectRespone);
-		return objectRespone;
+		let respone = [];
+		for (let index = 0; index < objectRespone.length; index++) {
+			let jsonObj = JSON.parse(JSON.stringify(objectRespone[index]));
+
+			await findItems(jsonObj.setOfAnswerId, AnswerModel).then((res) => {
+				jsonObj.setOfAnswer = res;
+			});
+			jsonObj.topic = await findItem(jsonObj.topicId, TopicModel);
+			respone.push(jsonObj);
+		}
+		return respone;
+	},
+
+	questions: ({ids}) => {
+		return findQuestions(ids);
 	},
 
 	//get one question
@@ -183,68 +243,100 @@ const root = {
 		}
 	}
 	*/
-	question: async({id}) => {
-		return await QuestionModel.findOne({_id: id});
+	question: ({id}) => {
+		return findQuestion(id);
 	},
 
 	createQuestion: ({input}) => {
 		return createItem(input, QuestionModel);
 	},
 
-	updateQuestion: async({id, input}) => {
-		console.log("------------------------")
-
-		try {
-			const objectRespone = await QuestionModel.updateOne({_id: id},
-				{
-					$set: input
-				});
-		}
-		catch {
-			return {
-				code: 500,
-				content: "? can't update data!"
-			};
-		}
-
-		return {
-			code: 201,
-			content: "Updated!"
-		};
+	updateQuestion: ({id, input}) => {
+		return updateItem(id, input, QuestionModel);
 	},
 
 	//------------------For Answered Model ---------------------
-	answered: async({answerId}) => {
-
+	answered: async({id}) => {
+		return findItem(id, AnsweredModel);
 	},
 
-	answereds: async({answerIds}) => {
-
+	answereds: async({ids}) => {
+		return findItems(ids, AnsweredModel);
 	},
 
 	createAnswered: async({input}) => {
-
+		return createItem(input, AnsweredModel);
 	},
 
-	updateAnswered: async({answerId, input}) => {
-
+	updateAnswered: async({id, input}) => {
+		return updateItem(id, input, AnsweredModel);
 	},
 
 	//------------------For Test Model--------------------------
 	test: async({id}) => {
-
+		try {
+			//tim cau hoi
+			let object = await TestModel.findOne({_id: id});
+			let jsonObj = JSON.parse(JSON.stringify(object));
+			//neu tim duoc thi tim ca cau tra loi trong truong setOfAnswer
+			findQuestions(jsonObj.setOfRemember).then((res) => {
+				jsonObj.setOfRemember = res;
+			});
+			findQuestions(jsonObj.setOfUnderstand).then((res) => {
+				jsonObj.setOfUnderstand = res;
+			});
+			findQuestions(jsonObj.setOfApply).then((res) => {
+				jsonObj.setOfApply = res;
+			});
+			findQuestions(jsonObj.setOfAnalyzing).then((res) => {
+				jsonObj.setOfAnalyzing = res;
+			});
+			console.log(jsonObj);
+			return jsonObj;
+		}
+		catch(e) {
+			console.log(e);
+			return null;
+		}
 	},
 
-	tests: async({ids}) => {
+	tests: async({ids = []}) => {
+		const promises = ids.map(async(id) => {
+			try {
+				//tim cau hoi
+				let object = await TestModel.findOne({_id: id});
+				let jsonObj = JSON.parse(JSON.stringify(object));
+				//neu tim duoc thi tim ca cau tra loi trong truong setOfAnswer
+				await findQuestions(jsonObj.setOfRemember).then((res) => {
+					jsonObj.setOfRemember = res;
+				});
+				await findQuestions(jsonObj.setOfUnderstand).then((res) => {
+					jsonObj.setOfUnderstand = res;
+				});
+				await findQuestions(jsonObj.setOfApply).then((res) => {
+					jsonObj.setOfApply = res;
+				});
+				await findQuestions(jsonObj.setOfAnalyzing).then((res) => {
+					jsonObj.setOfAnalyzing = res;
+				});
+				console.log(jsonObj);
+				return jsonObj;
+			}
+			catch(e) {
+				console.log(e);
+			}
+		});
 
+		const arrPromises = await Promise.all(promises);
+		return arrPromises;
 	},
 
 	createTest: async({input}) => {
-
+		return createItem(input, TestModel);
 	},
 
 	updateTest: async({id, input}) => {
-
+		return updateItem(id, input, TestModel);
 	},
 
 	//-------------------For evaluatedDoc Model-----------------
