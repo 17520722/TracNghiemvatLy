@@ -3,100 +3,73 @@ import "../css/testing-page.css";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
-import MathJax from "react-mathjax-preview";
-
-const questions = [
-  {
-    content:
-      "Một vật chuyển động thẳng đều với vận tốc v. Chọn trục toạ độ ox có phương trùng với phương chuyển động, chiều dương là chiều chuyển động, gốc toạ độ O cách  vị  trí vật xuất phát một  khoảng $OA={x}_{0}$ . Phương trình chuyển động của vật là:",
-    setOfAnswer: [
-      {
-        content: "$x=x_{0}+v_{0} t-\\frac{1}{2} a t^{2}$",
-        isCorrect: false,
-      },
-      {
-        content: "$x=x_{0}+{vt}$",
-        isCorrect: false,
-      },
-      {
-        content: "$x=v_{0} t+\\frac{1}{2} a t^{2}$",
-        isCorrect: true,
-      },
-      {
-        content: "$x=x_{0}+v_{0} t+\\frac{1}{2} a t^{2}$",
-        isCorrect: false,
-      },
-    ],
-    level: 2,
-    topic: "Bài mẫu",
-  },
-  {
-    content:
-      "Một vật chuyển động thẳng đều với vận tốc v. Chọn trục toạ độ ox có phương trùng với phương chuyển động, chiều dương là chiều chuyển động, gốc toạ độ O cách  vị  trí vật xuất phát một  khoảng $OA={x}_{0}$ . Phương trình chuyển động của vật là:",
-    setOfAnswer: [
-      {
-        content: "$x=x_{0}+v_{0} t-\\frac{1}{2} a t^{2}$",
-        isCorrect: false,
-      },
-      {
-        content: "$x=x_{0}+{vt}$",
-        isCorrect: false,
-      },
-      {
-        content: "$x=v_{0} t+\\frac{1}{2} a t^{2}$",
-        isCorrect: true,
-      },
-      {
-        content: "$x=x_{0}+v_{0} t+\\frac{1}{2} a t^{2}$",
-        isCorrect: false,
-      },
-    ],
-    level: 2,
-    topic: "Bài mẫu",
-  },
-  {
-    content:
-      "Một vật chuyển động thẳng đều với vận tốc v. Chọn trục toạ độ ox có phương trùng với phương chuyển động, chiều dương là chiều chuyển động, gốc toạ độ O cách  vị  trí vật xuất phát một  khoảng $OA={x}_{0}$ . Phương trình chuyển động của vật là:",
-    setOfAnswer: [
-      {
-        content: "$x=x_{0}+v_{0} t-\\frac{1}{2} a t^{2}$",
-        isCorrect: false,
-      },
-      {
-        content: "$x=x_{0}+{vt}$",
-        isCorrect: false,
-      },
-      {
-        content: "$x=v_{0} t+\\frac{1}{2} a t^{2}$",
-        isCorrect: true,
-      },
-      {
-        content: "$x=x_{0}+v_{0} t+\\frac{1}{2} a t^{2}$",
-        isCorrect: false,
-      },
-    ],
-    level: 2,
-    topic: "Bài mẫu",
-  },
-];
+import { MathJaxContext, MathJax } from "better-react-mathjax";
+import { mathjax_config } from "../constants/config";
+import * as test_records_actions from "../actions/test_records_actions";
+import { connect } from "react-redux";
 
 const abcArr = ["A", "B", "C", "D"];
 
-export default class TestedPage extends Component {
+class TestedPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      questions_arr: [],
+    };
+  }
+
+  componentDidMount = () => {
+    var { questions_arr } = this.state;
+    var { test_records } = this.props;
+
+    if (questions_arr.length === 0) {
+      this.setState({
+        questions_arr: test_records.setOfRemember
+          .concat(test_records.setOfUnderstand)
+          .concat(test_records.setOfApply)
+          .concat(test_records.setOfAnalyzing),
+      });
+    }
+  };
+
   renderQuestion = (cauhoi) => {
+    var { test_records } = this.props;
     var result = null;
     if (cauhoi.length > 0) {
       result = cauhoi.map((c, index) => {
         return (
-          <div>
-            <p>
-              <MathJax math={`Câu ${index + 1}: ${c.content}`}/>
-            </p>
-            {c.setOfAnswer.map((da, i) => {
-              return <p className="one-answer">
-                <MathJax math={`${abcArr[i]}. ${da.content} `}/>
-              </p>;
-            })}
+          <div key={index}>
+            <MathJaxContext version={3} config={mathjax_config}>
+              <div>
+                <b>{`Câu ${index + 1}:`}</b>
+                <MathJax>{c.content}</MathJax>
+              </div>
+              {c.setOfAnswer.map((da, i) => {
+                let ans_true = true;
+                if (test_records.answerSet[index]) {
+                  if (
+                    c.questionId + abcArr[i] ===
+                    test_records.answerSet[index].answerId
+                  ) {
+                    ans_true = false;
+                  }
+                }
+                return (
+                  <p
+                    key={i}
+                    className={`one-answer ${
+                      da.isCorrect
+                        ? "color-green"
+                        : ans_true === false
+                        ? "color-red"
+                        : ""
+                    }`}
+                  >
+                    <MathJax>{`${abcArr[i]}. ${da.content} `}</MathJax>
+                  </p>
+                );
+              })}
+            </MathJaxContext>
           </div>
         );
       });
@@ -105,21 +78,51 @@ export default class TestedPage extends Component {
   };
 
   showListNumber = () => {
+    var { questions_arr } = this.state;
+    var { test_records } = this.props;
     var result = [];
-    for (var i = 1; i <= 40; i++) {
-      result.push(<div key={i} className="number-of-list">{i}</div>);
+    var count = 0;
+    for (let i = 0; i < questions_arr.length; i++) {
+      let color = "";
+      for (let j = 0; j < questions_arr[i].setOfAnswer.length; j++) {
+        if (test_records.answerSet[i]) {
+          if (
+            questions_arr[i].setOfAnswer[j].id ===
+            test_records.answerSet[i].answerId
+          ) {
+            if (questions_arr[i].setOfAnswer[j].isCorrect === true) {
+              count++;
+              color = "bg-green";
+            } else if (questions_arr[i].setOfAnswer[j].isCorrect === false)
+              color = "bg-yellow";
+          }
+        } else {
+          color = "bg-yellow";
+        }
+      }
+      result.push(
+        <div key={i} id={`num${i + 1}`} className={`number-of-list ${color}`}>
+          {i + 1}
+        </div>
+      );
     }
+    /* Set number of correct answer! */
+    this.props.onSetCorrectAns(count);
+
     return result;
   };
 
   render() {
+    var { questions_arr } = this.state;
+    var { test_records } = this.props;
+    const numberQuestion = questions_arr.length;
     return (
       <div>
         <Header />
         <div className="row mt-3">
           <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9 list-question-part">
             <div className="list-ques-wrapper">
-              {this.renderQuestion(questions)}
+              {this.renderQuestion(questions_arr)}
             </div>
           </div>
           <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
@@ -127,9 +130,9 @@ export default class TestedPage extends Component {
               {this.showListNumber()}
             </div>
             <div className="time-finnish row">
-              <div className="col-12 time-title">Kết quả đúng: 50/50</div>
-              <div className="col-12 time-title">Điểm: 10</div>
-              <div className="col-12 time-title">Thời gian làm bài: 10:34</div>
+              <div className="col-12 time-title">{`Kết quả đúng: ${test_records.correctAnsNumber}/${numberQuestion}`}</div>
+              <div className="col-12 time-title">{`Điểm: ${((10 / numberQuestion) * test_records.correctAnsNumber).toFixed(2)}`}</div>
+              <div className="col-12 time-title">{`Thời gian làm bài còn: ${test_records.time}`}</div>
 
               <div className="col-6 time-title">
                 <Link to="/home/statistic">
@@ -143,7 +146,9 @@ export default class TestedPage extends Component {
               </div>
               <div className="col-6 time-title">
                 <Link to="/home/evaluated">
-                  <button className="btn btn-primary mt-2">Đánh giá</button>
+                  <button className="btn btn-primary mt-2 mb-2">
+                    Đánh giá
+                  </button>
                 </Link>
               </div>
             </div>
@@ -154,3 +159,19 @@ export default class TestedPage extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    test_records: state.test_records,
+  };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onSetCorrectAns: (number) => {
+      dispatch(test_records_actions.set_correct_number(number));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TestedPage);

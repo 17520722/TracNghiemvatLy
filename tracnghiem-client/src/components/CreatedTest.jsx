@@ -3,7 +3,10 @@ import topic_list from "../constants/topic_list";
 import { connect } from "react-redux";
 import * as topic_actions from "../actions/selected_topics_action";
 import * as test_actions from "../actions/created_test_info_actions";
+import * as record_test_actions from "../actions/test_records_actions";
 import * as _ from "lodash";
+import questions from "../constants/questions_demo";
+import { level, levelOfTest } from "../constants/genaral_define";
 
 let selectedTopic = [];
 let topic_edited = [];
@@ -29,6 +32,7 @@ class CreatedTest extends Component {
   };
 
   componentDidMount = () => {
+    this.props.onResetInfoTest();
     this.props.onSetSeletedTopics(selectedTopic);
   }
 
@@ -42,8 +46,10 @@ class CreatedTest extends Component {
       time: this.state.time,
       level: this.state.level,
     }
+    this.createTestOnRedux(test);
+    console.log(this.props.test_records);
     this.props.onSetTestInfo(test);
-    this.props.nextStepTopNotice();
+    this.props.nextStepToNotice();
   };
 
   handleChange = (event) => {
@@ -53,6 +59,31 @@ class CreatedTest extends Component {
       [name]: value,
     });
   };
+
+  createTestOnRedux = (test) => {
+    var number_question_for_lv = '';
+    if (test.level === "1") {
+      number_question_for_lv = levelOfTest[0];
+    } else if (test.level === "2") {
+      number_question_for_lv = levelOfTest[1];
+    } else {
+      number_question_for_lv = levelOfTest[2];
+    }
+    for (let i = 0; i < number_question_for_lv.remember; i++) {
+      questions.forEach(q => {
+        if (q.level === level[1].id) {
+          this.props.onAddQuestionToTest(q);
+        }
+      });
+    }
+    for (let i = 0; i < number_question_for_lv.understand; i++) {
+      questions.forEach(q => {
+        if (q.level === level[2].id) {
+          this.props.onAddQuestionToTest(q);
+        }
+      });
+    }
+  }
 
   addTopic = (event) => {
     var {selected_topics} = this.props;
@@ -135,6 +166,7 @@ class CreatedTest extends Component {
     var { subject, classes, term, time, level, topic } = this.state;
     var { selected_topics } = this.props;
     topic_edited = this.handleTermTopic();
+
     return (
       <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9">
         <p className="title-create-test">TẠO ĐỀ THI</p>
@@ -253,6 +285,7 @@ class CreatedTest extends Component {
 const mapStateToProps = state => {
   return {
     selected_topics: state.selected_topics,
+    test_records: state.test_records,
   }
 }
 
@@ -270,9 +303,14 @@ const mapDispatchToProps = (dispatch, props) => {
     onAddSelectedTopic: (topic) => {
       dispatch(topic_actions.add_selected_topic(topic));
     },
-
     onSetTestInfo: (test) => {
       dispatch(test_actions.set_created_test_info(test))
+    },
+    onAddQuestionToTest: (question) => {
+      dispatch(record_test_actions.add_question_to_test(question));
+    },
+    onResetInfoTest: () => {
+      dispatch(record_test_actions.clear_info_test());
     }
   }
 }
