@@ -3,7 +3,10 @@ const UserModel = require("../models/User");
 const TopicModel = require("../models/Topic");
 const AnswerModel = require("../models/Answer");
 const AnsweredModel = require("../models/Answered");
-const TestModel = require("../models/Test")
+const TestModel = require("../models/Test");
+const EvaluatedDocModel = require("../models/EvaluatedDoc");
+const AbilityModel = require("../models/Ability");
+const GeneratedTestModel = require("../models/GeneratedTest");
 
 const findItem = async(id, modelName) => {
 	return await modelName.findOne({_id: id});
@@ -341,28 +344,28 @@ const root = {
 
 	//-------------------For evaluatedDoc Model-----------------
 	evaluatedDoc: async({id}) => {
-
+		return findItem(id, EvaluatedDocModel);
 	},
 
 	evaluatedDocs: async({ids}) => {
-
+		return findItems(ids, EvaluatedDocModel);
 	},
 
 	createEvaluatedDoc: async({input}) => {
-
+		createItem(input, EvaluatedDocModel);
 	},
 
 	updateEvaluatedDoc: async({id, input}) => {
-
+		updateItem(id, input, EvaluatedDocModel);
 	},
 
 	//------------------For User Model -------------------------
 	user: async({id}) => {
-
+		findItem(id, UserModel);
 	},
 
 	users: async({ids}) => {
-
+		findItems(ids, UserModel);
 	},
 
 	allUser: async() => {
@@ -384,42 +387,58 @@ const root = {
 		return createItem(input, UserModel, objectName);
 	},
 
-	updateUser: async({id, input}) => {
+	updateUser: ({id, input}) => {
 		return updateItem(id, input, UserModel);
 	},
 
 	//-------------------Ability Model--------------------
-	ability: async({topicId, userId}) => {
-
+	ability: async({tpId, urId}) => {
+		return await AbilityModel.findOne({topicId: tpId, userId: urId});
 	},
 
-	abilities: async({userId}) => {
-
+	abilities: async({urId}) => {
+		return await AbilityModel.find({userId: urId});
 	},
 
-	createAbility: async({input}) => {
-
+	createAbility: ({input}) => {
+		return createItem(input, AbilityModel)
 	},
 
-	updateAbility: async({userId, topicId, input}) => {
-
+	updateAbility: async({tpId, urId, input}) => {
+		try {
+			await modelName.updateOne({topicId: tpId, userId: urId},
+				{
+					$set: input
+				});
+		}
+		catch {
+			return {
+				code: 500,
+				content: "? can't update data!"
+			};
+		}
+	
+		return {
+			code: 201,
+			content: "Updated!"
+		};
 	},
 
 	//----------------Generated Test Model ---------------
 	generatedTest: async({id}) => {
-
+		return findItem(id, GeneratedTestModel);
 	},
 
 	generatedTests: async() => {
-
+		return findAllItem(GeneratedTestModel);
 	},
 
 	createGeneratedTest: async({input}) => {
-
+		return createItem(input, GeneratedTestModel);
 	},
 
 	updateGeneratedTest: async({id, input}) => {
-
+		return updateItem(id, input, GeneratedTestModel);
 	}
 };
 
