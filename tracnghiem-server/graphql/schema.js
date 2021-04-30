@@ -89,7 +89,7 @@ const evaluatedDoc = `
      type EvaluatedDoc {
           _id: ID
           content: String
-          testId: Test
+          testId: ID
      }
 `
 
@@ -116,6 +116,12 @@ const userSchema = `
 `
 
 const abilitySchema = `
+     input AbilityInput {
+          topicId: ID
+          ability: String
+          userId: ID
+     }
+
      type Ability {
           _id: ID
           topicId: ID
@@ -125,6 +131,12 @@ const abilitySchema = `
 `
 
 const generatedTestSchema = `
+     input GeneratedTestInput {
+          numberOfQuestion: Int
+          levelOfDifficult: Int
+          setOfTopic: [ID]
+     }
+
      type GeneratedTest {
           _id: ID
           numberOfQuestion: Int
@@ -161,6 +173,14 @@ const specialSchema = `
           test(id: ID): Test
           tests(ids: [ID]): [Test]
 
+          evaluatedDoc(id: ID): EvaluatedDoc
+          evaluatedDocs(ids: [ID]): [EvaluatedDoc]
+
+          ability(id: ID): Ability
+          abilities(ids: [ID]): [Ability]
+
+          generatedTest(id: ID): GeneratedTest
+          generatedTests(ids: [ID]): [GeneratedTest]
      }
 
      type Mutation {
@@ -181,6 +201,15 @@ const specialSchema = `
 
           createTest(input: TestInput): Response
           updateTest(id: ID!, input: TestInput): Response
+
+          createEvaluatedDoc(input: EvaluatedDocInput): Response
+          updateEvaluatedDoc(id: ID, input: EvaluatedDocInput): Response
+
+          createAbility(input: AbilityInput): Response
+          updateAbility(id: ID!, input: AbilityInput): Response
+
+          createGeneratedTest(input: GeneratedTestInput): Response
+          updateGeneratedTest(id: ID!, input: GeneratedTestInput): Response
      }
 `
 
