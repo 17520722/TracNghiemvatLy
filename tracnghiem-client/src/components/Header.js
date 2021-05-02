@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import "../css/header.css";
 
 export default class Header extends Component {
   render() {
     return (
       <nav className="navbar navbar-expand-md navbar-light bg-light">
         <a className="navbar-brand" href="/" aria-disabled>
-          Navbar
+          Logo
         </a>
         <button
           className="navbar-toggler d-lg-none"
@@ -21,27 +22,20 @@ export default class Header extends Component {
         </button>
         <div className="collapse navbar-collapse" id="collapsibleNavId">
           <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li className="nav-item active">
-              <Link className="nav-link" to="/">
-                Home <span className="sr-only">(current)</span>
-              </Link>
-            </li>
             <li className="nav-item">
               <Link className="nav-link" to="/admin">
                 Admin
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/admin/de-thi">
-                Đề thi
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/login">
-                Đăng nhập
-              </Link>
-            </li>
           </ul>
+          <div>
+            <Link to="/login" className="user-log">
+              <label htmlFor="icon-user" className="mr-2">
+                Đăng nhập
+              </label>
+              <i id="icon-user" className="fas fa-user"></i>
+            </Link>
+          </div>
         </div>
       </nav>
     );

@@ -48,3 +48,9 @@ export const set_correct_number = (num_correct) => {
         num_correct
     }
 }
+
+export const set_null_for_answerset = () => {
+    return {
+        type: Types.SET_NULL_FOR_ANSWERSET,
+    }
+}

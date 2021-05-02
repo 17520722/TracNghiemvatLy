@@ -49,6 +49,7 @@ class CreatedTest extends Component {
     this.createTestOnRedux(test);
     console.log(this.props.test_records);
     this.props.onSetTestInfo(test);
+    this.props.onSetNullAnswerSet();
     this.props.nextStepToNotice();
   };
 
@@ -311,6 +312,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     onResetInfoTest: () => {
       dispatch(record_test_actions.clear_info_test());
+    },
+    onSetNullAnswerSet: () => {
+      dispatch(record_test_actions.set_null_for_answerset());
     }
   }
 }

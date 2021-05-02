@@ -32,7 +32,9 @@ export default class CreatedPage extends Component {
         <Header />
         <div className="row">
           <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3 side-block">
-            <div className="side-block-content"></div>
+            <div className="side-block-content">
+              
+            </div>
           </div>
           {isCreated ? (
             <NoticeExam removeTest={this.removeTest}/>
