@@ -3,11 +3,13 @@ const _ = require('lodash');
 
 const topicSchema = `
      input TopicInput {
+          topicId: String
           content: String
      }
 
      type Topic {
           _id: ID
+          topicId: String
           content: String
      }
 `
@@ -152,7 +154,7 @@ const specialSchema = `
      }
 
      type Query {
-          topic(id: ID): Topic
+          topic(topicId: String): Topic
           topics: [Topic]
 
           answer(id: ID): Answer

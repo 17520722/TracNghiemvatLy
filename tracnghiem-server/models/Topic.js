@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const TopicSchema = new mongoose.Schema({
+     topicId: String,
      content: String
 });
 

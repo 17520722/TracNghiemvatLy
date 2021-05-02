@@ -28,12 +28,13 @@ const findItems = async (ids = [], modelName) => {
 }
 
 const createItem = async (input, modelName, objectName=null, exact=true) => {
-	const query = {
-		...input,
+	let query = ""
+	if (modelName === TopicModel) {
+		query = {
+			topicId: input.topicId,
+		}
 	}
-
-	console.log(modelName);
-
+	
 	const objectRespone = await modelName.findOne(query, function(err, result) {
 		if (err) {
 			return {
@@ -42,7 +43,9 @@ const createItem = async (input, modelName, objectName=null, exact=true) => {
 			}
 		}
 	});
-	console.log(objectRespone);
+	query = {
+		...input,
+	}
 
 	if (objectRespone !== null && exact == true) {
 		return {
@@ -155,9 +158,9 @@ const findQuestions = async(ids) => {
 
 const root = {
 	//----------------For Topic Model -----------------
-	topic: async({id}) => {
+	topic: async({topicID}) => {
 		try {
-			return await TopicModel.findOne({_id: id});
+			return await TopicModel.findOne({topicId: topicID});
 		}
 		catch {
 			return null;
@@ -352,20 +355,20 @@ const root = {
 	},
 
 	createEvaluatedDoc: async({input}) => {
-		createItem(input, EvaluatedDocModel);
+		return createItem(input, EvaluatedDocModel);
 	},
 
 	updateEvaluatedDoc: async({id, input}) => {
-		updateItem(id, input, EvaluatedDocModel);
+		return updateItem(id, input, EvaluatedDocModel);
 	},
 
 	//------------------For User Model -------------------------
 	user: async({id}) => {
-		findItem(id, UserModel);
+		return findItem(id, UserModel);
 	},
 
 	users: async({ids}) => {
-		findItems(ids, UserModel);
+		return findItems(ids, UserModel);
 	},
 
 	allUser: async() => {

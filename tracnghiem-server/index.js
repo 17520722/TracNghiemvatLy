@@ -6,7 +6,9 @@ const root = require("./graphql/rootValue");
 const schema = require("./graphql/schema");
 const app = express();
 const URL_CLIENT = "http://localhost:3000";
+var cors = require('cors');
 
+app.use(cors())
 app.use('/graphql', graphqlHTTP({
 	schema: schema,
 	rootValue: root,
