@@ -5,7 +5,9 @@ import "../../css/admin_question.css";
 import React from "react";
 import { Button, CircularProgress } from "@material-ui/core";
 import { getAllTopic } from "../../graphql/topic.service";
+import * as toast_actions from "../../actions/Toast";
 import * as _ from "lodash";
+import { connect } from "react-redux"
 
 class CauHoiPage extends Component {
     constructor(props) {
@@ -45,7 +47,7 @@ class CauHoiPage extends Component {
                      textToast: "Lỗi: không tiếp cận được máy chủ",
                      isLoading: false,
                 });
-                dispatch(set_show_toast(true));
+                this.props.set_show_toast(true);
 
                 return;
             }
@@ -353,4 +355,18 @@ class CauHoiPage extends Component {
     }
 }
 
-export default CauHoiPage
+const mapStateToProps = (state) => {
+    return {
+      
+    };
+  };
+  
+  const mapDispatchToProps = (dispatch, props) => {
+    return {
+        set_show_toast: (status) => {
+            dispatch(toast_actions.set_show_toast(status))
+        }
+    };
+  };
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(CauHoiPage);
