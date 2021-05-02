@@ -19,9 +19,9 @@ export default class AdminPage extends Component {
                             </a>
                         </li>
                         <li>
-                            <a href="#" className="menu-item">
+                            <NavLink to="/admin/cau-hoi" className="menu-item" activeClassName="active">
                                 Ngân hàng câu hỏi
-                            </a>
+                            </NavLink>
                         </li>
                         <li>
                             <NavLink to="/admin/topic" className="menu-item" activeClassName="active">

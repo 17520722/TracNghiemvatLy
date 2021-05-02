@@ -1,7 +1,6 @@
 import HomePage from "./views/HomePage";
 import AdminPage from "./views/Admin/AdminPage";
 import DeThiPage from "./views/Admin/DeThi";
-import CauHoiPage from "./views/Admin/CauHoi";
 import LoginPage from "./views/login-page";
 import Page404 from "./views/404";
 import SignInPage from "./views/sign-in";
@@ -70,8 +69,8 @@ const routes = [
   },
   {
     path: "/admin/cau-hoi",
-    exact: false,
-    component: CauHoiPage,
+    exact: true,
+    component: AdminPage,
   },
   {
     path: "/admin/de-thi",
