@@ -4,7 +4,7 @@ let toastState = {
      isShowToast: false,
 }
 
-const toastReducer = (state = toastState, action) => {
+const toast = (state = toastState, action) => {
      switch(action.type) {
           case Types.SET_SHOW_TOAST:
                return {
@@ -16,4 +16,4 @@ const toastReducer = (state = toastState, action) => {
      }
 }
 
-export default toastReducer
+export default toast

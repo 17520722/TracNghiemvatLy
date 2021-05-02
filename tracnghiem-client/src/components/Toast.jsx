@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { set_show_toast } from '../actions/Toast';
 
 const Toast = ({text, type}) => {
-     let toastState = useSelector(state => state.set_show_toast);
+     let toastState = useSelector(state => state.toast);
      const dispatch = useDispatch();
      
      return (

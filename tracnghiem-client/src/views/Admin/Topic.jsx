@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button,
      MenuItem,
      FormControl,
@@ -6,11 +6,11 @@ import { Button,
      Select,
      TextField,
      CircularProgress } from '@material-ui/core'
-import { createTopic } from '../../graphql/topic.service';
+import { createTopic, getAllTopic } from '../../graphql/topic.service';
 import Toast from '../../components/Toast';
 import { useDispatch } from 'react-redux';
-import { SET_SHOW_TOAST } from '../../constants/TypeActions';
 import { set_show_toast } from '../../actions/Toast';
+import * as _ from 'lodash';
 
 const Topic = () => {
      const [isShowModal, setShowModal] = useState(false);
@@ -21,7 +21,30 @@ const Topic = () => {
      //cần phải redux khối Toast nay
      const [typeToast, setTypeToast] = useState("");
      const [textToast, setTextToast] = useState("");
+     const [listTopic, setListTopic] = useState([]);
+     const [numberTopic, setNumberTopic] = useState(0);
      const dispatch = useDispatch();
+
+     useEffect(() => {
+          getAllTopic().then(response => response.text()).then(result => {
+               let rawData = JSON.parse(result);
+
+               if (rawData.data === null) {
+                    setTypeToast("error");
+                    setTextToast("Lỗi: không tiếp cận được máy chủ.");
+                    setLoading(false);
+                    dispatch(set_show_toast(true));
+
+                    return;
+               }
+
+               const sortTopic = _.sortBy(rawData.data.topics, [o => o.topicId]);
+
+               setListTopic(sortTopic);
+               setNumberTopic(rawData.data.topics.length);
+               console.log(listTopic)
+          })
+     },[numberTopic])
 
      function onChangeHandle(e) {
           setTopicClass(e.target.value);
@@ -50,6 +73,16 @@ const Topic = () => {
                console.log(rejected);
           }).then(result => {
                let rawData = JSON.parse(result);
+
+               if (rawData.data.createTopic === null) {
+                    setTypeToast("error");
+                    setTextToast("Lỗi: không tiếp cận được máy chủ.");
+                    setLoading(false);
+                    dispatch(set_show_toast(true));
+
+                    return;
+               }
+
                if (rawData.data.createTopic.code !== 201) {
                     setTypeToast("error");
                     if (rawData.data.createTopic.code === 302) {
@@ -120,12 +153,36 @@ const Topic = () => {
                <div className="topic-list">
                     <div className="class-group">
                          <h2>Lớp 10</h2>
+                         {listTopic.map((item, index) => {
+                              if (Math.floor(item.topicId/100) === 10) {
+                                   return (
+                                        <h6 key={index}>{item.content}</h6>
+                                   )
+                              }
+                              return null;
+                         })}
                     </div>
                     <div className="class-group">
                          <h2>Lớp 11</h2>
+                         {listTopic.map((item, index) => {
+                              if (Math.floor(item.topicId/100) === 11) {
+                                   return (
+                                        <h6 key={index}>{item.content}</h6>
+                                   )
+                              }
+                              return null;
+                         })}
                     </div>
                     <div className="class-group">
                          <h2>Lớp 12</h2>
+                         {listTopic.map((item, index) => {
+                              if (Math.floor(item.topicId/100) === 12) {
+                                   return (
+                                        <h6 key={index}>{item.content}</h6>
+                                   )
+                              }
+                              return null;
+                         })}
                     </div>
                </div>
 

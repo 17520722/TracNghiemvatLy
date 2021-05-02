@@ -3,11 +3,10 @@ import "../css/testing-page.css";
 import "../constants/genaral_define";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Question from "../components/Question";
 import { QUESTIONS_PER_PAGE } from "../constants/genaral_define";
 import { connect } from "react-redux";
-import * as record_test_actions from "../actions/test_records_actions";
 import Timer from "../components/Timer";
 
 class TestingPage extends Component {
