@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import logo from '../images/t.png'
-import { inputBackground, invalidColor, primary, validColor } from '../constants/GlobalStyle'
+import { inputBackground, primary, validColor } from '../constants/GlobalStyle'
 
 const Container = styled.div`
      margin: 5% auto 0 auto;

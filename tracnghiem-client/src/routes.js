@@ -79,6 +79,11 @@ const routes = [
     component: DeThiPage,
   },
   {
+    path: "/admin/topic",
+    exact: true,
+    component: AdminPage
+  },
+  {
     path: "**",
     exact: true,
     component: Page404,

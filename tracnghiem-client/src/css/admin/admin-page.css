@@ -1,0 +1,88 @@
+.admin-container {
+     display: flex;
+}
+
+.side-bar {
+     width: 250px;
+     background-color: #151515;
+     color: white;
+     height: 100vh;
+     display: flex;
+     flex-direction: column;
+     overflow-y: auto;
+     position: fixed;
+}
+     .logo {
+          width: 100%;
+          height: 60px;
+          background-color: #1e1e1f;
+          text-align: center;
+          margin-bottom: 1rem;
+     }
+
+     .menu {
+          list-style-type: none;
+          font-weight: 500;
+          font-size: 1.2rem;
+          text-align: left;
+          padding-left: 0;
+     }
+          li {
+               margin-top: 0.2rem;
+          }
+          li a.menu-item {
+               text-decoration: none;
+               color: white;
+               display: block;
+               border-bottom: 2px solid transparent;
+               padding: 0.6rem 0 0.6rem 1rem;
+               transition: .2s;
+          }
+          li a.menu-item:hover {
+               text-decoration: none;
+               color: #151515;
+               border-top-left-radius: 1.4rem;
+               border-bottom-left-radius: 1.4rem;
+               background-color: white;
+          }
+
+          .menu-item.active {
+               text-decoration: none;
+               color: #151515;
+               border-top-left-radius: 1.4rem;
+               border-bottom-left-radius: 1.4rem;
+               background-color: white;
+          }
+.body {
+     margin: 16px;
+     margin-left: 266px;
+     padding: 1rem;
+     display: flex;
+     flex-direction: column;
+     flex-grow: 1;
+     overflow-y: auto;
+}
+
+.btn-primary-color {
+     background-color: #2e2e2e !important;
+     color: white !important;
+     font-weight: 600 !important;
+}
+
+.btn-secondary-color {
+     background-color: #f48fb1 !important;
+     color: whitesmoke !important;
+     font-weight: 600 !important;
+}
+
+.btn-w-200 {
+     width: 200px;
+}
+
+.form-control-style {
+     margin-top: 1rem !important;
+     margin-bottom: 1rem !important;
+     min-width: 120px;
+}
+
+

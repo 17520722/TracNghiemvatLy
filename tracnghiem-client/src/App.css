@@ -38,10 +38,16 @@
 }
 
 /*CSS for app*/
+::-webkit-scrollbar {
+  width: 0.25rem;
+}
 
-a:hover {
-  color: white;
-  opacity: 80%;
+::-webkit-scrollbar-track {
+  background: #a9a9a9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e1e24;
 }
 
 .center {
