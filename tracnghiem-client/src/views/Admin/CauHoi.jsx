@@ -6,15 +6,15 @@ export default class CauHoiPage extends Component {
     super(props);
 
     this.state = {
-      txt_noidung: "",
-      dapan: {
+      content: "",
+      setOfAnswer: {
         dapan1: "",
         dapan2: "",
         dapan3: "",
         dapan4: "",
       },
-      select_doKho: 1,
-      select_dangToan: 1,
+      topic: "1",
+      level: 1,
     };
   }
 
@@ -29,20 +29,19 @@ export default class CauHoiPage extends Component {
   };
 
   handleChangeAnswer = (event) => {
-
     let value = event.target.value;
     let name = event.target.name;
 
     this.setState({
       dapan: {
         ...this.state.dapan,
-        [name]: value
-      } 
-    })
-  }
+        [name]: value,
+      },
+    });
+  };
 
   handleSubmit = (event) => {
-    var {txt_noidung, dapan, select_doKho, select_dangToan} = this.state;
+    var { txt_noidung, dapan, select_doKho, select_dangToan } = this.state;
     event.preventDefault();
 
     callApi("cau-hoi", "POST", {
@@ -51,40 +50,35 @@ export default class CauHoiPage extends Component {
       select_doKho: select_doKho,
       select_dangToan: select_dangToan,
     });
-    
   };
 
   render() {
-
-    var {
-      txt_noidung,
-      dapan,
-      select_doKho,
-      select_dangToan,
-    } = this.state;
+    var { content, setOfAnswer, level, topic } = this.state;
 
     return (
-      <div>
+      <div className="ml-5 mr-5 mt-5">
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label htmlFor="txt_noidung">Nội dung</label>
             <textarea
               className="form-control"
-              id="txt_noidung"
+              id="content"
               rows="4"
-              name="txt_noidung"
-              value={txt_noidung}
+              name="content"
+              value={content}
               onChange={this.handleChange}
             />
 
             <div className="form-group">
               <label htmlFor="dapan1">Đáp án 1</label>
+              <label className="ml-2"> isCorrect: </label>
+              <input className="ml-2" type="checkbox" />
               <input
                 type="text"
                 className="form-control"
                 id="dapan1"
                 name="dapan1"
-                value={dapan.dapan1}
+                value={setOfAnswer.dapan1}
                 onChange={this.handleChangeAnswer}
               />
             </div>
@@ -95,7 +89,7 @@ export default class CauHoiPage extends Component {
                 className="form-control"
                 id="dapan2"
                 name="dapan2"
-                value={dapan.dapan2}
+                value={setOfAnswer.dapan2}
                 onChange={this.handleChangeAnswer}
               />
             </div>
@@ -106,7 +100,7 @@ export default class CauHoiPage extends Component {
                 className="form-control"
                 id="dapan3"
                 name="dapan3"
-                value={dapan.dapan3}
+                value={setOfAnswer.dapan3}
                 onChange={this.handleChangeAnswer}
               />
             </div>
@@ -117,22 +111,20 @@ export default class CauHoiPage extends Component {
                 className="form-control"
                 id="dapan4"
                 name="dapan4"
-                value={dapan.dapan4}
+                value={setOfAnswer.dapan4}
                 onChange={this.handleChangeAnswer}
               />
             </div>
-
           </div>
           <div className="row">
             <div className="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-
               <div className="form-group">
-                <label htmlFor="select_doKho">Độ khó</label>
+                <label htmlFor="level">Độ khó</label>
                 <select
                   className="form-control"
-                  id="select_doKho"
-                  name="select_doKho"
-                  value={select_doKho}
+                  id="level"
+                  name="level"
+                  value={level}
                   onChange={this.handleChange}
                 >
                   <option value={1}>Nhận biết</option>
@@ -141,17 +133,15 @@ export default class CauHoiPage extends Component {
                   <option value={4}>Vận dụng cao</option>
                 </select>
               </div>
-              
             </div>
             <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-
               <div className="form-group">
                 <label htmlFor="select_dangToan">Dạng toán</label>
                 <select
                   className="form-control"
                   id="select_dangToan"
-                  name="select_dangToan"
-                  value={select_dangToan}
+                  name="topic"
+                  value={topic}
                   onChange={this.handleChange}
                 >
                   <option value={1}>Dạng toán 1</option>
@@ -160,7 +150,6 @@ export default class CauHoiPage extends Component {
                   <option value={4}>Dạng toán 4</option>
                 </select>
               </div>
-
             </div>
           </div>
 

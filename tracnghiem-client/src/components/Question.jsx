@@ -1,38 +1,47 @@
 import { Component } from "react";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
+import { mathjax_config } from "../constants/config";
+import { connect } from "react-redux";
+import * as record_test_actions from "../actions/test_records_actions";
 
 const abcArr = ["A", "B", "C", "D"];
 
-const config = {
-  loader: { load: ["[tex]/html"] },
-  tex: {
-    packages: { "[+]": ["html"] },
-    inlineMath: [
-      ["$", "$"],
-      ["\\(", "\\)"],
-    ],
-    displayMath: [
-      ["$$", "$$"],
-      ["\\[", "\\]"],
-    ],
-  },
-};
-
-export default class Question extends Component {
+class Question extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedAnswer: "",
+      setPoint: 0
     };
+  }
+
+  componentDidMount = () => {
+    this.loadAnsPerPage();
   }
 
   handleCheckChange = (event) => {
     var name = event.target.name;
     var value = event.target.value;
     var id = event.target.id;
-    this.setState({ selectedAnswer: id });
+    var { number, test_records, question } = this.props;
+
     if (value === "on") {
       this.onFillColor(name);
+
+      console.log(test_records);
+      const answered = {
+        questionId: question.questionId,
+        answerId: id,
+      };
+
+      if (test_records.answerSet) {
+        for (let i = 0; i < test_records.answerSet.length; i++) {
+          if (test_records.answerSet[i].questionId === question.questionId) {
+            this.props.onUpdateAnsweredTest(answered);
+            return;
+          }
+        }
+      }
+      this.props.onAddAnsweredTest(answered);
     }
   };
 
@@ -42,12 +51,23 @@ export default class Question extends Component {
     element.style.color = "white";
   };
 
+  loadAnsPerPage = () => {
+    var { test_records, number } = this.props;
+    test_records.answerSet.forEach((e) => {
+      for (let i = 0; i < abcArr.length; i++) {
+        if (e.answerId === number + abcArr[i]) {
+          let radioInput = document.getElementById(e.answerId);
+          radioInput.checked = true;
+        }
+      }
+    });
+  };
+
   render() {
     var { question, number } = this.props;
-    console.log(this.state);
     return (
       <div>
-        <MathJaxContext version={3} config={config}>
+        <MathJaxContext version={3} config={mathjax_config}>
           <div>
             <b>Câu {number}: </b> <MathJax>{question.content}</MathJax>
           </div>
@@ -71,3 +91,22 @@ export default class Question extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    test_records: state.test_records,
+  };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onAddAnsweredTest: (answer) => {
+      dispatch(record_test_actions.add_answerd_to_test(answer));
+    },
+    onUpdateAnsweredTest: (answer) => {
+      dispatch(record_test_actions.update_answerd_to_test(answer));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Question);

@@ -13,7 +13,7 @@ export default class CreatedPage extends Component {
     };
   }
 
-  nextStepTopNotice = () => {
+  nextStepToNotice = () => {
     this.setState({
       isCreated: true,
     });
@@ -37,7 +37,7 @@ export default class CreatedPage extends Component {
           {isCreated ? (
             <NoticeExam removeTest={this.removeTest}/>
           ) : (
-            <CreatedTest nextStepTopNotice={this.nextStepTopNotice} />
+            <CreatedTest nextStepToNotice={this.nextStepToNotice} />
           )}
         </div>
         <Footer />

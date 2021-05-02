@@ -16,6 +16,7 @@
     border-radius: 20px;
     margin-left: 2rem;
     margin-right: 1rem;
+    min-height: 300px;
 }
 
 .list-number-wrapper {
@@ -55,4 +56,24 @@
 
 .finnish {
     text-align: center;
+}
+
+.color-green {
+    color: green;
+    font-weight: 700;
+}
+
+.color-red {
+    color: red;
+    font-weight: 500;
+}
+
+.bg-green {
+    background-color: green;
+    color: white;
+}
+.bg-yellow {
+    background-color: rgb(200, 200, 40);
+    color: white;
+    border: 1px solid yellow;
 }
