@@ -11,10 +11,15 @@ var initialState = {
   correctAnsNumber: 0,
   incorrectAnsNumber: 0,
   answerSet: [],
-  time: ''
+  time: "",
 };
 
 var myReducer = (state = initialState, action) => {
+  let numberQuestions = state.setOfRemember
+    .concat(state.setOfUnderstand)
+    .concat(state.setOfApply)
+    .concat(state.setOfAnalyzing);
+
   switch (action.type) {
     case Types.ADD_QUESTION_TO_TEST:
       var index_question = -1;
@@ -77,16 +82,25 @@ var myReducer = (state = initialState, action) => {
       ]);
       state.answerSet[index_answered] = action.answered;
       return state;
-    
+
     case Types.SET_NUMBER_CORRECT:
       state.correctAnsNumber = action.num_correct;
-      console.log(state.correctAnsNumber);
+      state.incorrectAnsNumber = numberQuestions.length - state.correctAnsNumber;
       return state;
 
     case Types.SET_TIME_FINNISH_TEST:
       state.time = `${action.m}:${action.s}`;
       console.log(state.time);
       return state;
+
+    case Types.SET_NULL_FOR_ANSWERSET:
+      for (let i = 0; i < numberQuestions.length; i++) {
+        const nullOnj = {
+          questionId: numberQuestions[i].questionId,
+          answerId: "NA"
+        };
+        state.answerSet.push(nullOnj);
+      }
 
     default:
       return state;

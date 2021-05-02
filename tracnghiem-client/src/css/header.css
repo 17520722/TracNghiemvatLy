@@ -1,0 +1,9 @@
+.user-log {
+  cursor: pointer;
+  color: black;
+}
+
+.user-log:hover {
+  color: black;
+  opacity: 0.5;
+}

@@ -95,6 +95,8 @@ class TestedPage extends Component {
               color = "bg-green";
             } else if (questions_arr[i].setOfAnswer[j].isCorrect === false)
               color = "bg-yellow";
+          }  else if (test_records.answerSet[i].answerId === "NA") {
+            color = "bg-yellow";
           }
         } else {
           color = "bg-yellow";

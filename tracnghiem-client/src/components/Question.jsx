@@ -41,7 +41,7 @@ class Question extends Component {
           }
         }
       }
-      this.props.onAddAnsweredTest(answered);
+      // this.props.onAddAnsweredTest(answered);
     }
   };
 
