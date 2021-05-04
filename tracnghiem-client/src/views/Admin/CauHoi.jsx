@@ -8,6 +8,7 @@ import { getAllTopic } from "../../graphql/topic.service";
 import * as toast_actions from "../../actions/Toast";
 import * as _ from "lodash";
 import { connect } from "react-redux"
+import Toast from "../../components/Toast";
 
 class CauHoiPage extends Component {
     constructor(props) {
@@ -40,8 +41,8 @@ class CauHoiPage extends Component {
         getAllTopic().then(response => response.text()).then(result => {
             let rawData = JSON.parse(result);
 
-            if (rawData.data === null) {
-                 this.setState({
+            if (rawData.data === null || rawData.data === undefined) {
+                this.setState({
                      ...this.state,
                      typeToast: "error",
                      textToast: "Lỗi: không tiếp cận được máy chủ",
@@ -137,6 +138,16 @@ class CauHoiPage extends Component {
         });
         return result;
     };
+
+    onCreateQuestion = () => {
+        this.setState({
+            ...this.state,
+            typeToast: "success",
+            textToast: "OK",
+            isLoading: false,
+        });
+        this.props.set_show_toast(true);
+    }
 
     onChangeImageHandler = (event) => {
         var file = event.target.files[0];
@@ -343,13 +354,15 @@ class CauHoiPage extends Component {
                         <div className="text-right">
                             <Button variant="contained" className="btn-primary-color form-control-style btn-w-200"
                                 color="secondary"
-                                disabled={this.state.isLoading}>
+                                disabled={this.state.isLoading}
+                                onClick={this.onCreateQuestion}>
                                 {this.state.isLoading ? <CircularProgress size={24}/> : "Thêm câu hỏi"}
                             </Button>
                         </div>
                     </form>
                 </React.Fragment> : null
             }
+            <Toast type={this.state.typeToast} text={this.state.textToast}></Toast>
             </>
         );
     }
@@ -359,14 +372,14 @@ const mapStateToProps = (state) => {
     return {
       
     };
-  };
+};
   
-  const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch, props) => {
     return {
         set_show_toast: (status) => {
             dispatch(toast_actions.set_show_toast(status))
         }
     };
-  };
+};
   
-  export default connect(mapStateToProps, mapDispatchToProps)(CauHoiPage);
+export default connect(mapStateToProps, mapDispatchToProps)(CauHoiPage);

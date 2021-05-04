@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 const Topic = () => {
      const [isShowModal, setShowModal] = useState(false);
      const [topicClass, setTopicClass] = useState(1000);
-     const [topicChapter, setTopicChapter] = useState(10);
+     const [topicChapter, setTopicChapter] = useState(1);
      const [topicName, setTopicName] = useState("");
      const [isLoading, setLoading] = useState(false);
      //cần phải redux khối Toast nay
@@ -28,8 +28,9 @@ const Topic = () => {
      useEffect(() => {
           getAllTopic().then(response => response.text()).then(result => {
                let rawData = JSON.parse(result);
+               console.log(rawData);
 
-               if (rawData.data === null) {
+               if (rawData.data === null || rawData.data === undefined) {
                     setTypeToast("error");
                     setTextToast("Lỗi: không tiếp cận được máy chủ.");
                     setLoading(false);
@@ -62,7 +63,7 @@ const Topic = () => {
      async function onCreateTopic() {
           setLoading(true);
           createTopic({
-               topicId: topicClass + topicChapter,
+               topicId: topicClass + (topicChapter <= 3 ? 10 + topicChapter : 20 + topicChapter),
                content: topicName.trimEnd().trimStart(),
           }).then(response => response.text(),
           rejected => {
@@ -74,7 +75,7 @@ const Topic = () => {
           }).then(result => {
                let rawData = JSON.parse(result);
 
-               if (rawData.data.createTopic === null) {
+               if (rawData.data === undefined || rawData.data.createTopic === null) {
                     setTypeToast("error");
                     setTextToast("Lỗi: không tiếp cận được máy chủ.");
                     setLoading(false);
@@ -94,6 +95,7 @@ const Topic = () => {
                } else {
                     setTypeToast("success");
                     setTextToast("Tạo chủ đề mới thành công");
+                    setNumberTopic(numberTopic + 1);
                }
                setLoading(false);
                dispatch(set_show_toast(true));
@@ -129,13 +131,13 @@ const Topic = () => {
                               value={topicChapter}
                               onChange={onChangeChapter}
                          >
-                              <MenuItem value={10}>Chương 1</MenuItem>
-                              <MenuItem value={20}>Chương 2</MenuItem>
-                              <MenuItem value={30}>Chương 3</MenuItem>
-                              <MenuItem value={40}>Chương 4</MenuItem>
-                              <MenuItem value={50}>Chương 5</MenuItem>
-                              <MenuItem value={60}>Chương 6</MenuItem>
-                              <MenuItem value={70}>Chương 7</MenuItem>
+                              <MenuItem value={1}>Chương 1</MenuItem>
+                              <MenuItem value={2}>Chương 2</MenuItem>
+                              <MenuItem value={3}>Chương 3</MenuItem>
+                              <MenuItem value={4}>Chương 4</MenuItem>
+                              <MenuItem value={5}>Chương 5</MenuItem>
+                              <MenuItem value={6}>Chương 6</MenuItem>
+                              <MenuItem value={7}>Chương 7</MenuItem>
                          </Select>
                     </FormControl>
                     <TextField id="topic-name" label="Tên chủ đề" className="form-control-style"
@@ -147,9 +149,9 @@ const Topic = () => {
                          disabled={isLoading}>
                          {isLoading ? <CircularProgress size={24}/> : "Tạo"}
                     </Button>
-                    <Toast text={textToast} type={typeToast}></Toast>
                </> :
                null }
+               <Toast text={textToast} type={typeToast}></Toast>
                <div className="topic-list">
                     <div className="class-group">
                          <h2>Lớp 10</h2>

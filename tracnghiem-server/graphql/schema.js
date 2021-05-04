@@ -21,7 +21,6 @@ const answerSchema = `
      }
 
      type Answer {
-          _id: ID
           content: String
           isCorrect: Boolean
      }
@@ -30,7 +29,7 @@ const answerSchema = `
 const questionSchema = `
      input QuestionInput {
           content: String
-          setOfAnswerId: [ID]
+          setOfAnswer: [AnswerInput]
           level: Int
           topic: ID
      }
@@ -38,10 +37,8 @@ const questionSchema = `
      type Question {
           _id: ID
           content: String
-          setOfAnswerId: [ID]
           setOfAnswer: [Answer]
           level: Int
-          topicId: ID
           topic: Topic
      }
 `
@@ -157,10 +154,6 @@ const specialSchema = `
           topic(topicId: String): Topic
           topics: [Topic]
 
-          answer(id: ID): Answer
-          answers(ids: [ID]): [Answer]
-          allAnswer: [Answer]
-
           allQuestion: [Question]
           questions(ids: [ID]): [Question]
           question(id: ID!): Question
@@ -188,9 +181,6 @@ const specialSchema = `
      type Mutation {
           createTopic(input: TopicInput): Response
           updateTopic(id: ID!, input: TopicInput): Response
-
-          createAnswer(input: AnswerInput): Response
-          updateAnswer(id: ID!, input: AnswerInput): Response
 
           createQuestion(input: QuestionInput): Response
           updateQuestion(id: ID!, input: QuestionInput): Response

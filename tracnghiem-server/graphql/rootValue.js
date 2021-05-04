@@ -7,6 +7,7 @@ const TestModel = require("../models/Test");
 const EvaluatedDocModel = require("../models/EvaluatedDoc");
 const AbilityModel = require("../models/Ability");
 const GeneratedTestModel = require("../models/GeneratedTest");
+const { map } = require("lodash");
 
 const findItem = async(id, modelName) => {
 	return await modelName.findOne({_id: id});
@@ -34,6 +35,11 @@ const createItem = async (input, modelName, objectName=null, exact=true) => {
 			topicId: input.topicId,
 		}
 	}
+	else {
+		query = {
+			...input,
+		}
+	}
 	
 	const objectRespone = await modelName.findOne(query, function(err, result) {
 		if (err) {
@@ -43,9 +49,6 @@ const createItem = async (input, modelName, objectName=null, exact=true) => {
 			}
 		}
 	});
-	query = {
-		...input,
-	}
 
 	if (objectRespone !== null && exact == true) {
 		return {
@@ -124,10 +127,8 @@ const findQuestion = async(id) => {
 	const objectResponse = await QuestionModel.findOne({_id: id});
 	let jsonObj = JSON.parse(JSON.stringify(objectResponse));
 
-	await findItems(jsonObj.setOfAnswerId, AnswerModel).then((res) => {
-		jsonObj.setOfAnswer = res;
-	});
-	jsonObj.topic = await findItem(jsonObj.topicId, TopicModel);
+	jsonObj.topic = await TopicModel.findOne({topicId: jsonObj.topic});
+	console.log(jsonObj)
 
 	return jsonObj;
 }
@@ -140,10 +141,7 @@ const findQuestions = async(ids) => {
 			let jsonObj = JSON.parse(JSON.stringify(object));
 			//neu tim duoc thi tim ca cau tra loi trong truong setOfAnswer
 			if (object) {
-				await findItems(jsonObj.setOfAnswerId, AnswerModel).then((res) => {
-					jsonObj.setOfAnswer = res;
-				});
-				jsonObj.topic = await findItem(jsonObj.topicId, TopicModel);
+				jsonObj.topic = await TopicModel.findOne({topicId: jsonObj.topic});
 			}
 
 			return jsonObj;
@@ -223,18 +221,15 @@ const root = {
 		const objectRespone = await QuestionModel.find({}, (err, result) => {
 			if (err) console.log(err);
 		});
+		console.log(objectRespone);
 
-		let respone = [];
-		for (let index = 0; index < objectRespone.length; index++) {
-			let jsonObj = JSON.parse(JSON.stringify(objectRespone[index]));
-
-			await findItems(jsonObj.setOfAnswerId, AnswerModel).then((res) => {
-				jsonObj.setOfAnswer = res;
-			});
-			jsonObj.topic = await findItem(jsonObj.topicId, TopicModel);
-			respone.push(jsonObj);
-		}
-		return respone;
+		const promises = objectRespone.map(async(item) => {
+			let jsonObj = JSON.parse(JSON.stringify(item));
+			jsonObj.topic = await TopicModel.findOne({topicId: jsonObj.topic});
+			return jsonObj;
+		});
+		const arrPromises = await Promise.all(promises);
+		return arrPromises;
 	},
 
 	questions: ({ids}) => {

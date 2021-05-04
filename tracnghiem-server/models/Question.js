@@ -2,10 +2,11 @@ const mongoose = require('mongoose');
 
 const QuestionSchema = new mongoose.Schema({
     content: String,
-    setOfAnswerId: [{type: String}],
-    setOfAnswer: [{type: String}],
+    setOfAnswer: [{
+        content: String,
+        isCorrect: Boolean
+    }],
     level: Number,
-    topicId: String,
     topic: String
 });
 
