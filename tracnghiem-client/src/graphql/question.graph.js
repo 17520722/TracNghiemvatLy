@@ -21,14 +21,14 @@ export const _getAllQuestion = () => {
 
 export const _createQuestion = (input) => {
      return {
-          query: "mutation {\r\n  createQuestion(input: {content: \"" + input.content + "\", level: " + input.level + ", topic: \"" + input.topic + "\", setOfAnswer: " + input.setOfAnswer + "}) {\r\n    code\r\n    content\r\n  }\r\n}",
+          query: "mutation {\r\n  createQuestion(input: {content: \"" + input.content + "\", level: " + input.level + ", topic: \"" + input.topic + "\", setOfAnswer: " + JSON.stringify(input.setOfAnswer) + "}) {\r\n    code\r\n    content\r\n  }\r\n}",
           variables: {}
      }
 }
 
 export const _updateQuestion = (questionId, input) => {
      return {
-          query: "mutation {\r\n  updateQuestion(id: \"" + questionId + "\", input: {content: \"" + input.content + "\", level: " + input.level + ", topic: \"" + input.topic +"\", setOfAnswer: "+ input.setOfAnswer +"}) {\r\n    code\r\n    content\r\n  }\r\n}",
+          query: "mutation {\r\n  updateQuestion(id: \"" + questionId + "\", input: {content: \"" + input.content + "\", level: " + input.level + ", topic: \"" + input.topic +"\", setOfAnswer: "+ JSON.stringify(input.setOfAnswer) +"}) {\r\n    code\r\n    content\r\n  }\r\n}",
           variables: {}
      }
 }

@@ -46,12 +46,12 @@ const questionSchema = `
 const answeredSchema = `
      input AnsweredInput {
           questionId: ID
-          answerId: ID
+          trueAnswer: String
      }
 
      type Answered {
           questionId: ID
-          answerId: ID
+          trueAnswer: String
      }
 `
 

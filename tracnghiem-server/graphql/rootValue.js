@@ -124,11 +124,12 @@ const findAllItem = async(modelName) => {
 }
 
 const findQuestion = async(id) => {
-	const objectResponse = await QuestionModel.findOne({_id: id});
-	let jsonObj = JSON.parse(JSON.stringify(objectResponse));
-
+	const objectRespone = await QuestionModel.findOne({_id: id}, (err, result) => {
+		if (err) console.log(err);
+		console.log(result)
+	});
+	let jsonObj = JSON.parse(JSON.stringify(objectRespone));
 	jsonObj.topic = await TopicModel.findOne({topicId: jsonObj.topic});
-	console.log(jsonObj)
 
 	return jsonObj;
 }
@@ -280,19 +281,19 @@ const root = {
 			let object = await TestModel.findOne({_id: id});
 			let jsonObj = JSON.parse(JSON.stringify(object));
 			//neu tim duoc thi tim ca cau tra loi trong truong setOfAnswer
-			findQuestions(jsonObj.setOfRemember).then((res) => {
+			await findQuestions(jsonObj.setOfRemember).then((res) => {
 				jsonObj.setOfRemember = res;
 			});
-			findQuestions(jsonObj.setOfUnderstand).then((res) => {
+			await findQuestions(jsonObj.setOfUnderstand).then((res) => {
 				jsonObj.setOfUnderstand = res;
 			});
-			findQuestions(jsonObj.setOfApply).then((res) => {
+			await findQuestions(jsonObj.setOfApply).then((res) => {
 				jsonObj.setOfApply = res;
 			});
-			findQuestions(jsonObj.setOfAnalyzing).then((res) => {
+			await findQuestions(jsonObj.setOfAnalyzing).then((res) => {
 				jsonObj.setOfAnalyzing = res;
 			});
-			console.log(jsonObj);
+			console.log(jsonObj)
 			return jsonObj;
 		}
 		catch(e) {
