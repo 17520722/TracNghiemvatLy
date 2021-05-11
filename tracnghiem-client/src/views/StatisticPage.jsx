@@ -5,7 +5,6 @@ import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import * as test_records from "../actions/test_records_actions";
-import topic_list from "../constants/topic_list";
 import _ from "lodash";
 
 class StatisticPage extends Component {
@@ -22,23 +21,15 @@ class StatisticPage extends Component {
     console.log(question_arr.length);
     if (question_arr.length === 0) {
       this.setState({
-        question_arr: test_records.setOfRemember
-          .concat(test_records.setOfUnderstand)
-          .concat(test_records.setOfApply)
-          .concat(test_records.setOfAnalyzing),
+        question_arr: test_records.setOfQuestions,
       });
     }
   };
 
   renderStatistic = () => {
     var { question_arr } = this.state;
-    var { test_records } = this.props;
+    var { test_records, topic_list } = this.props;
     var result = null;
-
-    var correctRemember = 0;
-    var correctUnderstand = 0;
-    var correctApply = 0;
-    var correctAnalyzing = 0;
 
     var topicArr = [];
     var questionsOfTopic = [];
@@ -47,44 +38,46 @@ class StatisticPage extends Component {
 
     topic_list.forEach((topic) => {
       var topicProps = {
-        topicId: topic.id,
+        topicId: topic.topicId,
         topic: topic,
         numberQuestion: 0,
         remember: 0,
+        correctRemember: 0,
         understand: 0,
+        correctUnderstand: 0,
         apply: 0,
+        correctApply: 0,
         analyzing: 0,
+        correctAnalyzing: 0,
       };
       for (let i = 0; i < question_arr.length; i++) {
         if (topicArr.length === 0) {
-          if (topic.id === question_arr[i].topic) {
+          if (topic.topicId === question_arr[i].topic.topicId) {
             topicArr.push(topic);
           }
         }
-        for (let t = 0; t < topicArr.length; t++) {
-          if (_.findIndex(topicArr, ["id", question_arr[i].topic]) === -1) {
-            topicArr.push(topic);
-          }
+        if (
+          _.findIndex(topicArr, ["topicId", question_arr[i].topic.topicId]) ===
+          -1
+        ) {
+          topicArr.push(topic);
         }
 
-        if (question_arr[i].topic === topic.id) {
+        if (question_arr[i].topic.topicId === topic.topicId) {
           topicProps.numberQuestion++;
           switch (question_arr[i].level) {
-            case "1":
+            case 1:
               topicProps.remember++;
               break;
-            case "2":
+            case 2:
               topicProps.understand++;
               break;
-            case "3":
+            case 3:
               topicProps.apply++;
               break;
-            case "4":
+            case 4:
               topicProps.analyzing++;
               break;
-          }
-          if (_.findIndex(questionsOfTopic, ["topicId", topic.id]) === -1) {
-            questionsOfTopic.push(topicProps);
           }
 
           for (let j = 0; j < question_arr[i].setOfAnswer.length; j++) {
@@ -94,16 +87,27 @@ class StatisticPage extends Component {
                 question_arr[i].setOfAnswer[j].id &&
               question_arr[i].setOfAnswer[j].isCorrect === true
             ) {
-              if (question_arr[i].level === "1") {
-                correctRemember++;
-              } else if (question_arr[i].level === "2") {
-                correctUnderstand++;
-              } else if (question_arr[i].level === "3") {
-                correctApply++;
-              } else if (question_arr[i].level === "4") {
-                correctAnalyzing++;
+              console.log(question_arr[i].level);
+              if (question_arr[i].level === 1) {
+                topicProps.correctRemember++;
+              } else if (question_arr[i].level === 2) {
+                topicProps.correctUnderstand++;
+              } else if (question_arr[i].level === 3) {
+                topicProps.correctApply++;
+              } else if (question_arr[i].level === 4) {
+                topicProps.correctAnalyzing++;
               }
             }
+          }
+
+          let index_topic = _.findIndex(questionsOfTopic, [
+            "topicId",
+            topic.topicId,
+          ]);
+          if (index_topic === -1) {
+            questionsOfTopic.push(topicProps);
+          } else {
+            questionsOfTopic[index_topic] = topicProps;
           }
         }
       }
@@ -114,11 +118,11 @@ class StatisticPage extends Component {
       result = questionsOfTopic.map((element, index) => {
         return (
           <tr key={index}>
-            <td>{element.topic.topic}</td>
-            <td>{`${correctRemember} / ${element.remember}`}</td>
-            <td>{`${correctUnderstand} / ${element.understand}`}</td>
-            <td>{`${correctApply} / ${element.apply}`}</td>
-            <td>{`${correctAnalyzing} / ${element.analyzing}`}</td>
+            <td>{element.topic.content}</td>
+            <td>{`${element.correctRemember} / ${element.remember}`}</td>
+            <td>{`${element.correctUnderstand} / ${element.understand}`}</td>
+            <td>{`${element.correctApply} / ${element.apply}`}</td>
+            <td>{`${element.correctAnalyzing} / ${element.analyzing}`}</td>
             <td>{`${element.numberQuestion}`}</td>
           </tr>
         );
@@ -193,6 +197,7 @@ class StatisticPage extends Component {
 const mapStateToProps = (state) => {
   return {
     test_records: state.test_records,
+    topic_list: state.topic_list,
   };
 };
 

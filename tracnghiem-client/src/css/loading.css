@@ -1,0 +1,15 @@
+.loading-text {
+  vertical-align: middle;
+  margin: auto;
+  width: 300px;
+  text-align: center;
+  font-size: 14pt;
+}
+
+.green-color {
+   background-color: rgb(160, 200, 160) !important;
+}
+
+.green-color div {
+    background-color: green !important;
+}

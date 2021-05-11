@@ -24,10 +24,7 @@ class TestedPage extends Component {
 
     if (questions_arr.length === 0) {
       this.setState({
-        questions_arr: test_records.setOfRemember
-          .concat(test_records.setOfUnderstand)
-          .concat(test_records.setOfApply)
-          .concat(test_records.setOfAnalyzing),
+        questions_arr: test_records.setOfQuestions
       });
     }
   };
@@ -38,7 +35,7 @@ class TestedPage extends Component {
     if (cauhoi.length > 0) {
       result = cauhoi.map((c, index) => {
         return (
-          <div key={index}>
+          <div key={index} className="font-text">
             <MathJaxContext version={3} config={mathjax_config}>
               <div>
                 <b>{`Câu ${index + 1}:`}</b>
@@ -48,7 +45,7 @@ class TestedPage extends Component {
                 let ans_true = true;
                 if (test_records.answerSet[index]) {
                   if (
-                    c.questionId + abcArr[i] ===
+                    (index + 1) + abcArr[i] ===
                     test_records.answerSet[index].answerId
                   ) {
                     ans_true = false;
@@ -82,6 +79,7 @@ class TestedPage extends Component {
     var { test_records } = this.props;
     var result = [];
     var count = 0;
+    console.log(questions_arr);
     for (let i = 0; i < questions_arr.length; i++) {
       let color = "";
       for (let j = 0; j < questions_arr[i].setOfAnswer.length; j++) {

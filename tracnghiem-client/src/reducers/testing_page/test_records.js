@@ -11,6 +11,8 @@ var initialState = {
   correctAnsNumber: 0,
   incorrectAnsNumber: 0,
   answerSet: [],
+
+  setOfQuestions: [],
   time: "",
 };
 
@@ -24,37 +26,37 @@ var myReducer = (state = initialState, action) => {
     case Types.ADD_QUESTION_TO_TEST:
       var index_question = -1;
       switch (action.ans_question.level) {
-        case "1":
+        case 1:
           index_question = _.findIndex(state.setOfRemember, [
-            "questionId",
-            action.ans_question.questionId,
+            "_id",
+            action.ans_question._id,
           ]);
           if (index_question === -1) {
             state.setOfRemember.push(action.ans_question);
           }
           return state;
-        case "2":
+        case 2:
           index_question = _.findIndex(state.setOfUnderstand, [
-            "questionId",
-            action.ans_question.questionId,
+            "_id",
+            action.ans_question._id,
           ]);
           if (index_question === -1) {
             state.setOfUnderstand.push(action.ans_question);
           }
           return state;
-        case "3":
+        case 3:
           index_question = _.findIndex(state.setOfApply, [
-            "questionId",
-            action.ans_question.questionId,
+            "_id",
+            action.ans_question._id,
           ]);
           if (index_question === -1) {
             state.setOfApply.push(action.ans_question);
           }
           return state;
-        case "4":
+        case 4:
           index_question = _.findIndex(state.setOfAnalyzing, [
-            "questionId",
-            action.ans_question.questionId,
+            "_id",
+            action.ans_question._id,
           ]);
           if (index_question === -1) {
             state.setOfAnalyzing.push(action.ans_question);
@@ -96,11 +98,29 @@ var myReducer = (state = initialState, action) => {
     case Types.SET_NULL_FOR_ANSWERSET:
       for (let i = 0; i < numberQuestions.length; i++) {
         const nullOnj = {
-          questionId: numberQuestions[i].questionId,
+          questionId: numberQuestions[i]._id,
           answerId: "NA"
         };
         state.answerSet.push(nullOnj);
       }
+      console.log(state);
+      return state;
+
+    case Types.SET_ID_FOR_ANSWER:
+      const abcd = ["A", "B", "C", "D"];
+      for (let i = 0; i < numberQuestions.length; i++) {
+        for (let j = 0; j < abcd.length; j++) {
+          let temp_ans = {
+            content: numberQuestions[i].setOfAnswer[j].content,
+            isCorrect: numberQuestions[i].setOfAnswer[j].isCorrect,
+            id: (i + 1) + abcd[j]
+          }
+          numberQuestions[i].setOfAnswer[j] = temp_ans;
+        }
+      }
+      state.setOfQuestions = numberQuestions;
+      console.log(state);
+      return state; 
 
     default:
       return state;

@@ -29,19 +29,18 @@ class Question extends Component {
 
       console.log(test_records);
       const answered = {
-        questionId: question.questionId,
+        questionId: question._id,
         answerId: id,
       };
 
       if (test_records.answerSet) {
         for (let i = 0; i < test_records.answerSet.length; i++) {
-          if (test_records.answerSet[i].questionId === question.questionId) {
+          if (test_records.answerSet[i].questionId === question._id) {
             this.props.onUpdateAnsweredTest(answered);
             return;
           }
         }
       }
-      // this.props.onAddAnsweredTest(answered);
     }
   };
 
@@ -66,7 +65,7 @@ class Question extends Component {
   render() {
     var { question, number } = this.props;
     return (
-      <div>
+      <div className="font-text">
         <MathJaxContext version={3} config={mathjax_config}>
           <div>
             <b>Câu {number}: </b> <MathJax>{question.content}</MathJax>

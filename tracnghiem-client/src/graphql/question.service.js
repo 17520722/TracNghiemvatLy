@@ -1,3 +1,4 @@
+import { API_ENDPOINT } from "../constants/config"
 import { _createQuestion, _getAllQuestion, _getQuestion, _getQuestions, _updateQuestion } from "./question.graph"
 
 export const getQuestion = async(questionId) => {

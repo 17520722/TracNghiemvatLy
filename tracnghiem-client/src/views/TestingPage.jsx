@@ -20,10 +20,7 @@ class TestingPage extends Component {
   componentDidMount = () => {
     var { test_records, number } = this.props;
     this.setState({
-      questions_arr: test_records.setOfRemember
-        .concat(test_records.setOfUnderstand)
-        .concat(test_records.setOfApply)
-        .concat(test_records.setOfAnalyzing),
+      questions_arr: test_records.setOfQuestions,
     });
   };
 

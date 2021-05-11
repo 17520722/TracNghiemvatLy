@@ -15,7 +15,7 @@ var myReducer = (state = initialState, action) => {
             return state;
 
         case Types.DELETE_ONE_SELECTED_TOPIC:
-            const index = _.findIndex(state, ['id', action.id]);
+            const index = _.findIndex(state, ['topicId', action.id]);
             console.log(index);
             state.splice(index, 1);
             return state;

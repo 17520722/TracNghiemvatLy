@@ -1,12 +1,11 @@
 import { Component } from "react";
-import topic_list from "../constants/topic_list";
 import { connect } from "react-redux";
 import * as topic_actions from "../actions/selected_topics_action";
 import * as test_actions from "../actions/created_test_info_actions";
 import * as record_test_actions from "../actions/test_records_actions";
 import * as _ from "lodash";
-import questions from "../constants/questions_demo";
 import { level, levelOfTest } from "../constants/genaral_define";
+import * as graphsql_question from "../graphql/question.service";
 
 let selectedTopic = [];
 let topic_edited = [];
@@ -22,6 +21,7 @@ class CreatedTest extends Component {
       level: "2",
 
       topic: [],
+      isSetIdAnswer: false,
     };
   }
 
@@ -34,22 +34,20 @@ class CreatedTest extends Component {
   componentDidMount = () => {
     this.props.onResetInfoTest();
     this.props.onSetSeletedTopics(selectedTopic);
-  }
+  };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    var test = {
-      id: `TE${Date.now()}`,
+    var test = await {
+      id: "AZX",
       subject: this.state.subject,
       classes: this.state.classes,
       term: this.state.term,
       time: this.state.time,
       level: this.state.level,
-    }
-    this.createTestOnRedux(test);
-    console.log(this.props.test_records);
-    this.props.onSetTestInfo(test);
-    this.props.onSetNullAnswerSet();
+    };
+    await this.getQuestionFromServer();
+    await this.props.onSetTestInfo(test);
     this.props.nextStepToNotice();
   };
 
@@ -61,8 +59,8 @@ class CreatedTest extends Component {
     });
   };
 
-  createTestOnRedux = (test) => {
-    var number_question_for_lv = '';
+  createTestOnRedux = (test, questions) => {
+    var number_question_for_lv = "";
     if (test.level === "1") {
       number_question_for_lv = levelOfTest[0];
     } else if (test.level === "2") {
@@ -71,40 +69,90 @@ class CreatedTest extends Component {
       number_question_for_lv = levelOfTest[2];
     }
     for (let i = 0; i < number_question_for_lv.remember; i++) {
-      questions.forEach(q => {
-        if (q.level === level[1].id) {
+      questions.forEach((q) => {
+        if (q.level === 1) {
           this.props.onAddQuestionToTest(q);
         }
       });
     }
     for (let i = 0; i < number_question_for_lv.understand; i++) {
-      questions.forEach(q => {
-        if (q.level === level[2].id) {
+      questions.forEach((q) => {
+        if (q.level === 2) {
           this.props.onAddQuestionToTest(q);
         }
       });
     }
-  }
+    for (let i = 0; i < number_question_for_lv.apply; i++) {
+      questions.forEach((q) => {
+        if (q.level === 3) {
+          this.props.onAddQuestionToTest(q);
+        }
+      });
+    }
+    for (let i = 0; i < number_question_for_lv.analyzing; i++) {
+      questions.forEach((q) => {
+        if (q.level === 4) {
+          this.props.onAddQuestionToTest(q);
+        }
+      });
+    }
+    console.log(this.props.test_records);
+  };
+
+  getQuestionFromServer = () => {
+    graphsql_question
+      .getAllQuestion()
+      .then((res) => res.text())
+      .then((result) => {
+        let temp = JSON.parse(result);
+        let allQuestion = temp.data.allQuestion;
+        let choiceQuestion = [];
+        for (let i = 0; i < 40; i++) {
+          if (choiceQuestion.length === 0) {
+            const index = _.random(0, allQuestion.length - 1);
+            choiceQuestion.push(allQuestion[index]);
+          } else {
+            this.findDifferent(allQuestion, choiceQuestion);
+          }
+        }
+        console.log(choiceQuestion);
+        let test = this.state;
+        this.createTestOnRedux(test, choiceQuestion);
+        
+        this.props.onSetIdForAnswer();
+        this.props.onSetNullAnswerSet();
+      });
+  };
+
+  findDifferent = (allQuestion, choiceQuestion) => {
+    const index = _.random(0, allQuestion.length - 1);
+    if (_.findIndex(choiceQuestion, ["_id", allQuestion[index]._id]) === -1) {
+      choiceQuestion.push(allQuestion[index]);
+    } else {
+      this.findDifferent(allQuestion, choiceQuestion);
+    }
+  };
 
   addTopic = (event) => {
-    var {selected_topics} = this.props;
+    var { selected_topics } = this.props;
     var value = event.target;
     var { topic } = this.state;
     this.setState({
       topic: value,
     });
     for (let i = 0; i < selected_topics.length; i++) {
-      if (selected_topics[i].id === topic) return;
+      if (selected_topics[i].topicId === topic) return;
     }
-    const index = _.findIndex(topic_edited, ['id', topic]);
+    const index = _.findIndex(topic_edited, ["topicId", topic]);
+    console.log(index);
     this.props.onAddSelectedTopic(topic_edited[index]);
   };
 
   sliceTopic = (topics, classes, term) => {
     var tempRe = [];
     for (let i = 0; i < topics.length; i++) {
-      var te = topics[i].id.slice(2, 3);
-      var cla = topics[i].id.slice(0, 2);
+      var te = topics[i].topicId.slice(2, 3);
+      var cla = topics[i].topicId.slice(0, 2);
       if (term === "cn" && classes === cla) {
         tempRe.push(topics[i]);
       } else if (term === te && classes === cla) {
@@ -118,27 +166,28 @@ class CreatedTest extends Component {
 
   handleTermTopic = () => {
     var { term, classes } = this.state;
-    var topic_e = this.sliceTopic(topic_list, classes, term);
+    var topic_e = this.sliceTopic(this.props.topic_list, classes, term);
     return topic_e;
   };
 
   handleDeleteTopic = (event) => {
-    var {selected_topics} = this.props;
+    var { selected_topics } = this.props;
     var id = event.target.id;
+    console.log(id);
     for (let i = 0; i < selected_topics.length; i++) {
-      if (selected_topics[i].id === id) {
+      if (selected_topics[i].topicId === id) {
         this.props.onDeleteOneTopic(id);
         this.setState({});
         break;
       }
     }
-  }
+  };
 
   showSelectedTopic = (topics, topic_list) => {
     var temp = [];
     for (let i = 0; i < topics.length; i++) {
       for (let j = 0; j < topic_list.length; j++) {
-        if (topics[i].id === topic_list[j].id) {
+        if (topics[i].topicId === topic_list[j].topicId) {
           temp.push(topic_list[j]);
         }
       }
@@ -150,11 +199,11 @@ class CreatedTest extends Component {
           <button
             key={i}
             type="button"
-            id={t.id}
+            id={t.topicId}
             className="btn btn-secondary selected-topic-btn"
             onClick={this.handleDeleteTopic}
           >
-            {t.topic}
+            {t.content}
           </button>
           <i className="fas fa-trash-alt"></i>
         </div>
@@ -257,8 +306,12 @@ class CreatedTest extends Component {
                 >
                   {topic_edited.map((topic, i) => {
                     return (
-                      <option key={i} value={topic.id} onClick={this.addTopic}>
-                        [{topic.id}] {topic.topic}
+                      <option
+                        key={i}
+                        value={topic.topicId}
+                        onClick={this.addTopic}
+                      >
+                        [{topic.topicId}] {topic.content}
                       </option>
                     );
                   })}
@@ -267,7 +320,7 @@ class CreatedTest extends Component {
 
               <div>
                 <p>Chủ đề đã chọn:</p>
-                {this.showSelectedTopic(selected_topics, topic_list)}
+                {this.showSelectedTopic(selected_topics, this.props.topic_list)}
               </div>
 
               <div className="text-right">
@@ -283,12 +336,13 @@ class CreatedTest extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     selected_topics: state.selected_topics,
     test_records: state.test_records,
-  }
-}
+    topic_list: state.topic_list,
+  };
+};
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
@@ -305,7 +359,7 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(topic_actions.add_selected_topic(topic));
     },
     onSetTestInfo: (test) => {
-      dispatch(test_actions.set_created_test_info(test))
+      dispatch(test_actions.set_created_test_info(test));
     },
     onAddQuestionToTest: (question) => {
       dispatch(record_test_actions.add_question_to_test(question));
@@ -315,8 +369,11 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     onSetNullAnswerSet: () => {
       dispatch(record_test_actions.set_null_for_answerset());
-    }
-  }
-}
+    },
+    onSetIdForAnswer: () => {
+      dispatch(record_test_actions.set_id_for_answer());
+    },
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreatedTest);
