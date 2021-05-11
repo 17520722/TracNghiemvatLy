@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import logo from '../images/t.png'
 import { inputBackground, primary, validColor } from '../constants/GlobalStyle'
+import { signIn } from '../graphql/user.service'
 
 const Container = styled.div`
      margin: 0 auto 0 auto;
@@ -96,7 +97,9 @@ const LoginLink = styled.a`
      margin: 0.5rem;
 `
 
-const SignInPage = () => {
+const SignUpPage = () => {
+     
+
      return (
           <Container>
                <Logo>
@@ -124,4 +127,4 @@ const SignInPage = () => {
      )
 }
 
-export default SignInPage
+export default SignUpPage

@@ -3,7 +3,7 @@ import AdminPage from "./views/Admin/AdminPage";
 import DeThiPage from "./views/Admin/DeThi";
 import LoginPage from "./views/login-page";
 import Page404 from "./views/404";
-import SignInPage from "./views/sign-in";
+import SignUpPage from "./views/sign-up";
 import TestingPage from "./views/TestingPage";
 import Home from "./views/Home";
 import TestedPage from "./views/TestedPage";
@@ -58,9 +58,9 @@ const routes = [
     component: LoginPage,
   },
   {
-    path: "/sign-in",
+    path: "/sign-up",
     exact: true,
-    component: SignInPage,
+    component: SignUpPage,
   },
   {
     path: "/admin",

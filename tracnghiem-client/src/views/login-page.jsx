@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import logo from '../images/t.png'
 import { inputBackground, primary, validColor } from '../constants/GlobalStyle'
+import { signIn } from '../graphql/user.service'
 
 const Container = styled.div`
      margin: 5% auto 0 auto;
@@ -101,25 +102,45 @@ const RegisterLink = styled.a`
 `
 
 const LoginPage = () => {
+     const [username, setUsername] = useState("");
+     const [password, setPassword] = useState("");
+
+     function onChangeUsername(e) {
+          setUsername(e.target.value);
+     }
+
+     function onChangePassword(e) {
+          setPassword(e.target.value);
+     }
+
+     async function onSubmitSignIn(e) {
+          e.preventDefault();
+          let user;
+          signIn(username, password).then(response => response.text()).then(result => {
+               console.log(JSON.parse(result));
+          });
+          console.log(user);
+     }
+
      return (
           <Container>
                <Logo>
                     <img src={ logo } alt="Logo"/>
                </Logo>
-               <LoginForm>
+               <LoginForm onSubmit={onSubmitSignIn}>
                     <InputGroup>
-                         <input type="text" id="username" name="username" placeholder="VD: viprono1, top1server,..." required minLength="3"/>
+                         <input type="text" id="username" name="username" placeholder="VD: viprono1, top1server,..." required minLength="3" onChange={onChangeUsername} value={username}/>
                          <label for="username">username</label>
                     </InputGroup>
                     <InputGroup>
-                         <input type="password" id="password" name="password" placeholder="password"required minLength="6"/>
+                         <input type="password" id="password" name="password" placeholder="password"required minLength="6" onChange={onChangePassword} value={password}/>
                          <label for="password">password</label>
                     </InputGroup>
                     <SubmitButton className="btn">Login</SubmitButton>
                </LoginForm>
                <SmallText>   
                     <ForgotLink href="#">Quên tài khoản?</ForgotLink>
-                    <RegisterLink href="sign-in">Đăng ký</RegisterLink>
+                    <RegisterLink href="sign-up">Đăng ký</RegisterLink>
                </SmallText>
           </Container>
      )
