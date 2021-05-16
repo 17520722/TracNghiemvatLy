@@ -28,3 +28,19 @@ export const signIn = async (username, password) => {
           redirect: 'follow'
      })
 }
+
+export const signUp = async (username, password) => {
+     let userParams = new URLSearchParams();
+     userParams.append("username", username);
+     userParams.append("hashPassword", password);
+
+     return await fetch(API_AUTH.concat("/register") , {
+          method: 'POST',
+          headers: {
+               'Accept': 'application/json',
+               "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: userParams,
+          redirect: 'follow'
+     })
+}

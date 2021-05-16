@@ -25,6 +25,7 @@ app.post('/auth/register', (req, res) => {
 		else {
 			let newUser = new User(req.body);
 			newUser.hashPassword = bcrypt.hashSync(req.body.hashPassword, 10);
+			newUser.role = "member";
 			newUser.save((err, user) => {
 				if (err) {
 					return res.status(400).send({message: err});

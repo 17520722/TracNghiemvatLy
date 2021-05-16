@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import logo from '../images/t.png'
 import { inputBackground, primary, validColor } from '../constants/GlobalStyle'
-import { signIn } from '../graphql/user.service'
+import { signUp } from '../graphql/user.service'
 
 const Container = styled.div`
      margin: 0 auto 0 auto;
@@ -98,24 +98,64 @@ const LoginLink = styled.a`
 `
 
 const SignUpPage = () => {
-     
+     const [username, setUsername] = useState("");
+     const [password, setPassword] = useState("");
+     const [passwordCon, setPasswordCon] = useState("");
+
+     function onChangeUsername(e) {
+          setUsername(e.target.value);
+     }
+
+     function onChangePassword(e) {
+          setPassword(e.target.value);
+          let validate = document.getElementById("password-confirm");
+          if (password !== passwordCon) {
+               validate.setCustomValidity("Password don't match");
+          }
+          else {
+               validate.setCustomValidity("");
+          }
+     }
+
+     function onChangePasswordCon(e) {
+          setPasswordCon(e.target.value);
+     }
+
+     function onValidateKeyUp(e) {
+          let validate = document.getElementById("password-confirm");
+          if (password !== passwordCon) {
+               validate.setCustomValidity("Password don't match");
+          }
+          else {
+               validate.setCustomValidity("");
+          }
+     }
+
+     async function onSubmitSignUp(e) {
+          e.preventDefault();
+          let user;
+          signUp(username, password).then(response => response.text()).then(result => {
+               console.log(JSON.parse(result));
+          });
+          console.log(user);
+     }
 
      return (
           <Container>
                <Logo>
                     <img src={ logo } alt="Logo"/>
                </Logo>
-               <LoginForm>
+               <LoginForm onSubmit={onSubmitSignUp}>
                     <InputGroup>
-                         <input type="text" id="username" name="username" placeholder="VD: viprono1, top1server,..." required minLength="3"/>
+                         <input type="text" id="username" name="username" placeholder="VD: viprono1, top1server,..." required minLength="3" value={username} onChange={onChangeUsername}/>
                          <label for="username">username</label>
                     </InputGroup>
                     <InputGroup>
-                         <input type="password" id="password" name="password" placeholder="password"required minLength="6"/>
+                         <input type="password" id="password" name="password" placeholder="password"required minLength="6" value={password} onChange={onChangePassword}/>
                          <label for="password">password</label>
                     </InputGroup>
                     <InputGroup>
-                         <input type="password" id="password-confirm" name="password-confirm" placeholder="confirm password"required minLength="6"/>
+                         <input type="password" id="password-confirm" name="password-confirm" placeholder="confirm password"required minLength="6" value={passwordCon} onChange={onChangePasswordCon} onKeyUp={onValidateKeyUp}/>
                          <label for="confirm-password">confirm password</label>
                     </InputGroup>
                     <SubmitButton className="btn">SignIn</SubmitButton>
