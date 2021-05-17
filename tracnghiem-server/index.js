@@ -58,7 +58,7 @@ app.post('/auth/signin', (req, res) => {
 						await User.updateOne({username: user.username}, {
 							refreshToken: refreshToken
 						});
-					} 
+					}
 					else {
 						// Nếu user này đã có refresh token thì lấy refresh token đó từ database
 						refreshToken = user.refreshToken;
