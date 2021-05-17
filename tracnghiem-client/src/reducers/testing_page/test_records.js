@@ -70,7 +70,11 @@ var myReducer = (state = initialState, action) => {
       return state;
 
     case Types.CLEAR_INFO_TEST:
-      state = initialState;
+      state.setOfRemember = [];
+      state.setOfUnderstand = [];
+      state.setOfApply = [];
+      state.setOfAnalyzing = [];
+      state.setOfQuestions = [];
       return state;
 
     case Types.ADD_ANSWERD_TO_TEST:
@@ -87,7 +91,8 @@ var myReducer = (state = initialState, action) => {
 
     case Types.SET_NUMBER_CORRECT:
       state.correctAnsNumber = action.num_correct;
-      state.incorrectAnsNumber = numberQuestions.length - state.correctAnsNumber;
+      state.incorrectAnsNumber =
+        numberQuestions.length - state.correctAnsNumber;
       return state;
 
     case Types.SET_TIME_FINNISH_TEST:
@@ -99,11 +104,10 @@ var myReducer = (state = initialState, action) => {
       for (let i = 0; i < numberQuestions.length; i++) {
         const nullOnj = {
           questionId: numberQuestions[i]._id,
-          answerId: "NA"
+          answerId: "NA",
         };
         state.answerSet.push(nullOnj);
       }
-      console.log(state);
       return state;
 
     case Types.SET_ID_FOR_ANSWER:
@@ -113,14 +117,13 @@ var myReducer = (state = initialState, action) => {
           let temp_ans = {
             content: numberQuestions[i].setOfAnswer[j].content,
             isCorrect: numberQuestions[i].setOfAnswer[j].isCorrect,
-            id: (i + 1) + abcd[j]
-          }
+            id: i + 1 + abcd[j],
+          };
           numberQuestions[i].setOfAnswer[j] = temp_ans;
         }
       }
       state.setOfQuestions = numberQuestions;
-      console.log(state);
-      return state; 
+      return state;
 
     default:
       return state;

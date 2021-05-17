@@ -4,18 +4,34 @@ export const level = [
   {
     id: "none",
     level: "Theo năng lực",
+    remember: 0,
+    understand: 0,
+    apply: 0,
+    analyzing: 0
   },
   {
     id: "1",
     level: "Dễ",
+    remember: 50,
+    understand: 30,
+    apply: 10,
+    analyzing: 10
   },
   {
     id: "2",
     level: "Trung bình",
+    remember: 30,
+    understand: 40,
+    apply: 20,
+    analyzing: 10
   },
   {
     id: "3",
     level: "Khó",
+    remember: 20,
+    understand: 30,
+    apply: 30,
+    analyzing: 20
   },
 ];
 
@@ -53,26 +69,18 @@ export const term = [
   },
 ];
 
-export const levelOfTest = [
-  {
-    remember: 25,
-    understand: 15,
-    apply: 5,
-    analyzing: 5,
-  },
-  {
-    remember: 15,
-    understand: 20,
-    apply: 10,
-    analyzing: 5,
-  },
-  {
-    remember: 10,
-    understand: 15,
-    apply: 15,
-    analyzing: 10,
+export var levelOfTest = (numberQuestion, level) => {
+  let rate = numberQuestion / 100;
+  let result = {
+    remember: rate * level.remember ,
+    understand: rate * level.understand,
+    apply: rate * level.apply,
+    analyzing: 0
   }
-];
+  console.log(result);
+  result.analyzing = numberQuestion - (result.remember + result.understand + result.apply);
+  return result;
+}
 
 export const QUESTIONS_PER_PAGE = 10;
 export const CAUTION_TIME_50 = 9;

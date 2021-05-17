@@ -37,7 +37,6 @@ class TestingPage extends Component {
     return result;
   };
 
-
   renderQuestionPerPage = () => {
     var { currentPage, questions_arr } = this.state;
     var result = [];
@@ -51,11 +50,35 @@ class TestingPage extends Component {
     return result;
   };
 
+  goToQuestion = async (e) => {
+    let elementId = e.target.id;
+    let number = parseInt(elementId.slice(3, 5));
+    let numberAfterDot = 0;
+    let page = 0;
+    if (number % 10 === 0) {
+      numberAfterDot = 10;
+      page = Math.floor(number / 10);
+    } else {
+      numberAfterDot = number % 10;
+      page = Math.floor(number / 10) + 1;
+    }
+    await this.setState({ currentPage: page });
+    let position =
+      (window.screen.height / 10) * numberAfterDot + (numberAfterDot - 1) * 120;
+    window.scrollTo(0, position);
+    console.log(position);
+  };
+
   showListNumber = () => {
     var result = [];
     for (var i = 1; i <= 40; i++) {
       result.push(
-        <div key={i} id={`num${i}`} className="number-of-list">
+        <div
+          key={i}
+          id={`num${i}`}
+          className="number-of-list"
+          onClick={this.goToQuestion}
+        >
           {i}
         </div>
       );
@@ -65,10 +88,12 @@ class TestingPage extends Component {
 
   nextPage = () => {
     this.setState({ currentPage: this.state.currentPage + 1 });
+    window.scrollTo(0, 0);
   };
 
   prevPage = () => {
     this.setState({ currentPage: this.state.currentPage - 1 });
+    window.scrollTo(0, 0);
   };
 
   onFinnishTest = () => {
@@ -139,6 +164,12 @@ class TestingPage extends Component {
               </div>
             </div>
           </div>
+          <i
+            class="fas fa-angle-up to-the-top"
+            onClick={() => {
+              window.scrollTo(0, 0);
+            }}
+          ></i>
         </div>
         <Footer />
       </div>

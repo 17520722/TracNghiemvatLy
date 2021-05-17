@@ -74,6 +74,20 @@ class TestedPage extends Component {
     return result;
   };
 
+  goToQuestion = (e) => {
+    let elementId = e.target.id;
+    let number = parseInt(elementId.slice(3, 5));
+    let numberAfterDot = 0;
+    if (number % 10 === 0) {
+      numberAfterDot = 10;
+    } else {
+      numberAfterDot = number % 10;
+    }
+    let position =
+      (window.screen.height / 7.9) * number + (number - 1) * 120;
+    window.scrollTo(0, position);
+  }
+
   showListNumber = () => {
     var { questions_arr } = this.state;
     var { test_records } = this.props;
@@ -101,7 +115,7 @@ class TestedPage extends Component {
         }
       }
       result.push(
-        <div key={i} id={`num${i + 1}`} className={`number-of-list ${color}`}>
+        <div key={i} id={`num${i + 1}`} className={`number-of-list ${color}`} onClick={this.goToQuestion}>
           {i + 1}
         </div>
       );
@@ -125,7 +139,7 @@ class TestedPage extends Component {
               {this.renderQuestion(questions_arr)}
             </div>
           </div>
-          <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3 list-num-position">
             <div className="list-number-wrapper row">
               {this.showListNumber()}
             </div>
@@ -153,6 +167,12 @@ class TestedPage extends Component {
               </div>
             </div>
           </div>
+          <i
+            class="fas fa-angle-up to-the-top"
+            onClick={() => {
+              window.scrollTo(0, 0);
+            }}
+          ></i>
         </div>
         <Footer />
       </div>

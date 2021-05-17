@@ -1,83 +1,95 @@
-
 .btn {
-    border-radius: 20px;
-    padding-left: 16px;
-    padding-right: 16px;
+  border-radius: 20px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .list-question-part {
-    background-color: #FFF;
-    margin-bottom: 5px;
+  background-color: #fff;
+  margin-bottom: 5px;
 }
 
 .list-ques-wrapper {
-    padding: 1rem;
-    border: 1px solid #2AA367;
-    border-radius: 20px;
-    margin-left: 2rem;
-    margin-right: 1rem;
-    min-height: 300px;
+  padding: 1rem;
+  border: 1px solid #2aa367;
+  border-radius: 20px;
+  margin-left: 2rem;
+  margin-right: 1rem;
+  min-height: 450px;
 }
 
 .list-number-wrapper {
-    padding: 1rem;
-    border: 1px solid #2AA367;
-    border-radius: 20px;
+  padding: 1rem;
+  border: 1px solid #2aa367;
+  border-radius: 20px;
 }
 
 .one-answer {
-    width: fit-content;
-    height: auto;
+  width: fit-content;
+  height: auto;
 }
 
 .list-num-position {
-    position: fixed;
-    top: auto;
-    right: 0;
+  position: fixed;
+  top: auto;
+  right: 0;
 }
 
 .number-of-list {
-    height: 30px;
-    width: 30px;
-    margin: 2px;
-    border-radius: 50%;
-    border: 1px solid green;
-    text-align: center;
+  height: 30px;
+  width: 30px;
+  margin: 2px;
+  border-radius: 50%;
+  border: 1px solid green;
+  text-align: center;
+  cursor: pointer;
 }
 
 .time-finnish {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 .time-title {
-    font-size: 13pt;
-    font-weight: 500;
+  font-size: 13pt;
+  font-weight: 500;
 }
 
 .finnish {
-    text-align: center;
+  text-align: center;
 }
 
 .color-green {
-    color: green;
-    font-weight: 700;
+  color: green;
+  font-weight: 700;
 }
 
 .color-red {
-    color: red;
-    font-weight: 500;
+  color: red;
+  font-weight: 500;
 }
 
 .bg-green {
-    background-color: green;
-    color: white;
+  background-color: green;
+  color: white;
 }
 .bg-yellow {
-    background-color: rgb(200, 200, 40);
-    color: white;
-    border: 1px solid yellow;
+  background-color: rgb(200, 200, 40);
+  color: white;
+  border: 1px solid yellow;
 }
 .font-text {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 13pt;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 13pt;
+}
+.to-the-top {
+  position: fixed;
+  cursor: pointer;
+  bottom: 50px;
+  right: 20px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1.4rem;
+  opacity: 0.75;
+  background-color: green;
+  color: white;
+  z-index: 1;
 }

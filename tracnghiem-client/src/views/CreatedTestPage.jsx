@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import CreatedTest from "../components/CreatedTest";
 import NoticeExam from "../components/NoticeExam";
 import * as topic_list_actions from "../actions/topic_list_actions";
+import * as record_test_actions from "../actions/test_records_actions";
 import { connect } from "react-redux";
 
 class CreatedPage extends Component {
@@ -66,7 +67,10 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     onGetTopicList: () => {
       dispatch(topic_list_actions.get_topic_list_req());
-    }
+    },
+    onResetInfoTest: () => {
+      dispatch(record_test_actions.clear_info_test());
+    },
   }
 }
 

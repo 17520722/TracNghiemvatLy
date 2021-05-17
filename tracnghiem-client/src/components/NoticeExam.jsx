@@ -2,8 +2,9 @@ import { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import * as _ from "lodash";
-import { classes, level } from "../constants/genaral_define";
+import { classes, level, term } from "../constants/genaral_define";
 import Loading from "./Loading";
+import * as test_records_actions from "../actions/test_records_actions"
 
 class NoticeExam extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class NoticeExam extends Component {
   }
 
   removeTest = () => {
+    this.props.onResetTestRecords();
     this.props.removeTest();
   };
 
@@ -88,6 +90,9 @@ class NoticeExam extends Component {
               <p>{`Phạm vi: ${
                 this.findObj(created_test_info.classes, classes).classes
               }`}</p>
+              <p>{`Học kì: ${
+                this.findObj(created_test_info.term, term).term
+              }`}</p>
               <p>{`Chủ đề: ${this.showSelectedTopics()}`}</p>
             </div>
             <div className="text-right mr-5">
@@ -114,4 +119,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(NoticeExam);
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onResetTestRecords: () => {
+      dispatch(test_records_actions.clear_info_test())
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NoticeExam);

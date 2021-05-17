@@ -32,7 +32,6 @@ class CreatedTest extends Component {
   };
 
   componentDidMount = () => {
-    this.props.onResetInfoTest();
     this.props.onSetSeletedTopics(selectedTopic);
   };
 
@@ -60,77 +59,95 @@ class CreatedTest extends Component {
   };
 
   createTestOnRedux = (test, questions) => {
+    var {test_records} = this.props;
     var number_question_for_lv = "";
     if (test.level === "1") {
-      number_question_for_lv = levelOfTest[0];
+      number_question_for_lv = levelOfTest(40, level[1]);
     } else if (test.level === "2") {
-      number_question_for_lv = levelOfTest[1];
+      number_question_for_lv = levelOfTest(40, level[2]);
     } else {
-      number_question_for_lv = levelOfTest[2];
+      number_question_for_lv = levelOfTest(40, level[3]);
     }
-    for (let i = 0; i < number_question_for_lv.remember; i++) {
-      questions.forEach((q) => {
-        if (q.level === 1) {
-          this.props.onAddQuestionToTest(q);
-        }
-      });
+
+    console.log(number_question_for_lv);
+    let allQuestionLenght = questions.length;
+
+    for (let i = 0; i < allQuestionLenght; i++) {
+      const index = _.random(0, questions.length - 1);
+      if (questions[index].level === 1) {
+        this.props.onAddQuestionToTest(questions[index]);
+        questions.splice(index, 1);
+      }
+      if (test_records.setOfRemember.length === number_question_for_lv.remember) {
+        break;
+      }
     }
-    for (let i = 0; i < number_question_for_lv.understand; i++) {
-      questions.forEach((q) => {
-        if (q.level === 2) {
-          this.props.onAddQuestionToTest(q);
-        }
-      });
+    for (let i = 0; i < allQuestionLenght; i++) {
+      const index = _.random(0, questions.length - 1);
+      if (questions[index].level === 2) {
+        this.props.onAddQuestionToTest(questions[index]);
+        questions.splice(index, 1);
+      }
+      if (test_records.setOfUnderstand.length === number_question_for_lv.understand) {
+        break;
+      }
     }
-    for (let i = 0; i < number_question_for_lv.apply; i++) {
-      questions.forEach((q) => {
-        if (q.level === 3) {
-          this.props.onAddQuestionToTest(q);
-        }
-      });
+    for (let i = 0; i < allQuestionLenght; i++) {
+      const index = _.random(0, questions.length - 1);
+      if (questions[index].level === 3) {
+        this.props.onAddQuestionToTest(questions[index]);
+        questions.splice(index, 1);
+      }
+      if (test_records.setOfApply.length === number_question_for_lv.apply) {
+        break;
+      }
     }
-    for (let i = 0; i < number_question_for_lv.analyzing; i++) {
-      questions.forEach((q) => {
-        if (q.level === 4) {
-          this.props.onAddQuestionToTest(q);
-        }
-      });
+    for (let i = 0; i < allQuestionLenght; i++) {
+      const index = _.random(0, questions.length - 1);
+      if (questions[index].level === 4) {
+        this.props.onAddQuestionToTest(questions[index]);
+        questions.splice(index, 1);
+      }
+      if (test_records.setOfAnalyzing.length === number_question_for_lv.analyzing) {
+        break;
+      }
     }
     console.log(this.props.test_records);
   };
 
+  filterQuestionByTopic = (allQuestion, topicList) => {
+    let tempArr = [];
+    for (let i = 0; i < topicList.length; i++) {
+      allQuestion.forEach((element) => {
+        if (element.topic.topicId === topicList[i].topicId) {
+          tempArr.push(element);
+        }
+      });
+    }
+    return tempArr;
+  };
+
   getQuestionFromServer = () => {
+    var { test_records } = this.props;
     graphsql_question
       .getAllQuestion()
       .then((res) => res.text())
       .then((result) => {
         let temp = JSON.parse(result);
         let allQuestion = temp.data.allQuestion;
-        let choiceQuestion = [];
-        for (let i = 0; i < 40; i++) {
-          if (choiceQuestion.length === 0) {
-            const index = _.random(0, allQuestion.length - 1);
-            choiceQuestion.push(allQuestion[index]);
-          } else {
-            this.findDifferent(allQuestion, choiceQuestion);
-          }
-        }
-        console.log(choiceQuestion);
         let test = this.state;
-        this.createTestOnRedux(test, choiceQuestion);
-        
+
+        if (selectedTopic.length !== 0) {
+          let temp = this.filterQuestionByTopic(allQuestion, selectedTopic);
+          allQuestion = temp;
+        } else {
+          let temp = this.filterQuestionByTopic(allQuestion, topic_edited);
+          allQuestion = temp;
+        }
+        this.createTestOnRedux(test, allQuestion);
         this.props.onSetIdForAnswer();
         this.props.onSetNullAnswerSet();
       });
-  };
-
-  findDifferent = (allQuestion, choiceQuestion) => {
-    const index = _.random(0, allQuestion.length - 1);
-    if (_.findIndex(choiceQuestion, ["_id", allQuestion[index]._id]) === -1) {
-      choiceQuestion.push(allQuestion[index]);
-    } else {
-      this.findDifferent(allQuestion, choiceQuestion);
-    }
   };
 
   addTopic = (event) => {
@@ -216,6 +233,7 @@ class CreatedTest extends Component {
     var { subject, classes, term, time, level, topic } = this.state;
     var { selected_topics } = this.props;
     topic_edited = this.handleTermTopic();
+    console.log(this.props.test_records);
 
     return (
       <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9">
@@ -363,9 +381,6 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     onAddQuestionToTest: (question) => {
       dispatch(record_test_actions.add_question_to_test(question));
-    },
-    onResetInfoTest: () => {
-      dispatch(record_test_actions.clear_info_test());
     },
     onSetNullAnswerSet: () => {
       dispatch(record_test_actions.set_null_for_answerset());
