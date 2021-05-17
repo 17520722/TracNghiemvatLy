@@ -7,7 +7,7 @@ import banner from "../img/banner.png";
 export default class HomePage extends Component {
   render() {
     return (
-      <div>
+      <>
         <Header />
         <div className="home-page-prop">
           <div className="container-fluid banner-prop">
@@ -43,7 +43,7 @@ export default class HomePage extends Component {
           </div>
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
 }

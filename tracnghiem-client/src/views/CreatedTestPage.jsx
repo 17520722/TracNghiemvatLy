@@ -39,7 +39,7 @@ class CreatedPage extends Component {
     var { isCreated } = this.state;
 
     return (
-      <div>
+      <>
         <Header />
         <div className="row">
           <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3 side-block">
@@ -52,7 +52,7 @@ class CreatedPage extends Component {
           )}
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
 }

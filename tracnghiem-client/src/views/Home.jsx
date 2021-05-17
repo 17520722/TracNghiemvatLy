@@ -7,13 +7,13 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div>
+      <>
         <Header />
           <Switch >
             <Redirect to="/home/welcome"/>
           </Switch>
         <Footer />
-      </div>
+      </>
     );
   }
 }

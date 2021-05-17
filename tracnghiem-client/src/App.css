@@ -121,3 +121,8 @@
   font-size: 22pt;
   padding-top: 35%;
 }
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
