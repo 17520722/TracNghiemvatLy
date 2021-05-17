@@ -2,6 +2,7 @@ import React from "react";
 import {routes} from "./routes";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Toast from "./components/Toast";
 
 function showRoute (routes) {
   var result = null;
@@ -26,6 +27,7 @@ export default function App() {
       <Switch>
         {showRoute(routes)}
       </Switch>
+      <Toast />
     </Router>
   );
 }

@@ -49,10 +49,9 @@ class CauHoiPage extends Component {
             if (rawData.data === null || rawData.data === undefined) {
                 this.setState({
                      ...this.state,
-                     typeToast: "error",
-                     textToast: "Lỗi: không tiếp cận được máy chủ",
                      isLoading: false,
                 });
+                this.props.set_toast("error", "Lỗi: không tiếp cận được máy chủ");
                 this.props.set_show_toast(true);
 
                 return;
@@ -72,10 +71,9 @@ class CauHoiPage extends Component {
             if (rawData.data === null || rawData.data === undefined) {
                 this.setState({
                      ...this.state,
-                     typeToast: "error",
-                     textToast: "Lỗi: không tiếp cận được máy chủ",
                      isLoading: false,
                 });
+                this.props.set_toast("error", "Lỗi: không tiếp cận được máy chủ");
                 this.props.set_show_toast(true);
 
                 return;
@@ -167,10 +165,9 @@ class CauHoiPage extends Component {
     onCreateQuestion = () => {
         this.setState({
             ...this.state,
-            typeToast: "success",
-            textToast: "OK",
             isLoading: false,
         });
+        this.props.set_toast("success", "OK");
         this.props.set_show_toast(true);
     }
 
@@ -405,7 +402,6 @@ class CauHoiPage extends Component {
                 <div className="panigation">
                     <Pagination count={countPage} shape="rounded" color="secondary" page={this.state.currentPage} onChange={this.handleChangePage}></Pagination>
                 </div>
-                <Toast type={this.state.typeToast} text={this.state.textToast}></Toast>
             </>
         );
     }

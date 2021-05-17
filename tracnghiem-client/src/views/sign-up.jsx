@@ -3,6 +3,9 @@ import styled from 'styled-components'
 import logo from '../images/t.png'
 import { inputBackground, primary, validColor } from '../constants/GlobalStyle'
 import { signUp } from '../graphql/user.service'
+import { useDispatch } from 'react-redux'
+import { set_show_toast, set_toast } from '../actions/Toast'
+import { useHistory } from 'react-router-dom'
 
 const Container = styled.div`
      margin: 0 auto 0 auto;
@@ -101,6 +104,8 @@ const SignUpPage = () => {
      const [username, setUsername] = useState("");
      const [password, setPassword] = useState("");
      const [passwordCon, setPasswordCon] = useState("");
+     const dispatch = useDispatch();
+     const history = useHistory();
 
      function onChangeUsername(e) {
           setUsername(e.target.value);
@@ -135,9 +140,18 @@ const SignUpPage = () => {
           e.preventDefault();
           let user;
           signUp(username, password).then(response => response.text()).then(result => {
-               console.log(JSON.parse(result));
+               let data = JSON.parse(result);
+               if (data?.message === "Exist!") {
+                    dispatch(set_toast("error", "Tài khoản đã tồn tại"));
+                    dispatch(set_show_toast(true));
+                    return;
+               }
+               dispatch(set_toast("success", "Tạo tài khoản thành công"));
+               dispatch(set_show_toast(true));
+               history.push("/login");
+               
+               console.log(data);
           });
-          console.log(user);
      }
 
      return (

@@ -9,7 +9,7 @@ import { Button,
 import { createTopic, getAllTopic } from '../../graphql/topic.service';
 import Toast from '../../components/Toast';
 import { useDispatch } from 'react-redux';
-import { set_show_toast } from '../../actions/Toast';
+import { set_show_toast, set_toast } from '../../actions/Toast';
 import * as _ from 'lodash';
 
 const Topic = () => {
@@ -31,8 +31,7 @@ const Topic = () => {
                console.log(rawData);
 
                if (rawData.data === null || rawData.data === undefined) {
-                    setTypeToast("error");
-                    setTextToast("Lỗi: không tiếp cận được máy chủ.");
+                    dispatch(set_toast("error", "Lỗi: không tiếp cận được máy chủ."));
                     setLoading(false);
                     dispatch(set_show_toast(true));
 
@@ -68,16 +67,14 @@ const Topic = () => {
           }).then(response => response.text(),
           rejected => {
                setLoading(false);
-               setTextToast("Lỗi bị từ chối từ máy chủ");
-               setTypeToast("error");
+               dispatch(set_toast("error", "Lỗi bị từ chối từ máy chủ"));
                dispatch(set_show_toast(true));
                console.log(rejected);
           }).then(result => {
                let rawData = JSON.parse(result);
 
                if (rawData.data === undefined || rawData.data.createTopic === null) {
-                    setTypeToast("error");
-                    setTextToast("Lỗi: không tiếp cận được máy chủ.");
+                    dispatch(set_toast("error", "Lỗi: không tiếp cận được máy chủ."));
                     setLoading(false);
                     dispatch(set_show_toast(true));
 
@@ -85,16 +82,14 @@ const Topic = () => {
                }
 
                if (rawData.data.createTopic.code !== 201) {
-                    setTypeToast("error");
                     if (rawData.data.createTopic.code === 302) {
-                         setTextToast("Lỗi: đã tồn tại");
+                         dispatch(set_toast("error", "Lỗi: đã tồn tại"));
                     }
                     else {
-                         setTextToast("Lỗi");
+                         dispatch(set_toast("error", "Lỗi"));
                     }
                } else {
-                    setTypeToast("success");
-                    setTextToast("Tạo chủ đề mới thành công");
+                    dispatch(set_toast("success", "Tạo chủ đề mới thành công"));
                     setNumberTopic(numberTopic + 1);
                }
                setLoading(false);
