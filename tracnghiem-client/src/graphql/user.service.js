@@ -29,9 +29,10 @@ export const signIn = async (username, password) => {
      })
 }
 
-export const signUp = async (username, password) => {
+export const signUp = async (username, email, password) => {
      let userParams = new URLSearchParams();
      userParams.append("username", username);
+     userParams.append("email", email);
      userParams.append("hashPassword", password);
 
      return await fetch(API_AUTH.concat("/register") , {

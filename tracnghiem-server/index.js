@@ -66,6 +66,7 @@ app.post('/auth/signin', (req, res) => {
 
 					return res.json({token: jwt.sign({
 						username: user.username,
+						email: user.email,
 						role: user.role,
 						info: user.info,
 						refreshToken: refreshToken,
@@ -73,6 +74,7 @@ app.post('/auth/signin', (req, res) => {
 						listOfEvaluatedDoc: user.listOfEvaluatedDoc
 					}, "RESTFULAPIs"),
 								username: user.username,
+								email: user.email,
 								role: user.role,
 								info: user.info,
 								refreshToken: refreshToken,
