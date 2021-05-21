@@ -6,6 +6,7 @@ const QuestionSchema = new mongoose.Schema({
         content: String,
         isCorrect: Boolean
     }],
+    image: String,
     level: Number,
     topic: String
 });
