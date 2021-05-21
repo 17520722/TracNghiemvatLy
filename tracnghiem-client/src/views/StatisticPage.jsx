@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import * as test_records from "../actions/test_records_actions";
+import * as act_ans_correct_topic from "../actions/ans_correct_per_topics_actions";
 import _ from "lodash";
 
 class StatisticPage extends Component {
@@ -33,8 +34,6 @@ class StatisticPage extends Component {
 
     var topicArr = [];
     var questionsOfTopic = [];
-
-    console.log(test_records.answerSet);
 
     topic_list.forEach((topic) => {
       var topicProps = {
@@ -112,10 +111,30 @@ class StatisticPage extends Component {
         }
       }
     });
-    console.log(questionsOfTopic);
 
     if (question_arr.length > 0) {
       result = questionsOfTopic.map((element, index) => {
+        let staticItem = {
+          topicId: element.topic.topicId,
+          topic: element.topic.content,
+          remember: {
+            correct: element.correctRemember,
+            all: element.remember
+          },
+          understand: {
+            correct: element.correctUnderstand,
+            all: element.understand
+          },
+          apply: {
+            correct: element.correctApply,
+            all: element.apply
+          },
+          analyzing: {
+            correct: element.correctAnalyzing,
+            all: element.analyzing
+          }
+        }
+        this.props.onAddStaticToRedux(staticItem);
         return (
           <tr key={index}>
             <td>{element.topic.content}</td>
@@ -202,7 +221,11 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-  return {};
+  return {
+    onAddStaticToRedux: (item) => {
+      dispatch(act_ans_correct_topic.add_ans_correct_per_topic(item));
+    }
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StatisticPage);

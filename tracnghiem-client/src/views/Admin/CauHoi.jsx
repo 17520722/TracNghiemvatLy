@@ -1,5 +1,4 @@
 import { Component } from "react";
-import topic_list from "../../constants/topic_list";
 import callApi from "../../utils/apiCalller";
 import "../../css/admin_question.css";
 import React from "react";
@@ -151,14 +150,7 @@ class CauHoiPage extends Component {
 
     renderTopic = () => {
         var result = null;
-        result = topic_list.map((topic, index) => {
-            return (
-                <option
-                    key={index}
-                    value={topic.id}
-                >{`${topic.id}: ${topic.topic}`}</option>
-            );
-        });
+        
         return result;
     };
 

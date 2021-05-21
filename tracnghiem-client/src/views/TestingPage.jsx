@@ -154,10 +154,10 @@ class TestingPage extends Component {
               {this.showListNumber()}
             </div>
             <div className="time-finnish row">
-              <div className="col-6 time-title">
+              <div className="col-7 time-title">
                 <Timer />
               </div>
-              <div className="col-6 finnish">
+              <div className="col-5 finnish">
                 <Link to="/home/tested">
                   <button className="btn btn-danger">Kết thúc</button>
                 </Link>

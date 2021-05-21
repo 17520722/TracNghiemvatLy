@@ -3,8 +3,69 @@ import "../css/evaluated-page.css";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { levelQuestions } from "../constants/genaral_define";
 
-export default class EvaluatedPage extends Component {
+class EvaluatedPage extends Component {
+  evaluatedFactor = (item_topic) => {
+    let f_remember =
+      item_topic.remember.all === 0
+        ? 0
+        : (item_topic.remember.correct / item_topic.remember.all) *
+          levelQuestions.remember;
+    let f_understand =
+      item_topic.understand.all === 0
+        ? 0
+        : (item_topic.understand.correct / item_topic.understand.all) *
+          levelQuestions.understand;
+    let f_apply =
+      item_topic.apply.all === 0
+        ? 0
+        : (item_topic.apply.correct / item_topic.apply.all) *
+          levelQuestions.apply;
+    let f_analyzing =
+      item_topic.analyzing.all === 0
+        ? 0
+        : (item_topic.analyzing.correct / item_topic.analyzing.all) *
+          levelQuestions.analyzing;
+    let factor =
+      (f_remember + f_understand + f_apply + f_analyzing) /
+      (levelQuestions.remember +
+        levelQuestions.understand +
+        levelQuestions.apply +
+        levelQuestions.analyzing);
+    console.log(item_topic);
+    return factor;
+  };
+
+  evaluatedText = (factor) => {
+    if (factor < 0.5) {
+      return "Weak";
+    } else if (factor <= 0.75) {
+      return "Good";
+    } else {
+      return "Very good";
+    }
+  }
+
+  renderEvaluateTable = () => {
+    let result = null;
+    let { ACPT } = this.props;
+    if (ACPT.length > 0) {
+      result = ACPT.map((re, index) => {
+        let factor = this.evaluatedFactor(re);
+        let text = this.evaluatedText(factor);
+        return (
+          <tr key={index}>
+            <td>{re.topic}</td>
+            <td>{`${factor}: ${text}`}</td>
+          </tr>
+        );
+      });
+    }
+    return result;
+  };
+
   render() {
     return (
       <div>
@@ -27,24 +88,7 @@ export default class EvaluatedPage extends Component {
                     <th>Đánh giá</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>Động lực học</td>
-                    <td>
-                      Đúng 3/6 câu, cần cố gắn hơn nữa để có thể đạt được điểm
-                      cao hơn. Đặc biệt cần phải chú trọng ôn lại phần lý thuyết
-                      để có thể hiểu rõ nội dung vần đề hơn.
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Điện xoay chiều</td>
-                    <td>
-                      Đúng 3/6 câu, cần cố gắn hơn nữa để có thể đạt được điểm
-                      cao hơn. Ôn lại các công thức, cách chuyển đổi giá trị
-                      điện áp, cường độ dòng điện, điện trở....
-                    </td>
-                  </tr>
-                </tbody>
+                <tbody>{this.renderEvaluateTable()}</tbody>
               </table>
             </div>
             <div className="row btn-nav-bottom">
@@ -62,3 +106,11 @@ export default class EvaluatedPage extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    ACPT: state.ans_correct_per_topics,
+  };
+};
+
+export default connect(mapStateToProps, null)(EvaluatedPage);

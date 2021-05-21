@@ -158,13 +158,6 @@ class TestedPage extends Component {
                   <button className="btn btn-danger mt-2">Thoát</button>
                 </Link>
               </div>
-              <div className="col-6 time-title">
-                <Link to="/home/evaluated">
-                  <button className="btn btn-primary mt-2 mb-2">
-                    Đánh giá
-                  </button>
-                </Link>
-              </div>
             </div>
           </div>
           <i

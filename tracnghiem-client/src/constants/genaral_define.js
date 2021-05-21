@@ -86,3 +86,10 @@ export const QUESTIONS_PER_PAGE = 10;
 export const CAUTION_TIME_50 = 9;
 export const CAUTION_TIME_45 = 8;
 export const CAUTION_TIME_15 = 2;
+
+export const levelQuestions = {
+  remember: 1,
+  understand: 2,
+  apply: 3,
+  analyzing: 4
+}

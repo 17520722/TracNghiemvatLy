@@ -5,6 +5,7 @@ import toast from "./Toast";
 import answerd_questions from "./testing_page/answerd_questions";
 import test_records from "./testing_page/test_records";
 import topic_list from "./create_test_page/topic_list";
+import ans_correct_per_topics from "./after_test/ans_correct_per_topics";
 
 const myReducer = combineReducers({
     selected_topics,
@@ -13,6 +14,7 @@ const myReducer = combineReducers({
     toast,
     test_records,
     answerd_questions,
+    ans_correct_per_topics,
 });
 
 export default myReducer;
