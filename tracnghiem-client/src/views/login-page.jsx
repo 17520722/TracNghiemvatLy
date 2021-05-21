@@ -3,6 +3,9 @@ import styled from 'styled-components'
 import logo from '../images/t.png'
 import { inputBackground, primary, validColor } from '../constants/GlobalStyle'
 import { signIn } from '../graphql/user.service'
+import { useDispatch } from 'react-redux'
+import { set_show_toast, set_toast } from '../actions/Toast'
+import { useHistory } from 'react-router-dom'
 
 const Container = styled.div`
      margin: 5% auto 0 auto;
@@ -104,6 +107,8 @@ const RegisterLink = styled.a`
 const LoginPage = () => {
      const [username, setUsername] = useState("");
      const [password, setPassword] = useState("");
+     const dispatch = useDispatch();
+     const history = useHistory();
 
      function onChangeUsername(e) {
           setUsername(e.target.value);
@@ -115,11 +120,18 @@ const LoginPage = () => {
 
      async function onSubmitSignIn(e) {
           e.preventDefault();
-          let user;
           signIn(username, password).then(response => response.text()).then(result => {
-               console.log(JSON.parse(result));
+               let data = JSON.parse(result);
+               console.log(data);
+
+               if (data?.message === "Authentication failed. User not found.") {
+                    dispatch(set_toast("error", "Thông tin tài khoản hoặc mật khẩu không chính xác."));
+                    dispatch(set_show_toast(true));
+                    return;
+               }
+               sessionStorage.setItem("user", result);
+               history.push("/");
           });
-          console.log(user);
      }
 
      return (

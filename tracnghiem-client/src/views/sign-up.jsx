@@ -102,6 +102,7 @@ const LoginLink = styled.a`
 
 const SignUpPage = () => {
      const [username, setUsername] = useState("");
+     const [email, setEmail] = useState("");
      const [password, setPassword] = useState("");
      const [passwordCon, setPasswordCon] = useState("");
      const dispatch = useDispatch();
@@ -109,6 +110,10 @@ const SignUpPage = () => {
 
      function onChangeUsername(e) {
           setUsername(e.target.value);
+     }
+
+     function onChangeEmail(e) {
+          setEmail(e.target.value);
      }
 
      function onChangePassword(e) {
@@ -139,7 +144,7 @@ const SignUpPage = () => {
      async function onSubmitSignUp(e) {
           e.preventDefault();
           let user;
-          signUp(username, password).then(response => response.text()).then(result => {
+          signUp(username, email, password).then(response => response.text()).then(result => {
                let data = JSON.parse(result);
                if (data?.message === "Exist!") {
                     dispatch(set_toast("error", "Tài khoản đã tồn tại"));
@@ -163,6 +168,10 @@ const SignUpPage = () => {
                     <InputGroup>
                          <input type="text" id="username" name="username" placeholder="VD: viprono1, top1server,..." required minLength="3" value={username} onChange={onChangeUsername}/>
                          <label for="username">username</label>
+                    </InputGroup>
+                    <InputGroup>
+                         <input type="email" id="email" name="email" placeholder="email" required minLength="3" value={email} onChange={onChangeEmail}/>
+                         <label for="email">email</label>
                     </InputGroup>
                     <InputGroup>
                          <input type="password" id="password" name="password" placeholder="password"required minLength="6" value={password} onChange={onChangePassword}/>

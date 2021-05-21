@@ -30,6 +30,7 @@ const questionSchema = `
      input QuestionInput {
           content: String
           setOfAnswer: [AnswerInput]
+          image: String
           level: Int
           topic: ID
      }
@@ -38,6 +39,7 @@ const questionSchema = `
           _id: ID
           content: String
           setOfAnswer: [Answer]
+          image: String
           level: Int
           topic: Topic
      }
