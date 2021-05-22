@@ -4,7 +4,6 @@ import { mathjax_config } from "../constants/config";
 
 const ListItemRoot = ({ item }) => {
      const classLevel = () => {
-          console.log(item);
           if (item?.level == 3) {
                return `#fc7373`;
           } else if (item?.level == 4) {

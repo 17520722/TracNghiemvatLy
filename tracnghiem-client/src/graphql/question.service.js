@@ -1,4 +1,4 @@
-import { API_ENDPOINT } from "../constants/config"
+import { API_ENDPOINT, API_URL } from "../constants/config"
 import { _createQuestion, _getAllQuestion, _getQuestion, _getQuestions, _updateQuestion } from "./question.graph"
 
 export const getQuestion = async(questionId) => {
@@ -35,13 +35,13 @@ export const getAllQuestion = async() => {
 }
 
 export const createQuestion = async(input) => {
-     return await fetch(API_ENDPOINT, {
+     return await fetch(API_URL.concat("/saveQuestion"), {
           method: 'POST',
           headers: {
                'Accept': 'application/json',
                'Content-Type': 'application/json',
           },
-          body: JSON.stringify(_createQuestion(input))
+          body: JSON.stringify(input)
      })
 }
 

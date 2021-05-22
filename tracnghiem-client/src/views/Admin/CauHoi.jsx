@@ -9,7 +9,7 @@ import * as _ from "lodash";
 import { connect } from "react-redux"
 import Toast from "../../components/Toast";
 import ListItemRoot from "../../components/ListItem";
-import { getAllQuestion } from "../../graphql/question.service";
+import { createQuestion, getAllQuestion } from "../../graphql/question.service";
 import { Pagination } from '@material-ui/lab';
 
 class CauHoiPage extends Component {
@@ -61,7 +61,6 @@ class CauHoiPage extends Component {
             this.setState({
                 listTopic: sortTopic,
             });
-            console.log(this.state.listTopic)
        });
 
        getAllQuestion().then(response => response.text()).then(result => {
@@ -115,6 +114,10 @@ class CauHoiPage extends Component {
     handleSubmit = (event) => {
         var { content, setOfAnswer, level, topic, cb_da, urlImage } = this.state;
         event.preventDefault();
+        this.setState({
+            ...this.state,
+            isLoading: true,
+        });
 
         const data = new FormData();
         data.append("file", this.state.selectedFile);
@@ -122,45 +125,63 @@ class CauHoiPage extends Component {
 
         let question = {
             content: content,
-            setOfAnswer: [
-                {
-                    content: setOfAnswer.dapan1,
-                    isCorrect: cb_da === "cb_da1" ? true : false,
-                },
-                {
-                    content: setOfAnswer.dapan2,
-                    isCorrect: cb_da === "cb_da2" ? true : false,
-                },
-                {
-                    content: setOfAnswer.dapan3,
-                    isCorrect: cb_da === "cb_da3" ? true : false,
-                },
-                {
-                    content: setOfAnswer.dapan4,
-                    isCorrect: cb_da === "cb_da4" ? true : false,
-                },
+            setOfAnswer: [ 
+                { content: setOfAnswer.dapan1, isCorrect: cb_da === "cb_da1" ? true : false, },
+                { content: setOfAnswer.dapan2, isCorrect: cb_da === "cb_da2" ? true : false, },
+                { content: setOfAnswer.dapan3, isCorrect: cb_da === "cb_da3" ? true : false, },
+                { content: setOfAnswer.dapan4, isCorrect: cb_da === "cb_da4" ? true : false, },
             ],
             level: level,
             topic: topic,
-            urlImage: urlImage,
+            image: urlImage,
         };
-        console.log(question);
-        callApi("questions", "POST", question);
+        
+        const graphQLImageServices = JSON.stringify(question).replace(/"([^(")"]+)":/g,"$1:");
+        console.log(graphQLImageServices)
+
+        if (question.content.trim() === "") {
+            this.setState({
+                ...this.state,
+                isLoading: false,
+            });
+            this.props.set_toast("error", "Trường nội dung bị trống");
+            this.props.set_show_toast(true);
+            return;
+        }
+
+        createQuestion(question).then(response => response.text()).then(result => {
+            let rawData = JSON.parse(result);
+            console.log(rawData);
+            this.setState({
+                ...this.state,
+                isLoading: false,
+            });
+
+            if (rawData?.message == "Saved!") {
+                this.props.set_toast("success", "Lưu thành công");
+                this.props.set_show_toast(true);
+            }
+            else {
+                this.props.set_toast("error", "Lỗi");
+                this.props.set_show_toast(true);
+            }
+        });
     };
 
     renderTopic = () => {
-        var result = null;
-        
-        return result;
+        return (
+            <React.Fragment>
+                { this.state.listTopic?.map((topicItem, index) => {
+                    return (
+                        <option key={index} value={topicItem.topicId}>{ topicItem.content }</option>
+                    )
+                })}
+            </React.Fragment>
+        )
     };
 
     onCreateQuestion = () => {
-        this.setState({
-            ...this.state,
-            isLoading: false,
-        });
-        this.props.set_toast("success", "OK");
-        this.props.set_show_toast(true);
+
     }
 
     onChangeImageHandler = (event) => {
@@ -373,6 +394,7 @@ class CauHoiPage extends Component {
                             </div>
                             <div className="text-right">
                                 <Button variant="contained" className="btn-primary-color form-control-style btn-w-200"
+                                    type="submit"
                                     color="secondary"
                                     disabled={this.state.isLoading}
                                     onClick={this.onCreateQuestion}>
@@ -409,6 +431,9 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         set_show_toast: (status) => {
             dispatch(toast_actions.set_show_toast(status))
+        },
+        set_toast: (typeToast, text) => {
+            dispatch(toast_actions.set_toast(typeToast, text))
         }
     };
 };

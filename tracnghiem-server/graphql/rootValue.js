@@ -126,7 +126,6 @@ const findAllItem = async(modelName) => {
 const findQuestion = async(id) => {
 	const objectRespone = await QuestionModel.findOne({_id: id}, (err, result) => {
 		if (err) console.log(err);
-		console.log(result)
 	});
 	let jsonObj = JSON.parse(JSON.stringify(objectRespone));
 	jsonObj.topic = await TopicModel.findOne({topicId: jsonObj.topic});
@@ -222,7 +221,6 @@ const root = {
 		const objectRespone = await QuestionModel.find({}, (err, result) => {
 			if (err) console.log(err);
 		});
-		console.log(objectRespone);
 
 		const promises = objectRespone.map(async(item) => {
 			let jsonObj = JSON.parse(JSON.stringify(item));

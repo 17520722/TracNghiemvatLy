@@ -11,6 +11,7 @@ const User = require('./models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const randToken = require('rand-token');
+const Question = require("./models/Question");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -88,6 +89,41 @@ app.post('/auth/signin', (req, res) => {
 			return res.status(500).json({message: "Internal Error"});
 		}
      });
+});
+
+app.post('/api/saveQuestion', (req, res) => {
+	const data = req.body;
+	console.log(data);
+	Question.findOne(data, async function(err, result) {
+		try {
+			if (err) {
+				res.status(500).send({message: "Error from server!"});
+			}
+			if (result) {
+				return res.status(302).send({message: "Exist!"});	
+			}
+			else {
+				let newItem = new Question(data);
+				try {
+					const saveResult = await newItem.save(err => console.log("ERR when inserted item"));
+					if (saveResult !== null) {
+						res.status(201).send({message: "Saved!"});
+					}
+					else {
+						return res.status(500).send({message: "Error from server!"});
+					}
+				}
+				catch {
+					console.log("Some thing went wrong! Let's check the server or database");
+				}
+			}
+		}
+		catch(e) {
+			console.log(e);
+			return res.status(500).json({message: "Internal Error"});
+		}
+	});
+
 });
 
 app.use('/graphql', graphqlHTTP({

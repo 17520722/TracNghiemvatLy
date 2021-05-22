@@ -1,3 +1,4 @@
+
 export const _getQuestion = (questionId) => {
      return {
           query: "{\r\n  question(id: \"" + questionId + "\") {\r\n    _id\r\n    setOfAnswer {\r\n      content\r\n      isCorrect\r\n    }\r\n    content\r\n    image\r\n    level\r\n    topic {\r\n      _id\r\n      topicId\r\n      content\r\n    }\r\n  }\r\n}",
@@ -21,7 +22,7 @@ export const _getAllQuestion = () => {
 
 export const _createQuestion = (input) => {
      return {
-          query: "mutation {\r\n  createQuestion(input: {content: \"" + input.content + "\", level: " + input.level + ", topic: \"" + input.topic + "\", image: \"" + input?.image +"\", setOfAnswer: " + JSON.stringify(input.setOfAnswer) + "}) {\r\n    code\r\n    content\r\n  }\r\n}",
+          query: "mutation {\r\n  createQuestion(input: {content: \"" + input.content + "\", level: " + input.level + ", topic: \"" + input.topic + "\", image: \"" + input.image +"\", setOfAnswer: " + JSON.stringify(input.setOfAnswer) + "}) {\r\n    code\r\n    content\r\n  }\r\n}",
           variables: {}
      }
 }
