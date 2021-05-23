@@ -3,11 +3,12 @@ import "../css/testing-page.css";
 import "../constants/genaral_define";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Question from "../components/Question";
 import { QUESTIONS_PER_PAGE } from "../constants/genaral_define";
 import { connect } from "react-redux";
 import Timer from "../components/Timer";
+import * as is_end_test from "../actions/is_end_test";
 
 class TestingPage extends Component {
   constructor(props) {
@@ -98,14 +99,16 @@ class TestingPage extends Component {
 
   onFinnishTest = () => {
     if (window.confirm("Kết thúc bài kiểm tra!")) {
-      console.log("A");
+     
     }
   };
 
   render() {
     var { currentPage, questions_arr } = this.state;
     var { test_records } = this.props;
-    console.log(test_records);
+    if (this.props.is_end_test === true) {
+      return <Redirect to="/home/tested" />
+    }
     return (
       <div>
         <Header />
@@ -127,7 +130,7 @@ class TestingPage extends Component {
                 onClick={this.nextPage}
                 hidden={
                   currentPage ===
-                  Math.ceil(questions_arr.length / QUESTIONS_PER_PAGE)
+                    Math.ceil(questions_arr.length / QUESTIONS_PER_PAGE)
                     ? true
                     : false
                 }
@@ -140,7 +143,7 @@ class TestingPage extends Component {
                 onClick={this.onFinnishTest}
                 hidden={
                   currentPage ===
-                  Math.ceil(questions_arr.length / QUESTIONS_PER_PAGE)
+                    Math.ceil(questions_arr.length / QUESTIONS_PER_PAGE)
                     ? false
                     : true
                 }
@@ -165,7 +168,7 @@ class TestingPage extends Component {
             </div>
           </div>
           <i
-            class="fas fa-angle-up to-the-top"
+            className="fas fa-angle-up to-the-top"
             onClick={() => {
               window.scrollTo(0, 0);
             }}
@@ -180,11 +183,16 @@ class TestingPage extends Component {
 const mapStateToProps = (state) => {
   return {
     test_records: state.test_records,
+    is_end_test: state.is_end_test,
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-  return {};
+  return {
+    onSetEndTest: () => {
+      dispatch(is_end_test.on_set_end_test());
+    }
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TestingPage);

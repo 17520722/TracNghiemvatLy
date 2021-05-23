@@ -28,3 +28,7 @@ export const SET_ID_FOR_ANSWER = "SET_ID_FOR_ANSWER";
 export const CLEAR_INFO_TEST = "CLEAR_INFO_TEST";
 
 export const ADD_ANS_CORRECT_PER_TOPIC = "ADD_ANS_CORRECT_PER_TOPIC";
+
+export const SET_END_TEST = "SET_END_TEST";
+export const SET_START_TEST = "SET_START_TEST";
+
