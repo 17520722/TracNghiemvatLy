@@ -119,7 +119,7 @@ class CreatedTest extends Component {
     let tempArr = [];
     for (let i = 0; i < topicList.length; i++) {
       allQuestion.forEach((element) => {
-        if (element.topic.topicId === topicList[i].topicId) {
+        if (element.topic?.topicId === topicList[i]?.topicId) {
           tempArr.push(element);
         }
       });
@@ -138,6 +138,7 @@ class CreatedTest extends Component {
         let test = this.state;
 
         if (selectedTopic.length !== 0) {
+          console.log(selectedTopic)
           let temp = this.filterQuestionByTopic(allQuestion, selectedTopic);
           allQuestion = temp;
         } else {

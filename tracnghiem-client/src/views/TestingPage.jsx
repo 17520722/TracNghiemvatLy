@@ -3,11 +3,13 @@ import "../css/testing-page.css";
 import "../constants/genaral_define";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
 import Question from "../components/Question";
 import { QUESTIONS_PER_PAGE } from "../constants/genaral_define";
 import { connect } from "react-redux";
 import Timer from "../components/Timer";
+import { withRouter } from 'react-router-dom'
+import { saveTest } from "../graphql/test.service";
+import { addTestForUser, updateUser } from "../graphql/user.service";
 
 class TestingPage extends Component {
   constructor(props) {
@@ -98,14 +100,34 @@ class TestingPage extends Component {
 
   onFinnishTest = () => {
     if (window.confirm("Kết thúc bài kiểm tra!")) {
-      console.log("A");
+      const testRecord = this.props.test_records;
+      let testResult = {
+        setOfRemember: testRecord.setOfRemember,
+        setOfUnderstand: testRecord.setOfUnderstand,
+        setOfApply: testRecord.setOfApply,
+        setOfAnalyzing: testRecord.setOfAnalyzing,
+        levelOfDifficult: testRecord.levelOfDifficult,
+        correctAnsNumber: testRecord.correctAnsNumber,
+        incorrectAnsNumber: testRecord.incorrectAnsNumber,
+        answerSet: testRecord.answerSet
+      }
+
+      const user = JSON.parse(sessionStorage.getItem('user'));
+
+      saveTest(testResult).then(response => response.json()).then(result => {
+        const data = result
+        console.log(data._id)
+        if (user) {
+          addTestForUser(user.username, user.token, data._id);
+        }
+      });
+      this.props.history.push("/home/tested");
     }
   };
 
   render() {
     var { currentPage, questions_arr } = this.state;
     var { test_records } = this.props;
-    console.log(test_records);
     return (
       <div>
         <Header />
@@ -127,7 +149,7 @@ class TestingPage extends Component {
                 onClick={this.nextPage}
                 hidden={
                   currentPage ===
-                  Math.ceil(questions_arr.length / QUESTIONS_PER_PAGE)
+                    Math.ceil(questions_arr.length / QUESTIONS_PER_PAGE)
                     ? true
                     : false
                 }
@@ -140,7 +162,7 @@ class TestingPage extends Component {
                 onClick={this.onFinnishTest}
                 hidden={
                   currentPage ===
-                  Math.ceil(questions_arr.length / QUESTIONS_PER_PAGE)
+                    Math.ceil(questions_arr.length / QUESTIONS_PER_PAGE)
                     ? false
                     : true
                 }
@@ -158,9 +180,7 @@ class TestingPage extends Component {
                 <Timer />
               </div>
               <div className="col-5 finnish">
-                <Link to="/home/tested">
-                  <button className="btn btn-danger">Kết thúc</button>
-                </Link>
+                <button className="btn btn-danger" onClick={this.onFinnishTest}>Kết thúc</button>
               </div>
             </div>
           </div>
@@ -187,4 +207,4 @@ const mapDispatchToProps = (dispatch, props) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TestingPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(TestingPage));

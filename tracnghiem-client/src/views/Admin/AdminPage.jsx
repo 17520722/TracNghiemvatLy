@@ -30,7 +30,7 @@ export default class AdminPage extends Component {
                         </li>
                         <li>
                             <a href="#" className="menu-item">
-                                Đề thi
+                                Bài thi
                             </a>
                         </li>
                         <li>

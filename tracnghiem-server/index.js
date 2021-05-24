@@ -12,84 +12,14 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const randToken = require('rand-token');
 const Question = require("./models/Question");
+const Test = require("./models/Test");
+const authRouter = require("./user/auth");
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));	
 
-app.post('/auth/register', (req, res) => {
-	User.findOne({username: req.body.username},(err, user) => {
-		if (err) throw err;
-		if (user) {
-			return res.status(401).json({message: "Exist!"});
-		}
-		else {
-			let newUser = new User(req.body);
-			newUser.hashPassword = bcrypt.hashSync(req.body.hashPassword, 10);
-			newUser.role = "member";
-			newUser.save((err, user) => {
-				if (err) {
-					return res.status(400).send({message: err});
-				}
-				else {
-					user.hashPassword = undefined;
-					return res.json(user);
-				}
-			});
-		}
-	});
-});
-
-app.post('/auth/signin', (req, res) => {
-	User.findOne({username: req.body.username}, async (err, user) => {
-          try {
-			if (err) throw err;
-			if (!user) {
-				res.status(401).json({message: "Authentication failed. User not found."});
-			}
-			else if (user) {
-				if (!user.comparePassword(req.body.hashPassword, user.hashPassword)) {
-					res.status(401).json({message: "Authentication failed. Wrong password."});
-				}
-				else {
-					let refreshToken = randToken.generate(100); // tạo 1 refresh token ngẫu nhiên
-
-					if (!user.refreshToken) {
-						// Nếu user này chưa có refresh token thì lưu refresh token đó vào database
-						await User.updateOne({username: user.username}, {
-							refreshToken: refreshToken
-						});
-					}
-					else {
-						// Nếu user này đã có refresh token thì lấy refresh token đó từ database
-						refreshToken = user.refreshToken;
-					}
-
-					return res.json({token: jwt.sign({
-						username: user.username,
-						email: user.email,
-						role: user.role,
-						info: user.info,
-						refreshToken: refreshToken,
-						listOfTest: user.listOfTest,
-						listOfEvaluatedDoc: user.listOfEvaluatedDoc
-					}, "RESTFULAPIs"),
-								username: user.username,
-								email: user.email,
-								role: user.role,
-								info: user.info,
-								refreshToken: refreshToken,
-								listOfTest: user.listOfTest,
-								listOfEvaluatedDoc: user.listOfEvaluatedDoc});
-				}
-			}
-		}
-		catch(e) {
-			console.log(e);
-			return res.status(500).json({message: "Internal Error"});
-		}
-     });
-});
+app.use('/auth', authRouter);
 
 app.post('/api/saveQuestion', (req, res) => {
 	const data = req.body;
@@ -124,6 +54,26 @@ app.post('/api/saveQuestion', (req, res) => {
 		}
 	});
 
+});
+
+app.post('/api/saveTest', async(req, res) => {
+	const data = req.body;
+	let newItem = new Test(data);
+	try {
+		await newItem.save().then(testResponse => {
+			if (testResponse) {
+				return res.status(201).json(testResponse);
+			}
+			else {
+				return res.status(500).send({message: "Error from server!"});
+			}
+		});
+	}
+	catch(e) {
+		console.log("Some thing went wrong! Let's check the server or database");
+		console.log(e);
+		return res.status(500).send({message: "Error from server!"});
+	}
 });
 
 app.use('/graphql', graphqlHTTP({

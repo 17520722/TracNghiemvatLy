@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
 const TestSchema = new mongoose.Schema({
-     setOfRemember: [String],
-     setOfUnderstand: [String],
-     setOfApply: [String],
-     setOfAnalyzing: [String],
+     setOfRemember: [],
+     setOfUnderstand: [],
+     setOfApply: [],
+     setOfAnalyzing: [],
      levelOfDifficult: Number,
      correctAnsNumber: Number,
      incorrectAnsNumber: Number,
-     answerSet: [String],
+     answerSet: [],
 });
 
 module.exports = mongoose.model("Test", TestSchema);

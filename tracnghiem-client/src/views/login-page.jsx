@@ -150,7 +150,7 @@ const LoginPage = () => {
                     </InputGroup>
                     <SubmitButton className="btn">Login</SubmitButton>
                </LoginForm>
-               <SmallText>   
+               <SmallText>
                     <ForgotLink href="#">Quên tài khoản?</ForgotLink>
                     <RegisterLink href="sign-up">Đăng ký</RegisterLink>
                </SmallText>

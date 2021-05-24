@@ -93,7 +93,6 @@ class TestedPage extends Component {
     var { test_records } = this.props;
     var result = [];
     var count = 0;
-    console.log(questions_arr);
     for (let i = 0; i < questions_arr.length; i++) {
       let color = "";
       for (let j = 0; j < questions_arr[i].setOfAnswer.length; j++) {

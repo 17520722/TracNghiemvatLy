@@ -1,3 +1,4 @@
+import { API_URL, API_ENDPOINT } from "../constants/config"
 import { _getTest, _getTests, _saveTest, _updateTest } from "./test.graph"
 
 export const getTest = async(testId) => {
@@ -23,13 +24,13 @@ export const getTests = async(testIds) => {
 }
 
 export const saveTest = async(testInput) => {
-     return await fetch(API_ENDPOINT, {
+     return await fetch(API_URL.concat("/saveTest"), {
           method: 'POST',
           headers: {
                'Accept': 'application/json',
                'Content-Type': 'application/json',
           },
-          body: JSON.stringify(_saveTest(testInput))
+          body: JSON.stringify(testInput)
      })
 }
 

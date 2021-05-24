@@ -1,3 +1,4 @@
+
 import { API_ENDPOINT, API_AUTH } from '../constants/config'
 import { _getUser } from './user.graph'
 
@@ -42,6 +43,33 @@ export const signUp = async (username, email, password) => {
                "Content-Type": "application/x-www-form-urlencoded",
           },
           body: userParams,
+          redirect: 'follow'
+     })
+}
+
+export const updateUser = async (username, token) => {
+     return await fetch(API_AUTH.concat("/updateUser") , {
+          method: 'POST',
+          headers: {
+               'Accept': 'application/json',
+               'Authorization': 'Bearer '.concat(token),
+               'username': username
+          },
+          redirect: 'follow'
+     })
+}
+
+export const addTestForUser = async (username, token, testId) => {
+     let testParams = new URLSearchParams();
+     testParams.append("testid", testId);
+     return await fetch(API_AUTH.concat("/addTest") , {
+          method: 'POST',
+          headers: {
+               'Accept': 'application/json',
+               'Authorization': 'Bearer '.concat(token),
+               'username': username,
+          },
+          body: testParams,
           redirect: 'follow'
      })
 }

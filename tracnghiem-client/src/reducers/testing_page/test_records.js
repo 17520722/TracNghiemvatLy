@@ -7,7 +7,7 @@ var initialState = {
   setOfUnderstand: [],
   setOfApply: [],
   setOfAnalyzing: [],
-  levelOfDifficult: "",
+  levelOfDifficult: 1,
   correctAnsNumber: 0,
   incorrectAnsNumber: 0,
   answerSet: [],
@@ -97,7 +97,6 @@ var myReducer = (state = initialState, action) => {
 
     case Types.SET_TIME_FINNISH_TEST:
       state.time = `${action.m}:${action.s}`;
-      console.log(state.time);
       return state;
 
     case Types.SET_NULL_FOR_ANSWERSET:
