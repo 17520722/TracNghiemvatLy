@@ -2,7 +2,7 @@ export const time = ["50", "45", "15"];
 
 export const level = [
   {
-    id: "none",
+    id: 0,
     level: "Theo năng lực",
     remember: 0,
     understand: 0,
@@ -10,7 +10,7 @@ export const level = [
     analyzing: 0
   },
   {
-    id: "1",
+    id: 1,
     level: "Dễ",
     remember: 50,
     understand: 30,
@@ -18,7 +18,7 @@ export const level = [
     analyzing: 10
   },
   {
-    id: "2",
+    id: 2,
     level: "Trung bình",
     remember: 30,
     understand: 40,
@@ -26,7 +26,7 @@ export const level = [
     analyzing: 10
   },
   {
-    id: "3",
+    id: 3,
     level: "Khó",
     remember: 20,
     understand: 30,

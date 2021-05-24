@@ -56,8 +56,14 @@ export const set_null_for_answerset = () => {
 };
 
 export const set_id_for_answer = () => {
-  console.log("AXA");
   return {
     type: Types.SET_ID_FOR_ANSWER,
   };
 };
+
+export const set_level_of_test = (level) => {
+  return {
+    type: Types.SET_LEVEL_OF_TEST,
+    level
+  }
+}
