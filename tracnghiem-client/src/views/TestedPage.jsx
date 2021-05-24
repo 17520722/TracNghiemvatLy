@@ -160,7 +160,7 @@ class TestedPage extends Component {
             </div>
           </div>
           <i
-            class="fas fa-angle-up to-the-top"
+            className="fas fa-angle-up to-the-top"
             onClick={() => {
               window.scrollTo(0, 0);
             }}

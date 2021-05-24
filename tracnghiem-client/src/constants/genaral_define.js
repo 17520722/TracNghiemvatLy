@@ -88,8 +88,8 @@ export const CAUTION_TIME_45 = 8;
 export const CAUTION_TIME_15 = 2;
 
 export const levelQuestions = {
-  remember: 1,
-  understand: 2,
-  apply: 3,
-  analyzing: 4
+  remember: 0.6,
+  understand: 0.7,
+  apply: 0.8,
+  analyzing: 0.9
 }

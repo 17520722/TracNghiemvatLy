@@ -3,6 +3,7 @@ import "../css/testing-page.css";
 import "../constants/genaral_define";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import { Link, Redirect } from "react-router-dom";
 import Question from "../components/Question";
 import { QUESTIONS_PER_PAGE } from "../constants/genaral_define";
 import { connect } from "react-redux";
@@ -10,6 +11,7 @@ import Timer from "../components/Timer";
 import { withRouter } from 'react-router-dom'
 import { saveTest } from "../graphql/test.service";
 import { addTestForUser, updateUser } from "../graphql/user.service";
+import * as is_end_test from "../actions/is_end_test";
 
 class TestingPage extends Component {
   constructor(props) {
@@ -128,6 +130,9 @@ class TestingPage extends Component {
   render() {
     var { currentPage, questions_arr } = this.state;
     var { test_records } = this.props;
+    if (this.props.is_end_test === true) {
+      return <Redirect to="/home/tested" />
+    }
     return (
       <div>
         <Header />
@@ -185,7 +190,7 @@ class TestingPage extends Component {
             </div>
           </div>
           <i
-            class="fas fa-angle-up to-the-top"
+            className="fas fa-angle-up to-the-top"
             onClick={() => {
               window.scrollTo(0, 0);
             }}
@@ -200,11 +205,16 @@ class TestingPage extends Component {
 const mapStateToProps = (state) => {
   return {
     test_records: state.test_records,
+    is_end_test: state.is_end_test,
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-  return {};
+  return {
+    onSetEndTest: () => {
+      dispatch(is_end_test.on_set_end_test());
+    }
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(TestingPage));
