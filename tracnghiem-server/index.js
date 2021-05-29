@@ -14,12 +14,15 @@ const randToken = require('rand-token');
 const Question = require("./models/Question");
 const Test = require("./models/Test");
 const authRouter = require("./user/auth");
+const uploadRouter = require("./routes/upload");
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));	
 
 app.use('/auth', authRouter);
+
+app.use('/uploads', uploadRouter);
 
 app.post('/api/saveQuestion', (req, res) => {
 	const data = req.body;

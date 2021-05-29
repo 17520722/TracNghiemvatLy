@@ -11,6 +11,7 @@ import Toast from "../../components/Toast";
 import ListItemRoot from "../../components/ListItem";
 import { createQuestion, getAllQuestion } from "../../graphql/question.service";
 import { Pagination } from '@material-ui/lab';
+import cloudinaryUpload from "../../services/uploads";
 
 class CauHoiPage extends Component {
     constructor(props) {
@@ -184,16 +185,18 @@ class CauHoiPage extends Component {
 
     }
 
-    onChangeImageHandler = (event) => {
+    onChangeImageHandler = async (event) => {
         var file = event.target.files[0];
         var reader = new FileReader();
 
         if (file === undefined) {
             file = this.state.selectedFile;
         } else {
+            let img = await cloudinaryUpload(event.target.files);
+            console.log(img);
             this.setState({
                 selectedFile: file,
-                urlImage: `/images/${file.name}`,
+                urlImage: img.secure_url,
             });
         }
 
