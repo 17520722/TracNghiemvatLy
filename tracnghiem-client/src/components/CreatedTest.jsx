@@ -18,7 +18,7 @@ class CreatedTest extends Component {
       classes: "thpt",
       term: "cn",
       time: "50",
-      level: "2",
+      level: 2,
 
       topic: [],
       isSetIdAnswer: false,
@@ -37,7 +37,7 @@ class CreatedTest extends Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    var test = await {
+    var test = {
       id: "AZX",
       subject: this.state.subject,
       classes: this.state.classes,
@@ -47,25 +47,30 @@ class CreatedTest extends Component {
     };
     await this.getQuestionFromServer();
     await this.props.onSetTestInfo(test);
+    await this.props.onSetLevelOfTest(parseInt(test.level));
     this.props.nextStepToNotice();
   };
 
   handleChange = (event) => {
     var name = event.target.name;
     var value = event.target.value;
+    if (name === "level") {
+      value = parseInt(value);
+    }
     this.setState({
       [name]: value,
     });
+    console.log(this.state);
   };
 
   createTestOnRedux = (test, questions) => {
-    var {test_records} = this.props;
+    var { test_records } = this.props;
     var number_question_for_lv = "";
-    if (test.level === "1") {
+    if (test.level === 1) {
       number_question_for_lv = levelOfTest(40, level[1]);
-    } else if (test.level === "2") {
+    } else if (test.level === 2) {
       number_question_for_lv = levelOfTest(40, level[2]);
-    } else {
+    } else if (test.level === 3) {
       number_question_for_lv = levelOfTest(40, level[3]);
     }
 
@@ -112,7 +117,6 @@ class CreatedTest extends Component {
         break;
       }
     }
-    console.log(this.props.test_records);
   };
 
   filterQuestionByTopic = (allQuestion, topicList) => {
@@ -276,10 +280,10 @@ class CreatedTest extends Component {
                   value={level}
                   onChange={this.handleChange}
                 >
-                  <option value="none">Theo năng lực</option>
-                  <option value="1">Dễ</option>
-                  <option value="2">Trung bình</option>
-                  <option value="3">Khó</option>
+                  <option value={0}>Theo năng lực</option>
+                  <option value={1}>Dễ</option>
+                  <option value={2}>Trung bình</option>
+                  <option value={3}>Khó</option>
                 </select>
               </div>
 
@@ -389,6 +393,9 @@ const mapDispatchToProps = (dispatch, props) => {
     onSetIdForAnswer: () => {
       dispatch(record_test_actions.set_id_for_answer());
     },
+    onSetLevelOfTest: (level) => {
+      dispatch(record_test_actions.set_level_of_test(level))
+    }
   };
 };
 

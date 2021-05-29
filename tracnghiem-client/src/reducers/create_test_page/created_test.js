@@ -7,7 +7,7 @@ var initialState = {
     classes: "thpt",
     term: "cn",
     time: "50",
-    level: "2",
+    level: 2,
 }
 
 var myReducer = (state = initialState, action) => {

@@ -116,10 +116,13 @@ class TestingPage extends Component {
 
       const user = JSON.parse(sessionStorage.getItem('user'));
 
+      console.log(testRecord);
+
       saveTest(testResult).then(response => response.json()).then(result => {
         const data = result
         console.log(data._id)
         if (user) {
+          console.log("A");
           addTestForUser(user.username, user.token, data._id);
         }
       });

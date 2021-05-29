@@ -52,12 +52,11 @@ class NoticeExam extends Component {
         }, 500);
       }
     }, 500);
-
     if (this.state.isLoadedQuestion === false) {
       return (
         <Loading />
       );
-    } else
+    } else {
       return (
         <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9">
           <div className="mr-3">
@@ -84,15 +83,12 @@ class NoticeExam extends Component {
             <div>
               <p className="title-create-test text-left">Thông tin đề thi:</p>
               <p>{`Thời gian làm bài: ${created_test_info.time} phút`}</p>
-              <p>{`Độ khó: ${
-                this.findObj(created_test_info.level, level).level
-              }`}</p>
-              <p>{`Phạm vi: ${
-                this.findObj(created_test_info.classes, classes).classes
-              }`}</p>
-              <p>{`Học kì: ${
-                this.findObj(created_test_info.term, term).term
-              }`}</p>
+              <p>{`Độ khó: ${this.findObj(created_test_info.level, level).level
+                }`}</p>
+              <p>{`Phạm vi: ${this.findObj(created_test_info.classes, classes).classes
+                }`}</p>
+              <p>{`Học kì: ${this.findObj(created_test_info.term, term).term
+                }`}</p>
               <p>{`Chủ đề: ${this.showSelectedTopics()}`}</p>
             </div>
             <div className="text-right mr-5">
@@ -108,6 +104,7 @@ class NoticeExam extends Component {
           </div>
         </div>
       );
+    }
   }
 }
 
