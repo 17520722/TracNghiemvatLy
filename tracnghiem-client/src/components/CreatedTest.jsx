@@ -32,6 +32,7 @@ class CreatedTest extends Component {
   };
 
   componentDidMount = () => {
+    this.props.onClearInfoTest();
     this.props.onSetSeletedTopics(selectedTopic);
   };
 
@@ -395,6 +396,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     onSetLevelOfTest: (level) => {
       dispatch(record_test_actions.set_level_of_test(level))
+    },
+    onClearInfoTest: () => {
+      dispatch(record_test_actions.clear_info_test());
     }
   };
 };

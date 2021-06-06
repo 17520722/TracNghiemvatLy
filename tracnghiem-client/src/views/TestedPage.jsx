@@ -34,39 +34,44 @@ class TestedPage extends Component {
     var result = null;
     if (cauhoi.length > 0) {
       result = cauhoi.map((c, index) => {
+        let showImage = c.image === null ? false : true;
         return (
-          <div key={index} className="font-text">
-            <MathJaxContext version={3} config={mathjax_config}>
-              <div>
-                <b>{`Câu ${index + 1}:`}</b>
-                <MathJax>{c.content}</MathJax>
-              </div>
-              {c.setOfAnswer.map((da, i) => {
-                let ans_true = true;
-                if (test_records.answerSet[index]) {
-                  if (
-                    (index + 1) + abcArr[i] ===
-                    test_records.answerSet[index].answerId
-                  ) {
-                    ans_true = false;
+          <div key={index} className="font-text row">
+            <div className={`${showImage === true ? "col-8" : "col-12"}`}>
+              <MathJaxContext version={3} config={mathjax_config}>
+                <div>
+                  <b>{`Câu ${index + 1}:`}</b>
+                  <MathJax>{c.content}</MathJax>
+                </div>
+                {c.setOfAnswer.map((da, i) => {
+                  let ans_true = true;
+                  if (test_records.answerSet[index]) {
+                    if (
+                      (index + 1) + abcArr[i] ===
+                      test_records.answerSet[index].answerId
+                    ) {
+                      ans_true = false;
+                    }
                   }
-                }
-                return (
-                  <p
-                    key={i}
-                    className={`one-answer ${
-                      da.isCorrect
+                  return (
+                    <p
+                      key={i}
+                      className={`one-answer ${da.isCorrect
                         ? "color-green"
                         : ans_true === false
-                        ? "color-red"
-                        : ""
-                    }`}
-                  >
-                    <MathJax>{`${abcArr[i]}. ${da.content} `}</MathJax>
-                  </p>
-                );
-              })}
-            </MathJaxContext>
+                          ? "color-red"
+                          : ""
+                        }`}
+                    >
+                      <MathJax>{`${abcArr[i]}. ${da.content} `}</MathJax>
+                    </p>
+                  );
+                })}
+              </MathJaxContext>
+            </div>
+            <div className={`${showImage === true ? "col-4" : ""}`} hidden={!showImage}>
+              <img src={`${c.image}`} className="image-question" />
+            </div>
           </div>
         );
       });
@@ -106,7 +111,7 @@ class TestedPage extends Component {
               color = "bg-green";
             } else if (questions_arr[i].setOfAnswer[j].isCorrect === false)
               color = "bg-yellow";
-          }  else if (test_records.answerSet[i].answerId === "NA") {
+          } else if (test_records.answerSet[i].answerId === "NA") {
             color = "bg-yellow";
           }
         } else {

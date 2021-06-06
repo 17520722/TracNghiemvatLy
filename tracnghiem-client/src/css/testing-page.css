@@ -93,3 +93,7 @@
   color: white;
   z-index: 1;
 }
+.image-question {
+  max-width: 300px;
+  margin-top: 2rem;
+}
