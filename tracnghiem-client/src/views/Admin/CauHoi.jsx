@@ -133,6 +133,8 @@ class CauHoiPage extends Component {
                 { content: setOfAnswer.dapan4, isCorrect: cb_da === "cb_da4" ? true : false, },
             ],
             level: level,
+            correctAns: 0,
+            countAns: 0,
             topic: topic,
             image: urlImage,
         };

@@ -101,13 +101,12 @@ auth_router.post('/addTest', (req, res) => {
 				else {
 					let list = user.listOfTest;
 					list.push(req.body.testid);
-					console.log(list)
 					User.updateOne({ username: decode.username }, {
 						listOfTest: list
 					}).then(doc => res.status(201).json(doc));
 				}
 			}
-			catch(e) {
+			catch (e) {
 				console.log(e);
 			}
 		});

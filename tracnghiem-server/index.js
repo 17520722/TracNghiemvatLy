@@ -15,6 +15,7 @@ const Question = require("./models/Question");
 const Test = require("./models/Test");
 const authRouter = require("./user/auth");
 const uploadRouter = require("./routes/upload");
+const topicEvaluate = require("./routes/topicEvaluate");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -24,9 +25,10 @@ app.use('/auth', authRouter);
 
 app.use('/uploads', uploadRouter);
 
+app.use('/topicEvalute', topicEvaluate);
+
 app.post('/api/saveQuestion', (req, res) => {
 	const data = req.body;
-	console.log(data);
 	Question.findOne(data, async function(err, result) {
 		try {
 			if (err) {

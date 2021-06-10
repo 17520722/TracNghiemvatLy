@@ -12,6 +12,7 @@ import { withRouter } from 'react-router-dom'
 import { saveTest } from "../graphql/test.service";
 import { addTestForUser, updateUser } from "../graphql/user.service";
 import * as is_end_test from "../actions/is_end_test";
+import { saveEvaluateTopicTest, saveEvaluatedTopic } from "../services/topicEvaluate";
 
 class TestingPage extends Component {
   constructor(props) {
@@ -118,17 +119,70 @@ class TestingPage extends Component {
 
       console.log(testRecord);
 
-      saveTest(testResult).then(response => response.json()).then(result => {
+      saveTest(testResult).then(response => response.json()).then(async result => {
         const data = result
         console.log(data._id)
         if (user) {
           console.log("A");
-          addTestForUser(user.username, user.token, data._id);
+          await addTestForUser(user.username, user.token, data._id);
+
+          const topicList = this.props.topic_list;
+          const miniList = [];
+          const testId = data._id;
+          const questionList = this.props.test_records.setOfQuestions;
+
+          for (let topic of topicList) {
+            let numberQuestionOfTopic = 0;
+            let numberCorrectQuestion = 0;
+
+            for (let k = 0; k < questionList.length; k++) {
+              if (questionList[k].topic.topicId === topic.topicId) {
+                numberQuestionOfTopic++;
+                for (let i = 0; i < questionList[k].setOfAnswer.length; i++) {
+                  if (this.props.test_records.answerSet[k]?.answerId === questionList[k].setOfAnswer[i].id &&
+                    questionList[k].setOfAnswer[i].isCorrect) {
+                    numberCorrectQuestion++;
+                  }
+                }
+              }
+            }
+
+            if (numberQuestionOfTopic !== 0) {
+              const input = {
+                username: user.username,
+                testId: testId,
+                topicId: topic.topicId,
+                numberCorrectAns: numberCorrectQuestion,
+                numberAns: numberQuestionOfTopic
+              }
+              miniList.push(topic);
+
+              await saveEvaluateTopicTest(input, user.token).then(response => response.json()).then(result => {
+                console.log(result)
+              });
+            }
+          }
+          await saveEvaluatedTopic(miniList, user.token).then(response => response.json()).then(result => {
+            console.log(result);
+          });
+          // for lấy topicId
+          //
+          //lấy list test từ user
+          //mỗi topic tính Năng Lực của user tại topic này bằng cách tìm 20 bài test gần nhất có topic trong nội dung
+          //    EvaluatedDoc(userId, topicId, testId);
+          //      numberCorrectAns / numberAns;
         }
       });
       this.props.history.push("/home/tested");
+      ////////
     }
   };
+  test = () => {
+    let { currentPage } = this.state;
+    for (let i = QUESTIONS_PER_PAGE * (currentPage - 1) + 1; i <= QUESTIONS_PER_PAGE * currentPage; i++) {
+      document.getElementById(i + "C").click();
+    }
+  }
 
   render() {
     var { currentPage, questions_arr } = this.state;
@@ -189,6 +243,7 @@ class TestingPage extends Component {
               </div>
               <div className="col-5 finnish">
                 <button className="btn btn-danger" onClick={this.onFinnishTest}>Kết thúc</button>
+                <button className="btn" onClick={this.test}>Auto</button>
               </div>
             </div>
           </div>
@@ -209,6 +264,8 @@ const mapStateToProps = (state) => {
   return {
     test_records: state.test_records,
     is_end_test: state.is_end_test,
+    topic_list: state.topic_list,
+    questions_arr: state.question_arr
   };
 };
 
@@ -216,7 +273,7 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     onSetEndTest: () => {
       dispatch(is_end_test.on_set_end_test());
-    }
+    },
   };
 };
 

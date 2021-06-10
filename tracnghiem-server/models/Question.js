@@ -8,6 +8,8 @@ const QuestionSchema = new mongoose.Schema({
     }],
     image: String,
     level: Number,
+    correctAns: Number,
+    countAns: Number,
     topic: String
 });
 

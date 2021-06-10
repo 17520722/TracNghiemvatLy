@@ -3,14 +3,21 @@ import { NavLink } from "react-router-dom";
 import "../../css/admin/admin-page.css";
 import { renderRoutes } from 'react-router-config';
 import routes from  './admin.routes';
+import { getAllEvaluateUser } from '../../services/topicEvaluate';
 
 export default class AdminPage extends Component {
+    componentDidMount() {
+        let user = JSON.parse(sessionStorage.getItem("user"));
+        console.log(user);
+        getAllEvaluateUser(user.token).then(response => response.json()).then(result => console.log(result));
+    }
+
     render() {
         return (
             <div className="admin-container">
                 <div className="side-bar">
                     <div className="logo">
-                        LOGO
+                        <a href="/">LOGO</a>
                     </div>
                     <ul className="menu">
                         <li>
