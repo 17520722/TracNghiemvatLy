@@ -64,28 +64,34 @@ class Question extends Component {
 
   render() {
     var { question, number } = this.props;
+    let showImage = question.image === null ? false : true;
     return (
-      <div className="font-text">
-        <MathJaxContext version={3} config={mathjax_config}>
-          <div>
-            <b>Câu {number}: </b> <MathJax>{question.content}</MathJax>
-          </div>
-          {question.setOfAnswer.map((an, i) => {
-            return (
-              <div key={i} className="one-answer mt-2">
-                <input
-                  type="radio"
-                  id={`${number}${abcArr[i]}`}
-                  name={`${number}`}
-                  onChange={this.handleCheckChange}
-                />
-                <label htmlFor={`${number}${abcArr[i]}`}>
-                  <MathJax>{`${abcArr[i]}. ${an.content} `}</MathJax>
-                </label>
-              </div>
-            );
-          })}
-        </MathJaxContext>
+      <div className="font-text row">
+        <div className={`${showImage === true ? "col-8" : "col-12"}`}>
+          <MathJaxContext version={3} config={mathjax_config}>
+            <div>
+              <b>Câu {number}: </b> <MathJax>{question.content}</MathJax>
+            </div>
+            {question.setOfAnswer.map((an, i) => {
+              return (
+                <div key={i} className="one-answer mt-2">
+                  <input
+                    type="radio"
+                    id={`${number}${abcArr[i]}`}
+                    name={`${number}`}
+                    onChange={this.handleCheckChange}
+                  />
+                  <label htmlFor={`${number}${abcArr[i]}`}>
+                    <MathJax>{`${abcArr[i]}. ${an.content} `}</MathJax>
+                  </label>
+                </div>
+              );
+            })}
+          </MathJaxContext>
+        </div>
+        <div className={`${showImage === true ? "col-4" : ""}`} hidden={!showImage}>
+          <img src={`${question.image}`} className="image-question" />
+        </div>
       </div>
     );
   }
