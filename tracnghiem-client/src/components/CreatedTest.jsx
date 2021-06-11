@@ -227,8 +227,8 @@ class CreatedTest extends Component {
             onClick={this.handleDeleteTopic}
           >
             {t.content}
+            <i className="fas fa-trash-alt"></i>
           </button>
-          <i className="fas fa-trash-alt"></i>
         </div>
       );
     });

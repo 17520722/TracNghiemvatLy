@@ -45,18 +45,20 @@ const InputGroup = styled.div`
           position: absolute;
           color: gray;
           transition: 0.2s;
-          transform: translate(0.85rem, 0.6rem);
+          transform: translate(1rem, 0.6rem);
      }
 
      input {
           width: 300px;
           height: 3rem;
-          padding-left: 0.8rem;
-          padding-right: 0.8rem;
+          padding-left: 1rem;
+          padding-right: 1rem;
           border-top: none;
           border-left: none;
           border-right: none;
-          border-bottom: 0.3rem solid gray;
+          border-bottom: none;
+          /* border-bottom: 0.3rem solid gray; */
+          border-radius: 8px;
           background-color: ${ inputBackground };
           outline: none;
           
@@ -76,7 +78,7 @@ const InputGroup = styled.div`
           }
 
           :valid {
-               border-bottom: 0.3rem solid ${ validColor };
+               /* border-bottom: 0.3rem solid ${ validColor }; */
                background-color: #def8ce;
           }
      }

@@ -69,19 +69,27 @@
 .banner-prop {
   position: relative;
   height: 300px;
-  background-color: #165636;
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #eeeeee;
 }
 
 .btn-start {
-  position: absolute;
-  top: 94%;
-  left: 46%;
-  border-radius: 20px;
+  border-radius: 5px;
   padding: 5px 15px;
   font-size: 13pt;
   background-color: #3FA32A;
   color: white;
   cursor: pointer;
+  transform: translateY(-1.2rem);
+  font-weight: 500;
+}
+
+.btn-start:hover {
+  color: white;
+  background-color: #53bf3e;
 }
 
 .botton-content {
@@ -124,4 +132,10 @@
 .row {
   margin-left: 0;
   margin-right: 0;
+}
+
+.class-container {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-around;
 }

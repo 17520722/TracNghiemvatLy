@@ -16,28 +16,22 @@ export default class HomePage extends Component {
           </div>
           <div className="botton-content">
             <div className="class-button-wrapper">
-              <div className="row">
-                <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                  <Link to="#" className="link-prop">
-                    <div className="one-btn-link center">
+              <div className="class-container">
+                <Link to="#" className="link-prop">
+                    <div className="one-btn-link">
                       <p className="class-text-prop">Lớp 10</p>
                     </div>
-                  </Link>
-                </div>
-                <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                  <Link to="#" className="link-prop">
-                    <div className="one-btn-link center">
+                </Link>
+                <Link to="#" className="link-prop">
+                    <div className="one-btn-link">
                       <p className="class-text-prop">Lớp 11</p>
                     </div>
-                  </Link>
-                </div>
-                <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                  <Link to="#" className="link-prop">
-                    <div className="one-btn-link center">
+                </Link>
+                <Link to="#" className="link-prop">
+                    <div className="one-btn-link">
                       <p className="class-text-prop">Lớp 12</p>
                     </div>
-                  </Link>
-                </div>
+                </Link>
               </div>
             </div>
           </div>

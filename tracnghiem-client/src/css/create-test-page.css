@@ -42,20 +42,24 @@
 .selected-topic-btn {
   margin-right: 5px;
   margin-bottom: 5px;
+  cursor: pointer;
 }
 .selected-topic-btn:hover {
-  transition: 0.3s;
+  transition: all 0.3s;
   background-color: #d9534f;
   border: 1px solid #d9534f;
 }
 
 .deleted_topic_wrapper i {
-  color: black;
-  font-size: 12pt;
-  visibility: hidden;
+  color: white;
+  font-size: 0;
+  margin-right: 0;
+  display: inline-block;
+  transition: .2s;
 }
 
 .deleted_topic_wrapper:hover i{
-  visibility: visible;
+  font-size: 1rem;
+  padding-left: 1rem;
 }
 
