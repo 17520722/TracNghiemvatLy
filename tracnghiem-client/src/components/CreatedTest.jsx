@@ -64,6 +64,10 @@ class CreatedTest extends Component {
     console.log(this.state);
   };
 
+  //lấy id user
+  //lấy topicScore
+  //lay questionScore
+  
   createTestOnRedux = (test, questions) => {
     var { test_records } = this.props;
     var number_question_for_lv = "";

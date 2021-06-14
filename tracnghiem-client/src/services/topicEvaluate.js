@@ -43,6 +43,6 @@ export const getEvaluatedTopic = async(listOfTopic, token) => {
                'Content-Type': 'application/json',
                'authorization': token
           },
-          body: JSON.stringify({listOfTopic: listOfTopic })
+          body: JSON.stringify({ listOfTopic: listOfTopic })
      })
 }

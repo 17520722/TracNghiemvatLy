@@ -33,6 +33,8 @@ const questionSchema = `
           image: String
           level: Int
           topic: ID
+          correctAns: Int
+          countAns: Int
      }
 
      type Question {
@@ -42,6 +44,8 @@ const questionSchema = `
           image: String
           level: Int
           topic: Topic
+          correctAns: Int
+          countAns: Int
      }
 `
 

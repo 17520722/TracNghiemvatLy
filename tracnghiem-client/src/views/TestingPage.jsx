@@ -13,6 +13,7 @@ import { saveTest } from "../graphql/test.service";
 import { addTestForUser, updateUser } from "../graphql/user.service";
 import * as is_end_test from "../actions/is_end_test";
 import { saveEvaluateTopicTest, saveEvaluatedTopic } from "../services/topicEvaluate";
+import { saveQuestionRecord } from "../services/question";
 
 class TestingPage extends Component {
   constructor(props) {
@@ -130,6 +131,8 @@ class TestingPage extends Component {
           const miniList = [];
           const testId = data._id;
           const questionList = this.props.test_records.setOfQuestions;
+          console.log(questionList)
+          let listQuestionRecord = [];
 
           for (let topic of topicList) {
             let numberQuestionOfTopic = 0;
@@ -137,13 +140,27 @@ class TestingPage extends Component {
 
             for (let k = 0; k < questionList.length; k++) {
               if (questionList[k].topic.topicId === topic.topicId) {
+
+                let questionObj = {
+                  _id: questionList[k]._id,
+                  countAns: questionList[k].countAns === undefined ? 0 : questionList[k].countAns,
+                  correctAns: questionList[k].correctAns === undefined ? 0 : questionList[k].correctAns,
+                  isCorrectAns: false
+                };
+
                 numberQuestionOfTopic++;
                 for (let i = 0; i < questionList[k].setOfAnswer.length; i++) {
                   if (this.props.test_records.answerSet[k]?.answerId === questionList[k].setOfAnswer[i].id &&
                     questionList[k].setOfAnswer[i].isCorrect) {
                     numberCorrectQuestion++;
+                    
+                    questionObj = {
+                      ...questionObj,
+                      isCorrectAns: true
+                    }
                   }
                 }
+                listQuestionRecord.push(questionObj);
               }
             }
 
@@ -165,6 +182,7 @@ class TestingPage extends Component {
           await saveEvaluatedTopic(miniList, user.token).then(response => response.json()).then(result => {
             console.log(result);
           });
+          saveQuestionRecord(listQuestionRecord);
           // for lấy topicId
           //
           //lấy list test từ user

@@ -1,21 +1,21 @@
 
 export const _getQuestion = (questionId) => {
      return {
-          query: "{\r\n  question(id: \"" + questionId + "\") {\r\n    _id\r\n    setOfAnswer {\r\n      content\r\n      isCorrect\r\n    }\r\n    content\r\n    image\r\n    level\r\n    topic {\r\n      _id\r\n      topicId\r\n      content\r\n    }\r\n  }\r\n}",
+          query: "{\r\n  question(id: \"" + questionId + "\") {\r\n    _id\r\n    setOfAnswer {\r\n      content\r\n      isCorrect\r\n    }\r\n    content\r\n    image\r\n    level\r\n    correctAns\r\n     countAns\r\n      topic {\r\n      _id\r\n      topicId\r\n      content\r\n    }\r\n  }\r\n}",
           variables: {}
      }
 }
 
 export const _getQuestions = (questionIds) => {
      return {
-          query: "{\r\n  questions(ids: " + questionIds + ") {\r\n    _id\r\n    setOfAnswer {\r\n      content\r\n      isCorrect\r\n    }\r\n    content\r\n    image\r\n    level\r\n    topic {\r\n      _id\r\n      topicId\r\n      content\r\n    }\r\n  }\r\n}",
+          query: "{\r\n  questions(ids: " + questionIds + ") {\r\n    _id\r\n    setOfAnswer {\r\n      content\r\n      isCorrect\r\n    }\r\n    content\r\n    image\r\n    level\r\n    correctAns\r\n     countAns\r\n     topic {\r\n      _id\r\n      topicId\r\n      content\r\n    }\r\n  }\r\n}",
           variables: {}
      }
 }
 
 export const _getAllQuestion = () => {
      return {
-          query: "{\r\n  allQuestion {\r\n    _id\r\n    setOfAnswer {\r\n      content\r\n      isCorrect\r\n    }\r\n    content\r\n    image\r\n    level\r\n    topic {\r\n      _id\r\n      topicId\r\n      content\r\n    }\r\n  }\r\n}",
+          query: "{\r\n  allQuestion {\r\n    _id\r\n    setOfAnswer {\r\n      content\r\n      isCorrect\r\n    }\r\n    content\r\n    image\r\n    level\r\n    correctAns\r\n     countAns\r\n    topic {\r\n      _id\r\n      topicId\r\n      content\r\n    }\r\n  }\r\n}",
           variables: {}
      }
 }

@@ -16,6 +16,7 @@ const Test = require("./models/Test");
 const authRouter = require("./user/auth");
 const uploadRouter = require("./routes/upload");
 const topicEvaluate = require("./routes/topicEvaluate");
+const question = require("./routes/question");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -26,6 +27,8 @@ app.use('/auth', authRouter);
 app.use('/uploads', uploadRouter);
 
 app.use('/topicEvalute', topicEvaluate);
+
+app.use('/question', question);
 
 app.post('/api/saveQuestion', (req, res) => {
 	const data = req.body;

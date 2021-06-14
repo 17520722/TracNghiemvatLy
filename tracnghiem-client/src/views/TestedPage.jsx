@@ -7,6 +7,7 @@ import { MathJaxContext, MathJax } from "better-react-mathjax";
 import { mathjax_config } from "../constants/config";
 import * as test_records_actions from "../actions/test_records_actions";
 import { connect } from "react-redux";
+import { saveQuestionRecord } from "../services/question";
 
 const abcArr = ["A", "B", "C", "D"];
 
@@ -27,6 +28,8 @@ class TestedPage extends Component {
         questions_arr: test_records.setOfQuestions
       });
     }
+
+    saveQuestionRecord()
   };
 
   renderQuestion = (cauhoi) => {

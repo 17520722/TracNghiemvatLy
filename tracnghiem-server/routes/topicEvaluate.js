@@ -48,6 +48,22 @@ router.post('/saveEvaluateTopicTest', (req, res) => {
 	}
 });
 
+router.post('/getTopicScoreForUser', (req, res) => {
+	TopicEvaluateModel.find({ username: req.body.username }, (err, doc) => {
+		try {
+			if (err) throw err;
+			if (doc) {
+				res.json({
+					topicScoreForUser: doc
+				})
+			}
+		}
+		catch (e) {
+			console.log(e);
+		}
+	});
+});
+
 router.post('/saveTopicScore', async (req, res) => {
 	const token = req.headers.authorization;
 	const decode = jwt.decode(token.replace('Bearer ',''));
