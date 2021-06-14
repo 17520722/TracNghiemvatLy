@@ -46,3 +46,16 @@ export const getEvaluatedTopic = async(listOfTopic, token) => {
           body: JSON.stringify({ listOfTopic: listOfTopic })
      })
 }
+
+export const getEvaluatedTestsUser = async(username) => {
+     const fetchMethod = await fetch(API_URL.concat("/getTopicScoreForUser"), {
+          method: 'POST',
+          headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({username: username})
+     });
+
+     return fetchMethod;
+}

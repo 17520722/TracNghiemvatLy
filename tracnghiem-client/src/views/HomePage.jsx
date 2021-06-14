@@ -3,6 +3,7 @@ import {Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import banner from "../img/banner.png";
+import { getEvaluatedTestsUser } from "../services/topicEvaluate";
 
 export default class HomePage extends Component {
   render() {
