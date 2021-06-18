@@ -10,6 +10,7 @@ import TestedPage from "./views/TestedPage";
 import EvaluatedPage from "./views/EvaluatedPage";
 import StatisticPage from "./views/StatisticPage";
 import CreatedPage from "./views/CreatedTestPage";
+import UserDetailPage from "./views/UserDetailPage";
 
 const routes = [
   {
@@ -51,6 +52,11 @@ const routes = [
     path: "/home/create-test",
     exact: false,
     component: CreatedPage,
+  },
+  {
+    path: "/home/user-detail",
+    exact: false,
+    component: UserDetailPage,
   },
   {
     path: "/login",

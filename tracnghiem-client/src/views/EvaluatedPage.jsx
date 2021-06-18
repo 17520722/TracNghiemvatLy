@@ -12,29 +12,21 @@ class EvaluatedPage extends Component {
     let f_remember =
       item_topic.remember.all === 0
         ? 0
-        : (item_topic.remember.correct / item_topic.remember.all) *
-        levelQuestions.remember;
+        : (item_topic.remember.correct / item_topic.remember.all);
     let f_understand =
       item_topic.understand.all === 0
         ? 0
-        : (item_topic.understand.correct / item_topic.understand.all) *
-        levelQuestions.understand;
+        : (item_topic.understand.correct / item_topic.understand.all);
     let f_apply =
       item_topic.apply.all === 0
         ? 0
-        : (item_topic.apply.correct / item_topic.apply.all) *
-        levelQuestions.apply;
+        : (item_topic.apply.correct / item_topic.apply.all);
     let f_analyzing =
       item_topic.analyzing.all === 0
         ? 0
-        : (item_topic.analyzing.correct / item_topic.analyzing.all) *
-        levelQuestions.analyzing;
+        : (item_topic.analyzing.correct / item_topic.analyzing.all);
     let factor =
-      ((f_remember + f_understand + f_apply + f_analyzing) /
-        ((item_topic.remember.all === 0 ? 0 : levelQuestions.remember) +
-          (item_topic.understand.all === 0 ? 0 : levelQuestions.understand) +
-          (item_topic.apply.all === 0 ? 0 : levelQuestions.apply) +
-          (item_topic.analyzing.all === 0 ? 0 : levelQuestions.analyzing))).toFixed(2);
+      ((f_remember + f_understand + f_apply + f_analyzing).toFixed(2));
     return factor;
   };
 
@@ -100,7 +92,7 @@ class EvaluatedPage extends Component {
   };
 
   render() {
-    let {test_records} = this.props;
+    let { test_records } = this.props;
     const numberOfQuestion = test_records.setOfQuestions.length;
     const point = ((10 / numberOfQuestion) * test_records.correctAnsNumber).toFixed(2);
     return (
