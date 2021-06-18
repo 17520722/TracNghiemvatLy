@@ -132,19 +132,35 @@ router.post('/getTopicScore', async (req, res) => {
 		const topicList = req.body.listOfTopic;
 		listRes = [];
 
-		for (const topic of topicList) {
-			await TopicEvaluateUserModel.findOne({ username: decode.username, topicId: topic.topicId },
+		if (topicList.length === 0) {
+			await TopicEvaluateUserModel.find({ username: decode.username },
 				(err, result) => {
 					try {
 						if (err) throw err;
 						if (result) {
-							listRes.push(result);
+							listRes = result;
 						}
 					}
 					catch (e) {
 						console.log(e);
 					}
 				});
+		}
+		else {
+			for (const topic of topicList) {
+				await TopicEvaluateUserModel.findOne({ username: decode.username, topicId: topic.topicId },
+					(err, result) => {
+						try {
+							if (err) throw err;
+							if (result) {
+								listRes.push(result);
+							}
+						}
+						catch (e) {
+							console.log(e);
+						}
+					});
+			}
 		}
 
 		res.json(listRes);

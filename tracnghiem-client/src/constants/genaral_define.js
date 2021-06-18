@@ -1,4 +1,8 @@
+import { getEvaluatedTopic } from "../services/topicEvaluate";
+
 export const time = ["50", "45", "15"];
+
+export const bias = 0.2;
 
 export const level = [
   {
@@ -80,6 +84,29 @@ export var levelOfTest = (numberQuestion, level) => {
   console.log(result);
   result.analyzing = numberQuestion - (result.remember + result.understand + result.apply);
   return result;
+}
+
+export const flexGenerateLevel = async (listTopic) => {
+  const user = JSON.parse(sessionStorage.getItem("user"))
+  const listScoreTopic = await getEvaluatedTopic(listTopic, user.token).then(response => response.json());
+  console.log(listScoreTopic);
+  let sum = 0;
+
+  for (let topicScore of listScoreTopic) {
+    sum += topicScore.NLScore;
+  }
+
+  const avg = sum / listScoreTopic.length;
+
+  if (avg >= 7) {
+    return levelOfTest(40, level[3]);
+  }
+  else if (avg >= 5) {
+    return levelOfTest(40, level[2]);
+  }
+  else {
+    return levelOfTest(40, level[1]);
+  }
 }
 
 export const QUESTIONS_PER_PAGE = 10;

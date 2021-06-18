@@ -121,8 +121,11 @@ var myReducer = (state = initialState, action) => {
           numberQuestions[i].setOfAnswer[j] = temp_ans;
         }
       }
-      state.setOfQuestions = numberQuestions;
-      return state;
+      //state.setOfQuestions = numberQuestions;
+      return {
+        ...state,
+        setOfQuestions: numberQuestions
+      };
 
     case Types.SET_LEVEL_OF_TEST:
       state.levelOfDifficult = action.level;

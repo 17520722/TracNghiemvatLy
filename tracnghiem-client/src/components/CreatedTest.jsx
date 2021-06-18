@@ -4,8 +4,9 @@ import * as topic_actions from "../actions/selected_topics_action";
 import * as test_actions from "../actions/created_test_info_actions";
 import * as record_test_actions from "../actions/test_records_actions";
 import * as _ from "lodash";
-import { level, levelOfTest } from "../constants/genaral_define";
+import { bias, flexGenerateLevel, level, levelOfTest } from "../constants/genaral_define";
 import * as graphsql_question from "../graphql/question.service";
+import { getEvaluatedTopic } from "../services/topicEvaluate";
 
 let selectedTopic = [];
 let topic_edited = [];
@@ -22,6 +23,7 @@ class CreatedTest extends Component {
 
       topic: [],
       isSetIdAnswer: false,
+      questionsFilterTopic: []
     };
   }
 
@@ -61,14 +63,20 @@ class CreatedTest extends Component {
     this.setState({
       [name]: value,
     });
-    console.log(this.state);
+
   };
 
   //lấy id user
   //lấy topicScore
   //lay questionScore
+  //if (testlevel == 0) 
+  //questionInTopic1,
+  //    filter(listQuestion, topic)
+  //questionInTopic2,
+  //questionInTopic3,
+  //questionInTopic4
   
-  createTestOnRedux = (test, questions) => {
+  createTestOnRedux = async(test, questions) => {
     var { test_records } = this.props;
     var number_question_for_lv = "";
     if (test.level === 1) {
@@ -77,52 +85,170 @@ class CreatedTest extends Component {
       number_question_for_lv = levelOfTest(40, level[2]);
     } else if (test.level === 3) {
       number_question_for_lv = levelOfTest(40, level[3]);
+    } else if (test.level === 0) {
+      number_question_for_lv = flexGenerateLevel(selectedTopic);
     }
 
-    console.log(number_question_for_lv);
-    let allQuestionLenght = questions.length;
+    if (test.level !== 0) {
+      console.log(number_question_for_lv);
+      let allQuestionLenght = questions.length;
 
-    for (let i = 0; i < allQuestionLenght; i++) {
-      const index = _.random(0, questions.length - 1);
-      if (questions[index].level === 1) {
-        this.props.onAddQuestionToTest(questions[index]);
-        questions.splice(index, 1);
+      for (let i = 0; i < allQuestionLenght; i++) {
+        console.log("SDSDSDS")
+        const index = _.random(0, questions.length - 1);
+        if (questions[index].level === 1) {
+          this.props.onAddQuestionToTest(questions[index]);
+          questions.splice(index, 1);
+        }
+        if (test_records.setOfRemember.length === number_question_for_lv.remember) {
+          break;
+        }
       }
-      if (test_records.setOfRemember.length === number_question_for_lv.remember) {
-        break;
+      for (let i = 0; i < allQuestionLenght; i++) {
+        console.log("SDSDSDSssss")
+        const index = _.random(0, questions.length - 1);
+        if (questions[index].level === 2) {
+          this.props.onAddQuestionToTest(questions[index]);
+          questions.splice(index, 1);
+        }
+        if (test_records.setOfUnderstand.length === number_question_for_lv.understand) {
+          break;
+        }
+      }
+      for (let i = 0; i < allQuestionLenght; i++) {
+        const index = _.random(0, questions.length - 1);
+        if (questions[index].level === 3) {
+          this.props.onAddQuestionToTest(questions[index]);
+          questions.splice(index, 1);
+        }
+        if (test_records.setOfApply.length === number_question_for_lv.apply) {
+          break;
+        }
+      }
+      for (let i = 0; i < allQuestionLenght; i++) {
+        console.log("SDSDSDSmkvsmkvm")
+        const index = _.random(0, questions.length - 1);
+        if (questions[index].level === 4) {
+          this.props.onAddQuestionToTest(questions[index]);
+          questions.splice(index, 1);
+        }
+        if (test_records.setOfAnalyzing.length === number_question_for_lv.analyzing) {
+          break;
+        }
       }
     }
-    for (let i = 0; i < allQuestionLenght; i++) {
-      const index = _.random(0, questions.length - 1);
-      if (questions[index].level === 2) {
-        this.props.onAddQuestionToTest(questions[index]);
-        questions.splice(index, 1);
+    else {
+      //get score
+      let user = JSON.parse(sessionStorage.getItem("user"));
+      let listScoreTopic = [];
+      await getEvaluatedTopic(selectedTopic, user.token).then(response => response.json()).then(result => {
+        listScoreTopic = result;
+        console.log("EHEHEHEHHEHEHE")
+      });
+      
+      listScoreTopic.forEach(topicScore =>  {
+        let arr = questions.filter(question => topicScore.topicId == question.topic.topicId);
+        arr = this.sortQuestionByScore(arr);
+        let temp = this.state.questionsFilterTopic;
+        temp.push(arr);
+        this.setState({ questionsFilterTopic:  temp})
+        console.log(arr)
+      });
+      //random topic.
+      for (let index = 0; index < number_question_for_lv.remember; index++) {
+        let rand = Math.floor(Math.random() * listScoreTopic.length) + 1;
+        //list question in topic specific 
+        let filterTopics = this.state.questionsFilterTopic[rand];
+        //check element of list question in topic
+
+        for (let i = filterTopics.length - 1; i >= 0; i++) {
+          if (filterTopics[i].level !== 1) {
+            continue;
+          }
+          //get topicScore of question
+          this.filterQuestionAndAddToTest(listScoreTopic, filterTopics, rand, i);
+        }
       }
-      if (test_records.setOfUnderstand.length === number_question_for_lv.understand) {
-        break;
+
+      for (let index = 0; index < number_question_for_lv.understand; index++) {
+        let rand = Math.floor(Math.random() * listScoreTopic.length) + 1;
+        //list question in topic specific 
+        let filterTopics = this.state.questionsFilterTopic[rand];
+        //check element of list question in topic
+
+        for (let i = filterTopics.length - 1; i >= 0; i++) {
+          if (filterTopics[i].level !== 2) {
+            continue;
+          }
+          //get topicScore of question
+          this.filterQuestionAndAddToTest(listScoreTopic, filterTopics, rand, i);
+        }
       }
-    }
-    for (let i = 0; i < allQuestionLenght; i++) {
-      const index = _.random(0, questions.length - 1);
-      if (questions[index].level === 3) {
-        this.props.onAddQuestionToTest(questions[index]);
-        questions.splice(index, 1);
+
+      for (let index = 0; index < number_question_for_lv.apply; index++) {
+        let rand = Math.floor(Math.random() * listScoreTopic.length) + 1;
+        //list question in topic specific 
+        let filterTopics = this.state.questionsFilterTopic[rand];
+        //check element of list question in topic
+
+        for (let i = filterTopics.length - 1; i >= 0; i++) {
+          if (filterTopics[i].level !== 3) {
+            continue;
+          }
+          //get topicScore of question
+          this.filterQuestionAndAddToTest(listScoreTopic, filterTopics, rand, i);
+        }
       }
-      if (test_records.setOfApply.length === number_question_for_lv.apply) {
-        break;
-      }
-    }
-    for (let i = 0; i < allQuestionLenght; i++) {
-      const index = _.random(0, questions.length - 1);
-      if (questions[index].level === 4) {
-        this.props.onAddQuestionToTest(questions[index]);
-        questions.splice(index, 1);
-      }
-      if (test_records.setOfAnalyzing.length === number_question_for_lv.analyzing) {
-        break;
+
+      for (let index = 0; index < number_question_for_lv.analyzing; index++) {
+        let rand = Math.floor(Math.random() * listScoreTopic.length) + 1;
+        //list question in topic specific 
+        let filterTopics = this.state.questionsFilterTopic[rand];
+        //check element of list question in topic
+
+        for (let i = filterTopics.length - 1; i >= 0; i++) {
+          if (filterTopics[i].level !== 4) {
+            continue;
+          }
+          //get topicScore of question
+          this.filterQuestionAndAddToTest(listScoreTopic, filterTopics, rand, i);
+        }
       }
     }
   };
+
+  filterQuestionAndAddToTest = (listScoreTopic, filterTopics, rand, index ) => {
+    const topicScore = listScoreTopic.find(element => element.topicId === filterTopics[index].topic.topicId);
+    const questionScore = isNaN(filterTopics[index].correctAns / filterTopics[index].countAns) ? 0 :
+          (filterTopics[index].correctAns / filterTopics[index].countAns);
+    if (questionScore <= topicScore.NLScore - bias) {
+      this.props.onAddQuestionToTest(filterTopics[index]);
+      
+      let newState = this.state.questionsFilterTopic;
+      newState[rand].splice(index, 1);
+
+      this.setState({ questionsFilterTopic: newState });
+    }
+    console.log(this.props.test_records.setOfQuestions);
+  };
+
+  sortQuestionByScore = (listQuestion) => {
+    for (let i = 0; i < listQuestion.length - 1; i++) {
+      for (let j = i + 1; j < listQuestion.length; j++) {
+          let scoreA = isNaN(listQuestion[i].correctAns / listQuestion[i].countAns) ? 0 : 
+              (listQuestion[i].correctAns / listQuestion[i].countAns);
+          let scoreB = isNaN(listQuestion[j].correctAns / listQuestion[j].countAns) ? 0 :
+              (listQuestion[j].correctAns / listQuestion[j].countAns);
+          
+          if (scoreA > scoreB) {
+            let temp = listQuestion[i];
+            listQuestion[i] = listQuestion[j];
+            listQuestion[j] = temp;
+          }
+      }
+    }
+    return listQuestion;
+  }
 
   filterQuestionByTopic = (allQuestion, topicList) => {
     let tempArr = [];
@@ -147,7 +273,7 @@ class CreatedTest extends Component {
         let test = this.state;
 
         if (selectedTopic.length !== 0) {
-          console.log(selectedTopic)
+
           let temp = this.filterQuestionByTopic(allQuestion, selectedTopic);
           allQuestion = temp;
         } else {
