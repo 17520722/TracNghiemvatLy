@@ -250,7 +250,7 @@ class CreatedTest extends Component {
         }
       }
     }
-    console.log("AJSASSSSSSSSSSSSSSSSSSSSSS");
+    console.log(test_records);
   };
 
   filterQuestionAndAddToTest = (listScoreTopic, filterTopics, rand, index) => {
@@ -262,7 +262,11 @@ class CreatedTest extends Component {
     )
       ? 0
       : filterTopics[index].correctAns / filterTopics[index].countAns;
-    if (questionScore <= topicScore.NLScore - bias) {
+    console.log(topicScore);
+    if (
+      questionScore <= topicScore.NLScore
+      // - bias
+    ) {
       this.props.onAddQuestionToTest(filterTopics[index]);
 
       let newState = this.state.questionsFilterTopic;

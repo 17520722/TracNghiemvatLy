@@ -62,6 +62,7 @@ export const set_id_for_answer = () => {
 };
 
 export const set_level_of_test = (level) => {
+  console.log("KKKKKKKKKKKKKKKK");
   return {
     type: Types.SET_LEVEL_OF_TEST,
     level
