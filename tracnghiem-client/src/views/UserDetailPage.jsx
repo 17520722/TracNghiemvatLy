@@ -67,22 +67,25 @@ function UserDetailPage(props) {
       return <div className="no-data-props">Không có dữ liệu</div>;
     } else {
       return (
-        <Line
-          data={{
-            labels: labels,
-            datasets: datasets,
-          }}
-          options={{
-            plugins: {
-              title: title,
-            },
-            elements: {
-              point: {
-                pointStyle: "rect",
+        <div className="static">
+          <Line
+            data={{
+              labels: labels,
+              datasets: datasets,
+            }}
+            options={{
+              plugins: {
+                title: title,
               },
-            },
-          }}
-        />
+              elements: {
+                point: {
+                  pointStyle: "rect",
+                },
+              },
+              maintainAspectRatio: "false",
+            }}
+          />
+        </div>
       );
     }
   };
@@ -95,15 +98,13 @@ function UserDetailPage(props) {
         <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9 right-content">
           <p className="title-right-content">Những đề gần đây</p>
           <div className="static-wrapper">
-            <div className="static">
-              <RenderChart />
+            <div className="topic-name-text">
+              <TopicName />
             </div>
+            <RenderChart />
             <div className="note-chart">
               (Với trục ngang là số đề thi đã làm gần đây. Trục dọc là điểm số
               tương quan qua từng đề thi)
-            </div>
-            <div className="topic-name-text">
-              <TopicName />
             </div>
           </div>
           <div>

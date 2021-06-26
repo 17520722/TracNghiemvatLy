@@ -8,11 +8,14 @@ import Question from "../components/Question";
 import { QUESTIONS_PER_PAGE } from "../constants/genaral_define";
 import { connect } from "react-redux";
 import Timer from "../components/Timer";
-import { withRouter } from 'react-router-dom'
+import { withRouter } from "react-router-dom";
 import { saveTest } from "../graphql/test.service";
 import { addTestForUser, updateUser } from "../graphql/user.service";
 import * as is_end_test from "../actions/is_end_test";
-import { saveEvaluateTopicTest, saveEvaluatedTopic } from "../services/topicEvaluate";
+import {
+  saveEvaluateTopicTest,
+  saveEvaluatedTopic,
+} from "../services/topicEvaluate";
 import { saveQuestionRecord } from "../services/question";
 
 class TestingPage extends Component {
@@ -25,6 +28,22 @@ class TestingPage extends Component {
   }
   componentDidMount = () => {
     var { test_records, number } = this.props;
+
+    document.addEventListener(
+      "copy",
+      function (evt) {
+        // Change the copied text if you want
+        evt.clipboardData.setData(
+          "text/plain",
+          "Xin đừng tìm đáp án trên mạng!"
+        );
+
+        // Prevent the default copy action
+        evt.preventDefault();
+      },
+      false
+    );
+
     this.setState({
       questions_arr: test_records.setOfQuestions,
     });
@@ -113,100 +132,118 @@ class TestingPage extends Component {
         levelOfDifficult: testRecord.levelOfDifficult,
         correctAnsNumber: testRecord.correctAnsNumber,
         incorrectAnsNumber: testRecord.incorrectAnsNumber,
-        answerSet: testRecord.answerSet
-      }
+        answerSet: testRecord.answerSet,
+      };
 
-      const user = JSON.parse(sessionStorage.getItem('user'));
+      const user = JSON.parse(sessionStorage.getItem("user"));
 
       console.log(testRecord);
 
-      saveTest(testResult).then(response => response.json()).then(async result => {
-        const data = result
-        console.log(data._id)
-        if (user) {
-          console.log("A");
-          await addTestForUser(user.username, user.token, data._id);
+      saveTest(testResult)
+        .then((response) => response.json())
+        .then(async (result) => {
+          const data = result;
+          console.log(data._id);
+          if (user) {
+            console.log("A");
+            await addTestForUser(user.username, user.token, data._id);
 
-          const topicList = this.props.topic_list;
-          const miniList = [];
-          const testId = data._id;
-          const questionList = this.props.test_records.setOfQuestions;
-          console.log(questionList)
-          let listQuestionRecord = [];
+            const topicList = this.props.topic_list;
+            const miniList = [];
+            const testId = data._id;
+            const questionList = this.props.test_records.setOfQuestions;
+            console.log(questionList);
+            let listQuestionRecord = [];
 
-          for (let topic of topicList) {
-            let numberQuestionOfTopic = 0;
-            let numberCorrectQuestion = 0;
+            for (let topic of topicList) {
+              let numberQuestionOfTopic = 0;
+              let numberCorrectQuestion = 0;
 
-            for (let k = 0; k < questionList.length; k++) {
-              if (questionList[k].topic.topicId === topic.topicId) {
+              for (let k = 0; k < questionList.length; k++) {
+                if (questionList[k].topic.topicId === topic.topicId) {
+                  let questionObj = {
+                    _id: questionList[k]._id,
+                    countAns:
+                      questionList[k].countAns === undefined
+                        ? 0
+                        : questionList[k].countAns,
+                    correctAns:
+                      questionList[k].correctAns === undefined
+                        ? 0
+                        : questionList[k].correctAns,
+                    isCorrectAns: false,
+                  };
 
-                let questionObj = {
-                  _id: questionList[k]._id,
-                  countAns: questionList[k].countAns === undefined ? 0 : questionList[k].countAns,
-                  correctAns: questionList[k].correctAns === undefined ? 0 : questionList[k].correctAns,
-                  isCorrectAns: false
-                };
+                  numberQuestionOfTopic++;
+                  for (let i = 0; i < questionList[k].setOfAnswer.length; i++) {
+                    if (
+                      this.props.test_records.answerSet[k]?.answerId ===
+                        questionList[k].setOfAnswer[i].id &&
+                      questionList[k].setOfAnswer[i].isCorrect
+                    ) {
+                      numberCorrectQuestion++;
 
-                numberQuestionOfTopic++;
-                for (let i = 0; i < questionList[k].setOfAnswer.length; i++) {
-                  if (this.props.test_records.answerSet[k]?.answerId === questionList[k].setOfAnswer[i].id &&
-                    questionList[k].setOfAnswer[i].isCorrect) {
-                    numberCorrectQuestion++;
-                    
-                    questionObj = {
-                      ...questionObj,
-                      isCorrectAns: true
+                      questionObj = {
+                        ...questionObj,
+                        isCorrectAns: true,
+                      };
                     }
                   }
+                  listQuestionRecord.push(questionObj);
                 }
-                listQuestionRecord.push(questionObj);
+              }
+
+              if (numberQuestionOfTopic !== 0) {
+                const input = {
+                  username: user.username,
+                  testId: testId,
+                  topicId: topic.topicId,
+                  numberCorrectAns: numberCorrectQuestion,
+                  numberAns: numberQuestionOfTopic,
+                };
+                miniList.push(topic);
+
+                await saveEvaluateTopicTest(input, user.token)
+                  .then((response) => response.json())
+                  .then((result) => {
+                    console.log(result);
+                  });
               }
             }
-
-            if (numberQuestionOfTopic !== 0) {
-              const input = {
-                username: user.username,
-                testId: testId,
-                topicId: topic.topicId,
-                numberCorrectAns: numberCorrectQuestion,
-                numberAns: numberQuestionOfTopic
-              }
-              miniList.push(topic);
-
-              await saveEvaluateTopicTest(input, user.token).then(response => response.json()).then(result => {
-                console.log(result)
+            await saveEvaluatedTopic(miniList, user.token)
+              .then((response) => response.json())
+              .then((result) => {
+                console.log(result);
               });
-            }
+            saveQuestionRecord(listQuestionRecord);
+            // for lấy topicId
+            //
+            //lấy list test từ user
+            //mỗi topic tính Năng Lực của user tại topic này bằng cách tìm 20 bài test gần nhất có topic trong nội dung
+            //    EvaluatedDoc(userId, topicId, testId);
+            //      numberCorrectAns / numberAns;
           }
-          await saveEvaluatedTopic(miniList, user.token).then(response => response.json()).then(result => {
-            console.log(result);
-          });
-          saveQuestionRecord(listQuestionRecord);
-          // for lấy topicId
-          //
-          //lấy list test từ user
-          //mỗi topic tính Năng Lực của user tại topic này bằng cách tìm 20 bài test gần nhất có topic trong nội dung
-          //    EvaluatedDoc(userId, topicId, testId);
-          //      numberCorrectAns / numberAns;
-        }
-      });
+        });
       this.props.history.push("/home/tested");
       ////////
     }
   };
   test = () => {
     let { currentPage } = this.state;
-    for (let i = QUESTIONS_PER_PAGE * (currentPage - 1) + 1; i <= QUESTIONS_PER_PAGE * currentPage; i++) {
+    for (
+      let i = QUESTIONS_PER_PAGE * (currentPage - 1) + 1;
+      i <= QUESTIONS_PER_PAGE * currentPage;
+      i++
+    ) {
       document.getElementById(i + "C").click();
     }
-  }
+  };
 
   render() {
     var { currentPage, questions_arr } = this.state;
     var { test_records } = this.props;
     if (this.props.is_end_test === true) {
-      return <Redirect to="/home/tested" />
+      return <Redirect to="/home/tested" />;
     }
     return (
       <div>
@@ -229,7 +266,7 @@ class TestingPage extends Component {
                 onClick={this.nextPage}
                 hidden={
                   currentPage ===
-                    Math.ceil(questions_arr.length / QUESTIONS_PER_PAGE)
+                  Math.ceil(questions_arr.length / QUESTIONS_PER_PAGE)
                     ? true
                     : false
                 }
@@ -242,7 +279,7 @@ class TestingPage extends Component {
                 onClick={this.onFinnishTest}
                 hidden={
                   currentPage ===
-                    Math.ceil(questions_arr.length / QUESTIONS_PER_PAGE)
+                  Math.ceil(questions_arr.length / QUESTIONS_PER_PAGE)
                     ? false
                     : true
                 }
@@ -260,8 +297,12 @@ class TestingPage extends Component {
                 <Timer />
               </div>
               <div className="col-5 finnish">
-                <button className="btn btn-danger" onClick={this.onFinnishTest}>Kết thúc</button>
-                <button className="btn" onClick={this.test}>Auto</button>
+                <button className="btn btn-danger" onClick={this.onFinnishTest}>
+                  Kết thúc
+                </button>
+                <button className="btn" onClick={this.test}>
+                  Auto
+                </button>
               </div>
             </div>
           </div>
@@ -283,7 +324,7 @@ const mapStateToProps = (state) => {
     test_records: state.test_records,
     is_end_test: state.is_end_test,
     topic_list: state.topic_list,
-    questions_arr: state.question_arr
+    questions_arr: state.question_arr,
   };
 };
 
@@ -295,4 +336,7 @@ const mapDispatchToProps = (dispatch, props) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(TestingPage));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(TestingPage));

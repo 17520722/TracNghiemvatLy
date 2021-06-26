@@ -15,8 +15,9 @@
 }
 
 .side-block-content {
-  border: 1px solid #2aa367;
-  border-radius: 10px;
+  border: none;
+  border-right: 1px solid #2aa367;
+  border-radius: 0;
   height: 100%;
   margin-left: 1rem;
 }

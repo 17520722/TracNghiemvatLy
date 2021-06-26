@@ -5,28 +5,43 @@ import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { levelQuestions } from "../constants/genaral_define";
-import { ANALYZING, APPLY, REMEMBER, REVIEW_TEST_WEAK, UNDERSTAND } from "../constants/string_const";
+import {
+  ANALYZING,
+  APPLY,
+  REMEMBER,
+  REVIEW_TEST_WEAK,
+  UNDERSTAND,
+} from "../constants/string_const";
 
 class EvaluatedPage extends Component {
   evaluatedFactor = (item_topic) => {
-    let f_remember =
-      item_topic.remember.all === 0
-        ? 0
-        : (item_topic.remember.correct / item_topic.remember.all);
-    let f_understand =
-      item_topic.understand.all === 0
-        ? 0
-        : (item_topic.understand.correct / item_topic.understand.all);
-    let f_apply =
-      item_topic.apply.all === 0
-        ? 0
-        : (item_topic.apply.correct / item_topic.apply.all);
-    let f_analyzing =
-      item_topic.analyzing.all === 0
-        ? 0
-        : (item_topic.analyzing.correct / item_topic.analyzing.all);
-    let factor =
-      ((f_remember + f_understand + f_apply + f_analyzing).toFixed(2));
+    // let f_remember =
+    //   item_topic.remember.all === 0
+    //     ? 0
+    //     : (item_topic.remember.correct / item_topic.remember.all);
+    // let f_understand =
+    //   item_topic.understand.all === 0
+    //     ? 0
+    //     : (item_topic.understand.correct / item_topic.understand.all);
+    // let f_apply =
+    //   item_topic.apply.all === 0
+    //     ? 0
+    //     : (item_topic.apply.correct / item_topic.apply.all);
+    // let f_analyzing =
+    //   item_topic.analyzing.all === 0
+    //     ? 0
+    //     : (item_topic.analyzing.correct / item_topic.analyzing.all);
+    let correct =
+      item_topic.remember.correct +
+      item_topic.understand.correct +
+      item_topic.apply.correct +
+      item_topic.analyzing.correct;
+    let all =
+      item_topic.remember.all +
+      item_topic.understand.all +
+      item_topic.apply.all +
+      item_topic.analyzing.all;
+    let factor = (correct / all).toFixed(2);
     return factor;
   };
 
@@ -38,40 +53,40 @@ class EvaluatedPage extends Component {
     } else {
       return "Very good";
     }
-  }
+  };
 
   evaluatedText = (item_topic) => {
-    let text = '';
+    let text = "";
     if (item_topic.remember.correct / item_topic.remember.all < 0.5) {
-      if (text === '') {
+      if (text === "") {
         text = REVIEW_TEST_WEAK + REMEMBER;
       } else {
-        text = text + ', ' + REMEMBER;
+        text = text + ", " + REMEMBER;
       }
     }
     if (item_topic.understand.correct / item_topic.understand.all < 0.5) {
-      if (text === '') {
+      if (text === "") {
         text = REVIEW_TEST_WEAK + UNDERSTAND;
       } else {
-        text = text + ', ' + UNDERSTAND;
+        text = text + ", " + UNDERSTAND;
       }
     }
     if (item_topic.apply.correct / item_topic.apply.all < 0.5) {
-      if (text === '') {
+      if (text === "") {
         text = REVIEW_TEST_WEAK + APPLY;
       } else {
-        text = text + ', ' + APPLY;
+        text = text + ", " + APPLY;
       }
     }
     if (item_topic.analyzing.correct / item_topic.analyzing.all < 0.5) {
-      if (text === '') {
+      if (text === "") {
         text = REVIEW_TEST_WEAK + ANALYZING;
       } else {
-        text = text + ', ' + ANALYZING;
+        text = text + ", " + ANALYZING;
       }
     }
     return text;
-  }
+  };
 
   renderEvaluateTable = () => {
     let result = null;
@@ -83,7 +98,9 @@ class EvaluatedPage extends Component {
         return (
           <tr key={index}>
             <td>{re.topic}</td>
-            <td>{`${factor}: ${text}`}. {this.evaluatedText(re)}</td>
+            <td>
+              {`${factor}: ${text}`}. {this.evaluatedText(re)}
+            </td>
           </tr>
         );
       });
@@ -94,7 +111,10 @@ class EvaluatedPage extends Component {
   render() {
     let { test_records } = this.props;
     const numberOfQuestion = test_records.setOfQuestions.length;
-    const point = ((10 / numberOfQuestion) * test_records.correctAnsNumber).toFixed(2);
+    const point = (
+      (10 / numberOfQuestion) *
+      test_records.correctAnsNumber
+    ).toFixed(2);
     return (
       <div>
         <Header />

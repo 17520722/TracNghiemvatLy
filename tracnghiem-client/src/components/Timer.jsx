@@ -16,9 +16,9 @@ function Timer({ onSetTimeFinnish, onSetEndTest }) {
 
   useEffect(() => {
     if (minutes > 0) {
-      seconds >= 0 && setTimeout(() => setSeconds(seconds - 1), 1000);
+      seconds >= 0 && setTimeout(() => setSeconds(seconds - 1), 950);
     } else if (minutes === 0) {
-      seconds > 0 && setTimeout(() => setSeconds(seconds - 1), 1000);
+      seconds > 0 && setTimeout(() => setSeconds(seconds - 1), 950);
     } 
     onSetTimeFinnish(minutes, seconds);
     if (minutes === 0 && seconds === 0) {
