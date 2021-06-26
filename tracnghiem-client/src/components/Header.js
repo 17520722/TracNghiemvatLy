@@ -36,13 +36,15 @@ export default class Header extends Component {
     this.handleClose();
     sessionStorage.removeItem("user");
     this.setState({ user: null });
+    
+    window.location.href = '/';
   }
 
   render() {
     return (
       <nav className="navbar navbar-expand-md navbar-light bg-light">
         <a className="navbar-brand" href="/" aria-disabled>
-          Logo
+          UIT - Trắc mghiệm vật lý
         </a>
         <button
           className="navbar-toggler d-lg-none"
@@ -57,11 +59,14 @@ export default class Header extends Component {
         </button>
         <div className="collapse navbar-collapse" id="collapsibleNavId">
           <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li className="nav-item">
-              <Link className="nav-link" to="/admin">
-                Admin
-              </Link>
-            </li>
+            {
+              this.state.user?.role === "admin" &&
+              <li className="nav-item">
+                <Link className="nav-link" to="/admin">
+                  Admin Panel
+                </Link>
+              </li>
+            }
           </ul>
           <div>
             { !this.state.user ? <Link to="/login" className="user-log">

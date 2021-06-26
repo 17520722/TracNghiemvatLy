@@ -10,6 +10,7 @@ import { connect } from "react-redux"
 import Toast from "../../components/Toast";
 import ListItemRoot from "../../components/ListItem";
 import { createQuestion, getAllQuestion } from "../../graphql/question.service";
+import { resetScore } from "../../services/question";
 import { Pagination } from '@material-ui/lab';
 import cloudinaryUpload from "../../services/uploads";
 
@@ -39,6 +40,7 @@ class CauHoiPage extends Component {
             listTopic: [],
             listQuestion: [],
             currentPage: 1,
+            resetLoading: false,
         };
     }
 
@@ -62,26 +64,34 @@ class CauHoiPage extends Component {
             this.setState({
                 listTopic: sortTopic,
             });
-       });
+        });
 
-       getAllQuestion().then(response => response.text()).then(result => {
-            let rawData = JSON.parse(result);
-
-            if (rawData.data === null || rawData.data === undefined) {
-                this.setState({
-                     ...this.state,
-                     isLoading: false,
-                });
-                this.props.set_toast("error", "Lỗi: không tiếp cận được máy chủ");
-                this.props.set_show_toast(true);
-
-                return;
-            }
-
+        let questions = JSON.parse(sessionStorage.getItem("questions"));
+        if (questions) {
             this.setState({
-                listQuestion: rawData.data?.allQuestion,
+                listQuestion: questions,
             });
-       });
+        }
+        getAllQuestion().then(response => response.text()).then(result => {
+                let rawData = JSON.parse(result);
+
+                if (rawData.data === null || rawData.data === undefined) {
+                    this.setState({
+                        ...this.state,
+                        isLoading: false,
+                    });
+                    this.props.set_toast("error", "Lỗi: không tiếp cận được máy chủ");
+                    this.props.set_show_toast(true);
+
+                    return;
+                }
+
+                this.setState({
+                    listQuestion: rawData.data?.allQuestion,
+                });
+
+                sessionStorage.setItem("questions", JSON.stringify(this.state.listQuestion));
+        });
     }
 
     onHandleModal = () => {
@@ -224,6 +234,25 @@ class CauHoiPage extends Component {
         this.setState({ currentPage: value});
     }
 
+    resetScoreQuestions = () => {
+        this.setState({ resetLoading: true });
+        if (this.state.listQuestion) {
+            resetScore().then(response => response.json()).then(result => {
+                console.log("OKOKOK");
+                this.setState({ resetLoading: false });
+            });
+        }
+
+        getAllQuestion().then(response => response.text()).then(result => {
+            let rawData = JSON.parse(result);
+            this.setState({
+                listQuestion: rawData.data?.allQuestion,
+            });
+
+            sessionStorage.setItem("questions", JSON.stringify(this.state.listQuestion));
+        });
+    }
+
     render() {
         var { content, setOfAnswer, level, topic, cb_da, showImage, currentPage } = this.state;
         const itemPerPage = 20;
@@ -231,7 +260,12 @@ class CauHoiPage extends Component {
 
         return (
             <>
-                <h1 className="title">Danh sách câu hỏi</h1>
+                <div className="title-box">
+                    <h1 className="title">Danh sách câu hỏi</h1>
+                    <Button variant="contained" onClick={this.resetScoreQuestions}
+                        disabled={this.state.resetLoading}
+                        style={{marginLeft: "1rem", marginBottom: "1rem"}}>Đặt lại điểm</Button>
+                </div>
                 <Button variant="contained" className={ this.state.isShowModal ? "btn-secondary-color" : "btn-primary-color"} color="secondary" onClick={ this.onHandleModal }>
                                 { this.state.isShowModal ? "Hủy" : "Thêm câu hỏi mới"}
                 </Button>

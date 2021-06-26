@@ -132,7 +132,8 @@ router.post('/getTopicScore', async (req, res) => {
 		const topicList = req.body.listOfTopic;
 		listRes = [];
 
-		if (topicList.length === 0) {
+		console.log(topicList.length)
+		if (!topicList) {
 			await TopicEvaluateUserModel.find({ username: decode.username },
 				(err, result) => {
 					try {
@@ -147,6 +148,7 @@ router.post('/getTopicScore', async (req, res) => {
 				});
 		}
 		else {
+			let index = 0;
 			for (const topic of topicList) {
 				await TopicEvaluateUserModel.findOne({ username: decode.username, topicId: topic.topicId },
 					(err, result) => {
@@ -154,6 +156,12 @@ router.post('/getTopicScore', async (req, res) => {
 							if (err) throw err;
 							if (result) {
 								listRes.push(result);
+								console.log(".......");
+								index++;
+								
+								if (index === topicList.length) {
+									res.json(listRes);
+								}
 							}
 						}
 						catch (e) {
@@ -162,8 +170,7 @@ router.post('/getTopicScore', async (req, res) => {
 					});
 			}
 		}
-
-		res.json(listRes);
+		console.log(listRes);
 	}
 });
 

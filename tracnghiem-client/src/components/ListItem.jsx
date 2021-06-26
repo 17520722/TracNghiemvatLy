@@ -40,6 +40,10 @@ const ListItemRoot = ({ item }) => {
                          {Difficult(item?.level)}
                     </div>
                     <div className="option-container">
+                         <div className="correct-rate">{
+                              isNaN(item?.correctAns / item?.countAns)
+                              ? 0
+                              : (item?.correctAns / item?.countAns) }</div>
                          <div className="edit-option">Edit</div>
                          <div className="delete-option">Delete</div>
                     </div>

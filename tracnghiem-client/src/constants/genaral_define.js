@@ -88,8 +88,12 @@ export var levelOfTest = (numberQuestion, level) => {
 
 export const flexGenerateLevel = async (listTopic) => {
   const user = JSON.parse(sessionStorage.getItem("user"))
-  const listScoreTopic = await getEvaluatedTopic(listTopic, user.token).then(response => response.json());
-  console.log(listScoreTopic);
+  let listScoreTopic = [];
+  await getEvaluatedTopic(listTopic, user.token)
+    .then(response => response.json())
+    .then(result => listScoreTopic = result);
+
+  console.log(listScoreTopic, listTopic);
   let sum = 0;
 
   for (let topicScore of listScoreTopic) {
@@ -98,14 +102,14 @@ export const flexGenerateLevel = async (listTopic) => {
 
   const avg = sum / listScoreTopic.length;
 
-  if (avg >= 7) {
-    return levelOfTest(40, level[3]);
+  if (avg >= 0.7) {
+    return levelOfTest(40, level[1]);
   }
-  else if (avg >= 5) {
+  else if (avg >= 0.5) {
     return levelOfTest(40, level[2]);
   }
   else {
-    return levelOfTest(40, level[1]);
+    return levelOfTest(40, level[3]);
   }
 }
 

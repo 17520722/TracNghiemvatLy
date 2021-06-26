@@ -123,21 +123,35 @@ class TestingPage extends Component {
 
   onFinnishTest = () => {
     if (window.confirm("Kết thúc bài kiểm tra!")) {
-      const testRecord = this.props.test_records;
+      let {test_records} = this.props;
+      let answers = test_records.answerSet;
+      let listQuestion = test_records.setOfQuestions;
+      let countCorrect = 0;
+
+      for (let ans of answers) {
+        let question = listQuestion.find(element => element._id === ans.questionId);
+        let objectAnswer = question.setOfAnswer.find(obj => obj.id === ans.answerId);
+
+        if (objectAnswer.isCorrect) {
+          countCorrect++;
+        }
+      }
+
       let testResult = {
-        setOfRemember: testRecord.setOfRemember,
-        setOfUnderstand: testRecord.setOfUnderstand,
-        setOfApply: testRecord.setOfApply,
-        setOfAnalyzing: testRecord.setOfAnalyzing,
-        levelOfDifficult: testRecord.levelOfDifficult,
-        correctAnsNumber: testRecord.correctAnsNumber,
-        incorrectAnsNumber: testRecord.incorrectAnsNumber,
-        answerSet: testRecord.answerSet,
-      };
+        setOfRemember: test_records.setOfRemember,
+        setOfUnderstand: test_records.setOfUnderstand,
+        setOfApply: test_records.setOfApply,
+        setOfAnalyzing: test_records.setOfAnalyzing,
+        levelOfDifficult: test_records.levelOfDifficult,
+        correctAnsNumber: countCorrect,
+        incorrectAnsNumber: test_records.setOfQuestions.length - countCorrect,
+        answerSet: test_records.answerSet
+      }
 
       const user = JSON.parse(sessionStorage.getItem("user"));
 
-      console.log(testRecord);
+      console.log(test_records);
+      console.log(testResult.correctAnsNumber)
 
       saveTest(testResult)
         .then((response) => response.json())

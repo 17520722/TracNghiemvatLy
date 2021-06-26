@@ -149,13 +149,13 @@ class CreatedTest extends Component {
       }
     } else {
       //get score
+      console.log(number_question_for_lv)
       let user = JSON.parse(sessionStorage.getItem("user"));
       let listScoreTopic = [];
       await getEvaluatedTopic(selectedTopic, user.token)
         .then((response) => response.json())
         .then((result) => {
           listScoreTopic = result;
-          console.log("EHEHEHEHHEHEHE");
         });
 
       for (let topicScore of listScoreTopic) {
@@ -167,114 +167,548 @@ class CreatedTest extends Component {
         temp.push(arr);
         this.setState({ questionsFilterTopic: temp });
       }
+      console.log(this.state.questionsFilterTopic.length);
 
-      //random topic.
-      for (let index = 0; index < number_question_for_lv.remember; index++) {
-        let rand = Math.floor(Math.random() * listScoreTopic.length);
-        //list question in topic specific
-        let filterTopics = this.state.questionsFilterTopic[rand];
-        //check element of list question in topic
-        console.log(filterTopics);
-        for (let i = filterTopics.length - 1; i >= 0; i--) {
-          console.log(i);
-          if (filterTopics[i].level !== 1) {
-            continue;
-          }
-          //get topicScore of question
-          await this.filterQuestionAndAddToTest(
-            listScoreTopic,
-            filterTopics,
-            rand,
-            i
-          );
-        }
+      if (selectedTopic.length <= 3) {
+        this.generateQuestionRobot(listScoreTopic, number_question_for_lv);
       }
+      else {
+        let flag = false;
+        //random topic.
+        for (let index = 0; index < number_question_for_lv.remember; index++) {
+          let rand = Math.floor(Math.random() * listScoreTopic.length);
+          //list question in topic specific
+          let filterTopics = this.state.questionsFilterTopic[rand];
+          let array = filterTopics.filter( element => {
+            if (element.level === 1) {
+              return true;
+            }
+          });
 
-      for (let index = 0; index < number_question_for_lv.understand; index++) {
-        let rand = Math.floor(Math.random() * listScoreTopic.length);
-        //list question in topic specific
-        let filterTopics = this.state.questionsFilterTopic[rand];
-        //check element of list question in topic
-
-        for (let i = filterTopics.length - 1; i >= 0; i--) {
-          if (filterTopics[i].level !== 2) {
-            continue;
+          if (!array) {
+            let objectProperty = this.findTopicSuitable(filterTopics, rand, listScoreTopic.length, 1);
+            rand = objectProperty.rand;
+            filterTopics = objectProperty.filterTopics;
           }
-          //get topicScore of question
-          await this.filterQuestionAndAddToTest(
-            listScoreTopic,
-            filterTopics,
-            rand,
-            i
-          );
+
+          //check element of list question in topic
+          if (!flag) {
+            for (let i = 0; i < filterTopics.length; i++) {
+              if (i === filterTopics.length - 1) {
+                flag = true;
+              }
+    
+              if (filterTopics[i].level !== 1) {
+                continue;
+              }
+              console.log("11");
+              //get topicScore of question
+              const result = await this.filterQuestionAndAddToTest(
+                listScoreTopic,
+                filterTopics[i],
+                rand,
+                i,
+                bias
+              );
+              
+              if (result) {
+                console.log("break;")
+                break;
+              }
+              console.log("continue;")
+            }
+          }
+          else {
+            console.log("12");
+            // this.reverseAddQuestion(filterTopics, 1, listScoreTopic, rand, -bias)
+
+            for (let i = filterTopics.length - 1; i >= 0; i--) {
+    
+              if (filterTopics[i].level !== 1) {
+                if (i !== 0) continue;
+                //rand = this.miniRandom(rand, listScoreTopic.length);
+              }
+              //get topicScore of question
+              const result = await this.filterQuestionAndAddToTestRevert(
+                listScoreTopic,
+                filterTopics[i],
+                rand,
+                i,
+                bias
+              );
+
+              if (result) {
+                console.log("break")
+                console.log(result)
+                break;
+              }
+              console.log("continue")
+              console.log(result)
+            }
+          }
         }
-      }
 
-      for (let index = 0; index < number_question_for_lv.apply; index++) {
-        let rand = Math.floor(Math.random() * listScoreTopic.length);
-        //list question in topic specific
-        let filterTopics = this.state.questionsFilterTopic[rand];
-        //check element of list question in topic
+        flag = false;
+        for (let index = 0; index < number_question_for_lv.understand; index++) {
+          let rand = Math.floor(Math.random() * listScoreTopic.length);
+          //list question in topic specific
+          let filterTopics = this.state.questionsFilterTopic[rand];
+          let array = filterTopics.filter( element => {
+            if (element.level === 1) {
+              return true;
+            }
+          });
 
-        for (let i = filterTopics.length - 1; i >= 0; i--) {
-          if (filterTopics[i].level !== 3) {
-            continue;
+          if (!array) {
+            let objectProperty = this.findTopicSuitable(filterTopics, rand, listScoreTopic.length, 2);
+            rand = objectProperty.rand;
+            filterTopics = objectProperty.filterTopics;
           }
-          //get topicScore of question
-          await this.filterQuestionAndAddToTest(
-            listScoreTopic,
-            filterTopics,
-            rand,
-            i
-          );
+
+          //check element of list question in topic
+
+          if (!flag) {
+            for (let i = 0; i < filterTopics.length; i++) {
+              if (i === filterTopics.length - 1) {
+                flag = true;
+              }
+    
+              if (filterTopics[i].level !== 2) {
+                continue;
+              }
+              console.log("21")
+              //get topicScore of question
+              const result = await this.filterQuestionAndAddToTest(
+                listScoreTopic,
+                filterTopics[i],
+                rand,
+                i,
+                bias
+              );
+              
+              if (result) {
+                console.log("break;")
+                break;
+              }
+              console.log("continue;")
+            }
+          }
+          else {
+            console.log("22")
+            // this.reverseAddQuestion(filterTopics, 2, listScoreTopic, rand, -bias)
+            console.log(this.state.questionsFilterTopic)
+            for (let i = filterTopics.length - 1; i >= 0; i--) {
+              if (filterTopics[i].level !== 2) {
+                continue;
+              }
+              //get topicScore of question
+              const result = await this.filterQuestionAndAddToTestRevert(
+                listScoreTopic,
+                filterTopics[i],
+                rand,
+                i,
+                bias
+              );
+
+              if (result) {
+                console.log("break")
+                console.log(result)
+                break;
+              }
+              console.log("continue")
+              console.log(result)
+            }
+          }
         }
-      }
 
-      for (let index = 0; index < number_question_for_lv.analyzing; index++) {
-        let rand = Math.floor(Math.random() * listScoreTopic.length);
-        //list question in topic specific
-        let filterTopics = this.state.questionsFilterTopic[rand];
-        //check element of list question in topic
+        flag = false;
+        for (let index = 0; index < number_question_for_lv.apply; index++) {
+          let rand = Math.floor(Math.random() * listScoreTopic.length);
+          //list question in topic specific
+          let filterTopics = this.state.questionsFilterTopic[rand];
+          let array = filterTopics.filter( element => {
+            if (element.level === 1) {
+              return true;
+            }
+          });
 
-        for (let i = filterTopics.length - 1; i >= 0; i--) {
-          if (filterTopics[i].level !== 4) {
-            continue;
+          if (!array) {
+            let objectProperty = this.findTopicSuitable(filterTopics, rand, listScoreTopic.length, 3);
+            rand = objectProperty.rand;
+            filterTopics = objectProperty.filterTopics;
           }
-          //get topicScore of question
-          await this.filterQuestionAndAddToTest(
-            listScoreTopic,
-            filterTopics,
-            rand,
-            i
-          );
+
+          //check element of list question in topic
+
+          if (!flag) {
+            for (let i = 0; i < filterTopics.length; i++) {
+              if (i === filterTopics.length - 1) {
+                flag = true;
+              }
+    
+              if (filterTopics[i].level !== 3) {
+                continue;
+              }
+
+              console.log("31")
+              //get topicScore of question
+              const result = await this.filterQuestionAndAddToTest(
+                listScoreTopic,
+                filterTopics[i],
+                rand,
+                i,
+                bias
+              );
+              
+              if (result) {
+                console.log("break;")
+                break;
+              }
+              console.log("continue;")
+            }
+          }
+          else {
+            console.log("32")
+            console.log(this.state.questionsFilterTopic)
+            // this.reverseAddQuestion(filterTopics, 3, listScoreTopic, rand, -bias)
+            for (let i = filterTopics.length - 1; i >= 0; i--) {
+              if (filterTopics[i].level !== 3) {
+                continue;
+              }
+              //get topicScore of question
+              const result = await this.filterQuestionAndAddToTestRevert(
+                listScoreTopic,
+                filterTopics[i],
+                rand,
+                i,
+                bias
+              );
+
+              if (result) {
+                console.log("break")
+                console.log(result)
+                break;
+              }
+              console.log("continue")
+              console.log(result)
+            }
+          }
+        }
+
+        flag = false;
+        for (let index = 0; index < number_question_for_lv.analyzing; index++) {
+          let rand = Math.floor(Math.random() * listScoreTopic.length);
+          //list question in topic specific
+          let filterTopics = this.state.questionsFilterTopic[rand];
+          let array = filterTopics.filter( element => {
+            if (element.level === 1) {
+              return true;
+            }
+          });
+
+          if (!array) {
+            let objectProperty = this.findTopicSuitable(filterTopics, rand, listScoreTopic.length, 4);
+            rand = objectProperty.rand;
+            filterTopics = objectProperty.filterTopics;
+          }
+
+          //check element of list question in topic
+
+          if (!flag) {
+            for (let i = 0; i < filterTopics.length; i++) {
+              if (i === filterTopics.length - 1) {
+                flag = true;
+              }
+    
+              if (filterTopics[i].level !== 4) {
+                continue;
+              }
+              console.log("41")
+              //get topicScore of question
+              const result = await this.filterQuestionAndAddToTest(
+                listScoreTopic,
+                filterTopics[i],
+                rand,
+                i,
+                bias
+              );
+              
+              if (result) {
+                console.log("break;")
+                break;
+              }
+              console.log("continue;")
+            }
+          }
+          else {
+            console.log("42")
+            // await this.reverseAddQuestion(filterTopics, 4, listScoreTopic, rand, -bias)
+            console.log(this.state.questionsFilterTopic)
+            for (let i = filterTopics.length - 1; i >= 0; i--) {
+              if (filterTopics[i].level !== 4) {
+                continue;
+              }
+              //get topicScore of question
+              const result = await this.filterQuestionAndAddToTestRevert(
+                listScoreTopic,
+                filterTopics[i],
+                rand,
+                i,
+                bias
+              );
+
+              if (result) {
+                console.log("break")
+                console.log(result)
+                break;
+              }
+              console.log("continue")
+              console.log(result)
+            }
+          }
         }
       }
     }
     console.log(test_records);
   };
 
-  filterQuestionAndAddToTest = (listScoreTopic, filterTopics, rand, index) => {
-    const topicScore = listScoreTopic.find(
-      (element) => element.topicId === filterTopics[index].topic.topicId
+  generateQuestionRobot = (listScoreTopic, number_question_for_lv) => {
+    var { test_records } = this.props;
+
+    let listQuestion = _.flatten(this.state.questionsFilterTopic);
+
+    let arrRemember = listQuestion.filter(question => question.level === 1);
+    arrRemember = _.shuffle(arrRemember);
+    for (let question of arrRemember) {
+      const topicScoreObject = listScoreTopic.find(
+        (element) => element.topicId === question.topic.topicId
+      );
+      const questionScore = isNaN(
+        question.correctAns / question.countAns
+      )
+        ? 0
+        : question.correctAns / question.countAns;
+
+      let topicScore = topicScoreObject.NLScore - bias;
+      if (topicScore < 0) {
+        topicScore = 0.00001;
+      }
+
+      if (questionScore >= topicScore || questionScore === 0) {
+        console.log("Best Match");
+        this.props.onAddQuestionToTest(question);
+
+        const index = _.findIndex(arrRemember, questionRem => questionRem._id === question._id);
+        arrRemember.splice(index, 1);
+      }
+
+      if (test_records.setOfRemember.length === number_question_for_lv.remember) {
+        break;
+      }
+    }
+    console.log(test_records.setOfRemember)
+
+    let arrUnderstand = listQuestion.filter(question => question.level === 2);
+    arrUnderstand = _.shuffle(arrUnderstand);
+    for (let question of arrUnderstand) {
+      const topicScoreObject = listScoreTopic.find(
+        (element) => element.topicId === question.topic.topicId
+      );
+      const questionScore = isNaN(
+        question.correctAns / question.countAns
+      )
+        ? 0
+        : question.correctAns / question.countAns;
+
+      let topicScore = topicScoreObject.NLScore - bias;
+      if (topicScore < 0) {
+        topicScore = 0.00001;
+      }
+
+      if (questionScore >= topicScore || questionScore === 0) {
+        console.log("Best Match");
+        this.props.onAddQuestionToTest(question);
+
+        const index = _.findIndex(arrUnderstand, questionRem => questionRem._id === question._id);
+        arrUnderstand.splice(index, 1);
+      }
+
+      if (test_records.setOfUnderstand.length === number_question_for_lv.understand) {
+        break;
+      }
+    }
+
+    let arrApply = listQuestion.filter(question => question.level === 3);
+    arrApply = _.shuffle(arrApply);
+    for (let question of arrApply) {
+      const topicScoreObject = listScoreTopic.find(
+        (element) => element.topicId === question.topic.topicId
+      );
+      const questionScore = isNaN(
+        question.correctAns / question.countAns
+      )
+        ? 0
+        : question.correctAns / question.countAns;
+
+      let topicScore = topicScoreObject.NLScore - bias;
+      if (topicScore < 0) {
+        topicScore = 0.00001;
+      }
+
+      if (questionScore >= topicScore || questionScore === 0) {
+        console.log("Best Match");
+        this.props.onAddQuestionToTest(question);
+
+        const index = _.findIndex(arrApply, questionRem => questionRem._id === question._id);
+        arrApply.splice(index, 1);
+      }
+
+      if (test_records.setOfApply.length === number_question_for_lv.apply) {
+        break;
+      }
+    }
+
+    let arrAnalyze = listQuestion.filter(question => question.level === 4);
+    arrAnalyze = _.shuffle(arrAnalyze);
+    for (let question of arrAnalyze) {
+      const topicScoreObject = listScoreTopic.find(
+        (element) => element.topicId === question.topic.topicId
+      );
+      const questionScore = isNaN(
+        question.correctAns / question.countAns
+      )
+        ? 0
+        : question.correctAns / question.countAns;
+
+      let topicScore = topicScoreObject.NLScore - bias;
+      if (topicScore < 0) {
+        topicScore = 0.00001;
+      }
+
+      if (questionScore >= topicScore || questionScore === 0) {
+        console.log("Best Match");
+        this.props.onAddQuestionToTest(question);
+
+        const index = _.findIndex(arrAnalyze, questionRem => questionRem._id === question._id);
+        arrAnalyze.splice(index, 1);
+      }
+
+      if (test_records.setOfAnalyzing.length === number_question_for_lv.analyzing) {
+        break;
+      }
+    }
+  }
+
+  // reverseAddQuestion = async (filterTopics, level, listScoreTopic, rand, bias) => {
+  //   for (let i = filterTopics.length - 1; i >= 0; i--) {
+  //     if (filterTopics[i].level !== level) {
+  //       continue;
+  //     }
+  //     //get topicScore of question
+  //     await this.filterQuestionAndAddToTestRevert(
+  //       listScoreTopic,
+  //       filterTopics[i],
+  //       rand,
+  //       i,
+  //       bias
+  //     );
+  //     break;
+  //   }
+  // }
+
+  findTopicSuitable = (filterTopics, rand, length, level, count = -1) => {
+    let array = filterTopics.filter( element => {
+      if (element.level === level) {
+        return true;
+      }
+    });
+
+    if (!array) {
+      console.log("FFFFFFFFF")
+      rand = rand + 1;
+
+      if (rand >= length) rand = 0;
+      filterTopics = this.state.questionsFilterTopic[rand];
+
+      count = count + 1;
+
+      if (length === count) {
+        return {
+          rand: rand,
+          filterTopics: filterTopics
+        }
+      }
+      return this.findTopicSuitable(filterTopics, rand, length, level, count);
+    }
+    else {
+      return {
+        rand: rand,
+        filterTopics: filterTopics
+      }
+    }
+  }
+
+  miniRandom(numberExcept, length) {
+    let num = Math.floor(Math.random() * length);
+    return (num === numberExcept) ? this.miniRandom(numberExcept, length) : num;
+  }
+
+  filterQuestionAndAddToTest = (listScoreTopic, question, rand, index, biasScore) => {
+    const topicScoreObject = listScoreTopic.find(
+      (element) => element.topicId === question.topic.topicId
     );
     const questionScore = isNaN(
-      filterTopics[index].correctAns / filterTopics[index].countAns
+      question.correctAns / question.countAns
     )
       ? 0
-      : filterTopics[index].correctAns / filterTopics[index].countAns;
-    console.log(topicScore);
-    if (
-      questionScore <= topicScore.NLScore
-      // - bias
-    ) {
-      this.props.onAddQuestionToTest(filterTopics[index]);
+      : question.correctAns / question.countAns;
+
+    let topicScore = topicScoreObject.NLScore - biasScore;
+    if (topicScore < 0) {
+      topicScore = 0.00001;
+    }
+    
+    console.log(questionScore >= topicScore, questionScore, topicScore)
+    if (questionScore >= topicScore || questionScore === 0) { //BIAS
+      console.log(questionScore)
+      this.props.onAddQuestionToTest(question);
 
       let newState = this.state.questionsFilterTopic;
       newState[rand].splice(index, 1);
-
       this.setState({ questionsFilterTopic: newState });
+      console.log("A", this.state.questionsFilterTopic, this.state.questionsFilterTopic[rand].length)
+      return true;
     }
-    console.log(this.props.test_records.setOfQuestions);
+    else return false;
+  };
+
+  filterQuestionAndAddToTestRevert = (listScoreTopic, question, rand, index, biasScore) => {
+    const topicScoreObject = listScoreTopic.find(
+      (element) => element.topicId === question.topic.topicId
+    );
+    const questionScore = isNaN(
+      question.correctAns / question.countAns
+    )
+      ? 0
+      : question.correctAns / question.countAns;
+
+    let topicScore = topicScoreObject.NLScore - biasScore;
+
+    if (topicScore < 0) {
+      topicScore = 0.00001;
+    }
+    console.log(questionScore < topicScore, questionScore, topicScore)
+    
+    if (questionScore < topicScore || questionScore === 0) {
+      this.props.onAddQuestionToTest(question);
+
+      let newState = this.state.questionsFilterTopic;
+      newState[rand].splice(index, 1);
+      this.setState({ questionsFilterTopic: newState });
+      console.log("B", question);
+      return true;
+    }
+    else return false;
   };
 
   sortQuestionByScore = (listQuestion) => {
@@ -313,15 +747,34 @@ class CreatedTest extends Component {
     return tempArr;
   };
 
-  getQuestionFromServer = () => {
+  getQuestionFromServer = async () => {
     var { test_records } = this.props;
-    graphsql_question
+
+    let isQuestionInLocal = JSON.parse(sessionStorage.getItem("questions"));
+    if (isQuestionInLocal) {
+      let allQuestion = isQuestionInLocal;
+      let test = this.state;
+
+      if (selectedTopic.length !== 0) {
+        let temp = this.filterQuestionByTopic(allQuestion, selectedTopic);
+        allQuestion = temp;
+      } else {
+        let temp = this.filterQuestionByTopic(allQuestion, topic_edited);
+        allQuestion = temp;
+      }
+      await this.createTestOnRedux(test, allQuestion);
+      await this.props.onSetIdForAnswer();
+      this.props.onSetNullAnswerSet();
+    }
+    else {
+      graphsql_question
       .getAllQuestion()
       .then((res) => res.text())
       .then(async (result) => {
         let temp = JSON.parse(result);
         let allQuestion = temp.data.allQuestion;
         let test = this.state;
+        sessionStorage.setItem("questions", JSON.stringify(allQuestion));
 
         if (selectedTopic.length !== 0) {
           let temp = this.filterQuestionByTopic(allQuestion, selectedTopic);
@@ -334,6 +787,7 @@ class CreatedTest extends Component {
         await this.props.onSetIdForAnswer();
         this.props.onSetNullAnswerSet();
       });
+    }
   };
 
   addTopic = (event) => {

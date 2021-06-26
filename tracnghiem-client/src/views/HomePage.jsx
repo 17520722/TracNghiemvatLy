@@ -2,10 +2,20 @@ import React, { Component } from "react";
 import {Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import { getAllQuestion } from "../graphql/question.service";
 import banner from "../img/banner.png";
 import { getEvaluatedTestsUser } from "../services/topicEvaluate";
 
 export default class HomePage extends Component {
+  componentDidMount() {
+    let questions = JSON.parse(sessionStorage.getItem("questions"));
+    if (!questions) {
+      getAllQuestion().then(res => res.json()).then(result => {
+        sessionStorage.setItem("questions", JSON.stringify(result.data.allQuestion));
+      });
+    }
+  }
+
   render() {
     return (
       <>
