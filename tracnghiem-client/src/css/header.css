@@ -18,3 +18,7 @@
 .user-name:hover {
   color: #53BF3E;
 }
+
+.navbar-brand {
+  font-weight: bold;
+}

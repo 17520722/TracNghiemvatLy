@@ -10,3 +10,13 @@ export const saveQuestionRecord = async(input = []) => {
           body: JSON.stringify({ listQuestion: input })
      })
 };
+
+export const resetScore = async() => {
+     return await fetch(API_URL.concat("/resetScore"), {
+          method: 'POST',
+          headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json',
+          }
+     })
+}

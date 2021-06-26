@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 
-export default class DeThiPage extends Component {
-    render () {
-        return (
-            <div>
-                DeThi
-            </div>
-        );
-    }
+const DeThiPage = () => {
+    return (
+        <React.Fragment>
+            <h1>Bài kiểm tra</h1>
+        </React.Fragment>
+    )
 }
+
+export default DeThiPage;

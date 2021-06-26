@@ -6,6 +6,14 @@ import routes from  './admin.routes';
 import { getAllEvaluateUser } from '../../services/topicEvaluate';
 
 export default class AdminPage extends Component {
+    constructor() {
+        let user = JSON.parse(sessionStorage.getItem("user"));
+
+        if (user.role !== "admin") {
+            window.location.href = '/';
+        }
+    }
+
     componentDidMount() {
         let user = JSON.parse(sessionStorage.getItem("user"));
         console.log(user);
@@ -21,9 +29,9 @@ export default class AdminPage extends Component {
                     </div>
                     <ul className="menu">
                         <li>
-                            <a href="#" className="menu-item">
+                            <NavLink to="/admin/user" className="menu-item" activeClassName="active">
                                 Người dùng
-                            </a>
+                            </NavLink>
                         </li>
                         <li>
                             <NavLink to="/admin/cau-hoi" className="menu-item" activeClassName="active">
@@ -36,14 +44,9 @@ export default class AdminPage extends Component {
                             </NavLink>
                         </li>
                         <li>
-                            <a href="#" className="menu-item">
-                                Bài thi
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" className="menu-item">
-                                Dạng đề
-                            </a>
+                            <NavLink to="/admin/test" className="menu-item" activeClassName="active">
+                                Bài kiểm tra
+                            </NavLink>
                         </li>
                     </ul>
                 </div>

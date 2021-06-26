@@ -132,7 +132,7 @@ const LoginPage = () => {
                     return;
                }
                sessionStorage.setItem("user", result);
-               history.push("/");
+               window.location.href = '/';
           });
      }
 

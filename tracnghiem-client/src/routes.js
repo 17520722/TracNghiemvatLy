@@ -79,12 +79,17 @@ const routes = [
     component: AdminPage,
   },
   {
-    path: "/admin/de-thi",
+    path: "/admin/test",
     exact: false,
-    component: DeThiPage,
+    component: AdminPage,
   },
   {
     path: "/admin/topic",
+    exact: true,
+    component: AdminPage
+  },
+  {
+    path: "/admin/user",
     exact: true,
     component: AdminPage
   },
