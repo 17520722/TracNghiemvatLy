@@ -17,10 +17,7 @@ var initialState = {
 };
 
 var myReducer = (state = initialState, action) => {
-  let numberQuestions = state.setOfRemember
-    .concat(state.setOfUnderstand)
-    .concat(state.setOfApply)
-    .concat(state.setOfAnalyzing);
+  let numberQuestions = [];
 
   switch (action.type) {
     case Types.ADD_QUESTION_TO_TEST:
@@ -111,6 +108,29 @@ var myReducer = (state = initialState, action) => {
 
     case Types.SET_ID_FOR_ANSWER:
       const abcd = ["A", "B", "C", "D"];
+
+      for (let i = 0; i < state.setOfRemember.length; i++) {
+        let mix_ans = _.shuffle(state.setOfRemember[i].setOfAnswer);
+        state.setOfRemember[i].setOfAnswer = mix_ans;
+      }
+      for (let i = 0; i < state.setOfUnderstand.length; i++) {
+        let mix_ans = _.shuffle(state.setOfUnderstand[i].setOfAnswer);
+        state.setOfUnderstand[i].setOfAnswer = mix_ans;
+      }
+      for (let i = 0; i < state.setOfApply.length; i++) {
+        let mix_ans = _.shuffle(state.setOfApply[i].setOfAnswer);
+        state.setOfApply[i].setOfAnswer = mix_ans;
+      }
+      for (let i = 0; i < state.setOfAnalyzing.length; i++) {
+        let mix_ans = _.shuffle(state.setOfAnalyzing[i].setOfAnswer);
+        state.setOfAnalyzing[i].setOfAnswer = mix_ans;
+      }
+
+      numberQuestions = state.setOfRemember
+      .concat(state.setOfUnderstand)
+      .concat(state.setOfApply)
+      .concat(state.setOfAnalyzing);
+
       for (let i = 0; i < numberQuestions.length; i++) {
         for (let j = 0; j < abcd.length; j++) {
           let temp_ans = {
@@ -121,6 +141,7 @@ var myReducer = (state = initialState, action) => {
           numberQuestions[i].setOfAnswer[j] = temp_ans;
         }
       }
+
       //state.setOfQuestions = numberQuestions;
       return {
         ...state,
