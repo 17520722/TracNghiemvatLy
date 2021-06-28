@@ -91,7 +91,7 @@ app.use('/graphql', graphqlHTTP({
 }));
 
 app.use(function (req, res, next) {
-	res.setHeader("Access-Control-Allow-Origin", URL_CLIENT);
+	res.setHeader("Access-Control-Allow-Origin", "http://vatlythpt.xyz");
 	res.setHeader(
 		"Access-Control-Allow-Methods",
 		"GET, POST, OPTIONS, PUT, PATCH, DELETE"
