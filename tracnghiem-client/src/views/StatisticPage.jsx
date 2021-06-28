@@ -202,7 +202,9 @@ class StatisticPage extends Component {
                 <Link to="/home/evaluated">
                   <button className="btn btn-primary">Đánh giá</button>
                 </Link>
-                <button className="btn btn-danger btn-prop">Thoát</button>
+                <a href="/">
+                  <button className="btn btn-danger btn-prop">Thoát</button>
+                </a>
               </div>
             </div>
           </div>

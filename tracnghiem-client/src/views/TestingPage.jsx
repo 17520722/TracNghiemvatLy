@@ -95,8 +95,9 @@ class TestingPage extends Component {
   };
 
   showListNumber = () => {
+    var { questions_arr } = this.state;
     var result = [];
-    for (var i = 1; i <= 40; i++) {
+    for (var i = 1; i <= questions_arr.length; i++) {
       result.push(
         <div
           key={i}
@@ -303,20 +304,20 @@ class TestingPage extends Component {
             </div>
           </div>
           <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3 list-num-position">
-            <div className="list-number-wrapper row">
+            <div className="list-number-wrapper">
               {this.showListNumber()}
             </div>
-            <div className="time-finnish row">
-              <div className="col-7 time-title">
+            <div className="time-finnish">
+              <div className="time-title">
                 <Timer />
               </div>
-              <div className="col-5 finnish">
+              <div className="finnish">
                 <button className="btn btn-danger" onClick={this.onFinnishTest}>
                   Kết thúc
                 </button>
-                <button className="btn" onClick={this.test}>
+                { window.location.href === "http://localhost:3000/home/testing" && <button className="btn" onClick={this.test}>
                   Auto
-                </button>
+                </button> }
               </div>
             </div>
           </div>
