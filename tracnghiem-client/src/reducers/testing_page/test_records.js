@@ -17,7 +17,7 @@ var initialState = {
 };
 
 var myReducer = (state = initialState, action) => {
-  let numberQuestions = [];
+  let numberQuestions = state.setOfQuestions;
 
   switch (action.type) {
     case Types.ADD_QUESTION_TO_TEST:

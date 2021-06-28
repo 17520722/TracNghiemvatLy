@@ -30,6 +30,7 @@ export default class Header extends Component {
 
   handleClose = () => {
     this.setState({ anchorEl: null });
+    window.location.href = '/home/user-detail';
   }
 
   logOut = () => {
