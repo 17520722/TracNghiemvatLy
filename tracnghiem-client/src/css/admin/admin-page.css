@@ -141,6 +141,17 @@
      color: white;
 }
 
+.logo {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+
+.logo a{
+     color: wheat;
+     font-weight: 500;
+}
+
 .panigation {
      padding: 5px;
      background-color: white;

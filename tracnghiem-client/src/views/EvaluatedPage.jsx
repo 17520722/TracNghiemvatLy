@@ -144,7 +144,9 @@ class EvaluatedPage extends Component {
                 <Link to="/home/statistic">
                   <button className="btn btn-primary">Thống kê</button>
                 </Link>
-                <button className="btn btn-danger btn-prop">Thoát</button>
+                <a href="/">
+                  <button className="btn btn-danger btn-prop">Thoát</button>
+                </a>
               </div>
             </div>
           </div>

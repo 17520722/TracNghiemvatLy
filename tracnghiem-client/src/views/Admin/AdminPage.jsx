@@ -6,7 +6,8 @@ import routes from  './admin.routes';
 import { getAllEvaluateUser } from '../../services/topicEvaluate';
 
 export default class AdminPage extends Component {
-    constructor() {
+    constructor(props) {
+        super(props);
         let user = JSON.parse(sessionStorage.getItem("user"));
 
         if (user.role !== "admin") {
@@ -25,7 +26,7 @@ export default class AdminPage extends Component {
             <div className="admin-container">
                 <div className="side-bar">
                     <div className="logo">
-                        <a href="/">LOGO</a>
+                        <a href="/">UIT - Trắc nghiệm vật lý</a>
                     </div>
                     <ul className="menu">
                         <li>

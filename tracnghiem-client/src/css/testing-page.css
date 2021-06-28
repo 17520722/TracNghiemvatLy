@@ -10,18 +10,23 @@
 }
 
 .list-ques-wrapper {
-  padding: 1rem;
-  border: 1px solid #2aa367;
-  border-radius: 20px;
-  margin-left: 2rem;
-  margin-right: 1rem;
+  border-radius: 8px;
   min-height: 450px;
+}
+
+.question-container {
+  margin-bottom: 1rem;
+  padding: 6px;
+  border-radius: 8px;
+  background-color: #E9EAEB;
 }
 
 .list-number-wrapper {
   padding: 1rem;
-  border: 1px solid #2aa367;
-  border-radius: 20px;
+  background-color: #E9EAEB;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .one-answer {
@@ -31,22 +36,26 @@
 
 .list-num-position {
   position: fixed;
-  top: auto;
   right: 0;
+  z-index: 1;
 }
 
 .number-of-list {
-  height: 30px;
-  width: 30px;
-  margin: 2px;
+  height: 32px;
+  width: 32px;
+  margin: 3px;
+  padding: 2px;
   border-radius: 50%;
-  border: 1px solid green;
+  border: 1px solid gray;
   text-align: center;
   cursor: pointer;
 }
 
 .time-finnish {
   margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .time-title {

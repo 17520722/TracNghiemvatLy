@@ -19,6 +19,13 @@
   color: #53BF3E;
 }
 
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  box-shadow: 0px 0px 6px 0px;
+}
+
 .navbar-brand {
   font-weight: bold;
 }

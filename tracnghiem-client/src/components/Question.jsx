@@ -47,6 +47,7 @@ class Question extends Component {
   onFillColor = (name) => {
     var element = document.getElementById(`num${name}`);
     element.style.backgroundColor = "green";
+    element.style.border = "1px solid green";
     element.style.color = "white";
   };
 
@@ -66,7 +67,7 @@ class Question extends Component {
     var { question, number } = this.props;
     let showImage = question.image === null ? false : true;
     return (
-      <div className="font-text row">
+      <div className="font-text row question-container">
         <div className={`${showImage === true ? "col-8" : "col-12"}`}>
           <MathJaxContext version={3} config={mathjax_config}>
             <div>
