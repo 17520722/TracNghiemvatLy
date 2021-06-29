@@ -29,7 +29,6 @@ function UserDetailPage(props) {
           .toFixed(2);
       }
       setLabels(labelsTemp);
-      console.log(labelsTemp);
       const randomColor = Math.floor(Math.random() * 16777215).toString(16);
       setDatasets([
         {
@@ -62,7 +61,6 @@ function UserDetailPage(props) {
   };
 
   const RenderChart = () => {
-    console.log(datasets);
     if (HasData === false) {
       return <div className="no-data-props">Không có dữ liệu</div>;
     } else {
@@ -90,6 +88,24 @@ function UserDetailPage(props) {
     }
   };
 
+  const RenderEvaluatedText = () => {
+    if (datasets[0] === undefined) {
+      console.log(datasets[0])
+      return <div></div>;
+    } else {
+      let lengthA = datasets[0].data.length - 1;
+      console.log(datasets[0].data[lengthA]);
+      if (datasets[0].data[0] < datasets[0].data[lengthA]) {
+        console.log("UP");
+      } else if (datasets[0].data[0] > datasets[0].data[lengthA]) {
+        console.log("DOWN");
+      } else {
+        console.log("AVG");
+      }
+    }
+    return <div></div>;
+  };
+
   return (
     <div>
       <Header />
@@ -111,6 +127,7 @@ function UserDetailPage(props) {
             <span className="bold-text">Nhận xét: </span>Nhìn chung trong 10 đề
             gần nhất có sự tiến bộ không đều. Kết quả đạt được khá tốt cần tiến
             bộ nhiều hơn.
+            <RenderEvaluatedText />
           </div>
         </div>
       </div>
