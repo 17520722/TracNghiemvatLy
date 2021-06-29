@@ -7,7 +7,6 @@ const TestModel = require("../models/Test");
 const EvaluatedDocModel = require("../models/EvaluatedDoc");
 const AbilityModel = require("../models/Ability");
 const GeneratedTestModel = require("../models/GeneratedTest");
-const { map } = require("lodash");
 
 const findItem = async(id, modelName) => {
 	return await modelName.findOne({_id: id});
@@ -218,17 +217,26 @@ const root = {
 	}
 	*/
 	allQuestion: async() => {
+		console.log("?")
 		const objectRespone = await QuestionModel.find({}, (err, result) => {
 			if (err) console.log(err);
-		});
+		}).lean();
+		console.log("complete Question")
+		const topics = await TopicModel.find({}, (err, result) => {
+			if (err) console.log(err);
+		}).lean();
+		console.log("complete Topic")
 
-		const promises = objectRespone.map(async(item) => {
-			let jsonObj = JSON.parse(JSON.stringify(item));
-			jsonObj.topic = await TopicModel.findOne({topicId: jsonObj.topic});
-			return jsonObj;
-		});
-		const arrPromises = await Promise.all(promises);
-		return arrPromises;
+		let arrQuestion = [];
+		for (let item of objectRespone) { //this is questions
+			let question = JSON.parse(JSON.stringify(item));
+			question.topic = topics.find(topic => topic.topicId === question.topic);
+			arrQuestion.push(question);
+			if (arrQuestion.length === objectRespone.length) {
+				console.log("!");
+				return arrQuestion;
+			}
+		}
 	},
 
 	questions: ({ids}) => {

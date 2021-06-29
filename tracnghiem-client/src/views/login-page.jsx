@@ -109,6 +109,7 @@ const RegisterLink = styled.a`
 const LoginPage = () => {
      const [username, setUsername] = useState("");
      const [password, setPassword] = useState("");
+     const [isLoading, setLoading] = useState(false);
      const dispatch = useDispatch();
      const history = useHistory();
 
@@ -122,6 +123,7 @@ const LoginPage = () => {
 
      async function onSubmitSignIn(e) {
           e.preventDefault();
+          setLoading(true);
           signIn(username, password).then(response => response.text()).then(result => {
                let data = JSON.parse(result);
                console.log(data);
@@ -129,9 +131,11 @@ const LoginPage = () => {
                if (data?.message === "Authentication failed. User not found.") {
                     dispatch(set_toast("error", "Thông tin tài khoản hoặc mật khẩu không chính xác."));
                     dispatch(set_show_toast(true));
+                    setLoading(false);
                     return;
                }
                sessionStorage.setItem("user", result);
+               setLoading(false);
                window.location.href = '/';
           });
      }
@@ -150,7 +154,7 @@ const LoginPage = () => {
                          <input type="password" id="password" name="password" placeholder="password"required minLength="6" onChange={onChangePassword} value={password}/>
                          <label for="password">password</label>
                     </InputGroup>
-                    <SubmitButton className="btn">Login</SubmitButton>
+                    <SubmitButton className="btn" disabled={isLoading}>Login</SubmitButton>
                </LoginForm>
                <SmallText>
                     <ForgotLink href="#">Quên tài khoản?</ForgotLink>

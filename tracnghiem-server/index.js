@@ -140,7 +140,7 @@ app.post("/api/cau-hoi", (req, res) => {
 	});
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(5000, () => {
 	console.log("App listening port 5000!");
 });
 
