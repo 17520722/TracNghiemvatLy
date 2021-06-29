@@ -20,7 +20,7 @@ const question = require("./routes/question");
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));	
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/auth', authRouter);
 
@@ -38,7 +38,7 @@ app.post('/api/saveQuestion', (req, res) => {
 				res.status(500).send({message: "Error from server!"});
 			}
 			if (result) {
-				return res.status(302).send({message: "Exist!"});	
+				return res.status(302).send({message: "Exist!"});
 			}
 			else {
 				let newItem = new Question(data);
@@ -141,9 +141,6 @@ app.post("/api/cau-hoi", (req, res) => {
 });
 
 // app.listen(process.env.PORT, () => {
-// 	console.log("App listening port 5000!");
-// });
-
 app.listen(5000, () => {
 	console.log("App listening port 5000!");
 });
