@@ -103,13 +103,13 @@ export const flexGenerateLevel = async (listTopic) => {
   const avg = sum / listScoreTopic.length;
 
   if (avg >= 0.7) {
-    return levelOfTest(40, level[1]);
+    return levelOfTest(40, level[3]);
   }
   else if (avg >= 0.5) {
     return levelOfTest(40, level[2]);
   }
   else {
-    return levelOfTest(40, level[3]);
+    return levelOfTest(40, level[1]);
   }
 }
 
