@@ -11,14 +11,6 @@ function LeftContentUserDetail(props) {
     setShowTopics(!ShowTopics);
     onTarget(e);
     props.onSetCurrentChart(1);
-
-    const userFromSession = JSON.parse(sessionStorage.getItem("user"));
-    props.onGetEvaluatedTopics(userFromSession.username);
-  };
-
-  const showChartTest = (e) => {
-    onTarget(e);
-    props.onSetCurrentChart(0);
   };
 
   const onTarget = (e) => {
@@ -74,13 +66,6 @@ function LeftContentUserDetail(props) {
 
   return (
     <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3 left-content">
-      <div
-        className="menu-item menu-test-chart-item row"
-        onClick={showChartTest}
-      >
-        <i className="far fa-file-alt col-2"></i>
-        <span>Các đề làm gần đây</span>
-      </div>
       <div>
         <div
           className="menu-item menu-topic-chart-item active-menu row"

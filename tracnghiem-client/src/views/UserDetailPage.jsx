@@ -4,6 +4,7 @@ import { Line } from "react-chartjs-2";
 import React, { useState, useEffect } from "react";
 
 import "../css/user_detail_page.css";
+import * as actions_evaluated_topics from "../actions/evalue_topics_user_actions";
 import LeftContentUserDetail from "../components/UserDetailPage/LeftContentUserDetail";
 import { connect } from "react-redux";
 
@@ -14,9 +15,13 @@ function UserDetailPage(props) {
   const [title, setTitle] = useState({});
 
   useEffect(() => {
+    if (props.evaluated.length === 0) {
+      const userFromSession = JSON.parse(sessionStorage.getItem("user"));
+      props.onGetEvaluatedTopics(userFromSession.username);
+    }
+
     if (props.evaluated_chart.length > 0) {
       setHasData(true);
-
       let data = [];
       let labelsTemp = [];
       for (let i = 0; i < props.evaluated_chart.length; i++) {
@@ -46,7 +51,7 @@ function UserDetailPage(props) {
       text: "Biểu đồ thể hiện sự phát triển chủ đề qua các đề thi",
       position: "bottom",
     });
-  }, [props.evaluated_chart]);
+  }, [props.evaluated_chart, props.evaluated]);
 
   const TopicName = () => {
     let result = "";
@@ -89,21 +94,74 @@ function UserDetailPage(props) {
   };
 
   const RenderEvaluatedText = () => {
+    let avg = 0;
+    let develop = "";
+    let ability = "";
     if (datasets[0] === undefined) {
-      console.log(datasets[0])
+      console.log(datasets[0]);
       return <div></div>;
     } else {
       let lengthA = datasets[0].data.length - 1;
-      console.log(datasets[0].data[lengthA]);
-      if (datasets[0].data[0] < datasets[0].data[lengthA]) {
-        console.log("UP");
-      } else if (datasets[0].data[0] > datasets[0].data[lengthA]) {
-        console.log("DOWN");
+      let up = true;
+      let down = true;
+      for (let i = 0; i < datasets[0].data.length; i++) {
+        if (i !== datasets[0].data.length - 1) {
+          if (datasets[0].data[i] < datasets[0].data[i + 1]) {
+            down = false;
+          } else if (datasets[0].data[i] > datasets[0].data[i + 1]) {
+            up = false;
+          }
+        }
+        avg = avg + datasets[0].data[i];
+      }
+      if (HasData === false) {
+        return <div>Không có dữ liệu</div>;
       } else {
-        console.log("AVG");
+        avg = (avg / datasets[0].data.length).toFixed(2);
+        console.log(avg);
+
+        if (avg <= 0.3) {
+          ability = "Yếu";
+        } else if (avg <= 0.5) {
+          ability = "Trung bình thấp";
+        } else if (avg <= 0.7) {
+          ability = "Trung bình khá";
+        } else if (avg <= 0.9) {
+          ability = "Tốt";
+        } else {
+          ability = "Rất tốt";
+        }
+
+        if (down === true && up === true) {
+          develop = "Không có sự thay đổi";
+        } else if (down === false && up === true) {
+          develop = "Qua biểu đồ ta thấy thí sinh có sự tiến bộ theo thời gian";
+        } else if (down === true && up === false) {
+          develop =
+            "Qua biểu đồ ta thấy thí sinh có sự sa sút về kiến thức theo thời gian";
+        } else {
+          if (datasets[0].data[0] < datasets[0].data[lengthA]) {
+            develop =
+              "Có sự tăng và giảm trong việc phát triển kiến thức nhưng nhìn chung năng lực của thí sinh đang dần phát triển theo thời gian";
+          } else if (datasets[0].data[0] > datasets[0].data[lengthA]) {
+            develop =
+              "Có sự tăng và giảm trong việc phát triển kiến thức nhưng nhìn chung năng lực của thí sinh đang dần sa sút theo thời gian";
+          } else {
+            develop =
+              "Có sự tăng và giảm trong việc phát triển kiến thức nhưng nhìn chung năng lực của thí sinh ít thay đổi";
+          }
+        }
       }
     }
-    return <div></div>;
+    return (
+      <div>
+        <div>
+          Qua biểu đồ ta có thể thấy được năng lực của thí sinh ở mức {ability}{" "}
+          với điểm năng lực trung bình là: {avg}
+        </div>
+        <div>{develop}</div>
+      </div>
+    );
   };
 
   return (
@@ -124,9 +182,8 @@ function UserDetailPage(props) {
             </div>
           </div>
           <div>
-            <span className="bold-text">Nhận xét: </span>Nhìn chung trong 10 đề
-            gần nhất có sự tiến bộ không đều. Kết quả đạt được khá tốt cần tiến
-            bộ nhiều hơn.
+            <div>*Dữ liệu được lấy từ 10 đề thi gần nhất</div>
+            <span className="bold-text">Nhận xét: </span>
             <RenderEvaluatedText />
           </div>
         </div>
@@ -140,7 +197,16 @@ const mapStateToProps = (state) => {
   return {
     topic_list: state.topic_list,
     evaluated_chart: state.evaluated_chart,
+    evaluated: state.evaluated_topics_user,
   };
 };
 
-export default connect(mapStateToProps, null)(UserDetailPage);
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onGetEvaluatedTopics: (username) => {
+      dispatch(actions_evaluated_topics.get_evaluated_topics_req(username));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserDetailPage);
