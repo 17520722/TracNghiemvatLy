@@ -50,6 +50,10 @@
   background: #1e1e24;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .center {
   margin-left: 25%;
 }
