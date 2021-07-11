@@ -45,7 +45,7 @@ export default class Header extends Component {
     return (
       <nav className="navbar navbar-expand-md navbar-light bg-light">
         <a className="navbar-brand" href="/" aria-disabled>
-          UIT - Trắc mghiệm vật lý
+          UIT - Trắc nghiệm vật lý
         </a>
         <button
           className="navbar-toggler d-lg-none"

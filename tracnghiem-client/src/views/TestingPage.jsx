@@ -43,6 +43,10 @@ class TestingPage extends Component {
       },
       false
     );
+    window.addEventListener('contextmenu', function (e) { 
+      // do something here... 
+      e.preventDefault(); 
+    }, false);
 
     this.setState({
       questions_arr: test_records.setOfQuestions,
