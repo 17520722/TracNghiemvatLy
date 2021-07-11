@@ -2,7 +2,7 @@ import { Component } from "react";
 import callApi from "../../utils/apiCalller";
 import "../../css/admin_question.css";
 import React from "react";
-import { Button, CircularProgress } from "@material-ui/core";
+import { Button, CircularProgress, Input } from "@material-ui/core";
 import { getAllTopic } from "../../graphql/topic.service";
 import * as toast_actions from "../../actions/Toast";
 import * as _ from "lodash";
@@ -39,8 +39,10 @@ class CauHoiPage extends Component {
             textToast: "",
             listTopic: [],
             listQuestion: [],
+            listQuestionRender: [],
             currentPage: 1,
             resetLoading: false,
+            keyword: "",
         };
     }
 
@@ -70,27 +72,34 @@ class CauHoiPage extends Component {
         if (questions) {
             this.setState({
                 listQuestion: questions,
+                listQuestionRender: questions
             });
         }
+
+        this.getQuestions();
+    }
+
+    getQuestions = () => {
         getAllQuestion().then(response => response.text()).then(result => {
-                let rawData = JSON.parse(result);
+            let rawData = JSON.parse(result);
 
-                if (rawData.data === null || rawData.data === undefined) {
-                    this.setState({
-                        ...this.state,
-                        isLoading: false,
-                    });
-                    this.props.set_toast("error", "Lỗi: không tiếp cận được máy chủ");
-                    this.props.set_show_toast(true);
-
-                    return;
-                }
-
+            if (rawData.data === null || rawData.data === undefined) {
                 this.setState({
-                    listQuestion: rawData.data?.allQuestion,
+                    ...this.state,
+                    isLoading: false,
                 });
+                this.props.set_toast("error", "Lỗi: không tiếp cận được máy chủ");
+                this.props.set_show_toast(true);
 
-                sessionStorage.setItem("questions", JSON.stringify(this.state.listQuestion));
+                return;
+            }
+
+            this.setState({
+                listQuestion: rawData.data?.allQuestion,
+                listQuestionRender: rawData.data?.allQuestion
+            });
+
+            sessionStorage.setItem("questions", JSON.stringify(this.state.listQuestion));
         });
     }
 
@@ -173,11 +182,24 @@ class CauHoiPage extends Component {
             if (rawData?.message == "Saved!") {
                 this.props.set_toast("success", "Lưu thành công");
                 this.props.set_show_toast(true);
+
+                this.getQuestions();
             }
             else {
                 this.props.set_toast("error", "Lỗi");
                 this.props.set_show_toast(true);
             }
+
+            this.setState({
+                content: "", 
+                setOfAnswer: {
+                    dapan1: "",
+                    dapan2: "",
+                    dapan3: "",
+                    dapan4: "",
+                },
+                urlImage: ""
+            })
         });
     };
 
@@ -253,10 +275,37 @@ class CauHoiPage extends Component {
         });
     }
 
+    onKeywordChange = (e) => {
+        this.setState({
+            keyword: e.target.value
+        });
+    }
+    
+    submitKeyword = (e) => {
+        e.preventDefault();
+        console.log("keyword");
+
+        let temp = this.state.listQuestionRender.filter(question => {
+            if (question.content.includes(this.state.keyword) || 
+                question._id.includes(this.state.keyword) || 
+                JSON.stringify(question.setOfAnswer).includes(this.state.keyword)) {
+                    return true;
+                }
+        });
+
+        if (this.state.keyword === "") {
+            temp = this.state.listQuestion;
+        }
+
+        this.setState({
+            listQuestionRender: temp
+        })
+    }
+
     render() {
         var { content, setOfAnswer, level, topic, cb_da, showImage, currentPage } = this.state;
         const itemPerPage = 20;
-        const countPage = Math.ceil(this.state.listQuestion?.length / itemPerPage);
+        const countPage = Math.ceil(this.state.listQuestionRender?.length / itemPerPage);
 
         return (
             <>
@@ -443,8 +492,18 @@ class CauHoiPage extends Component {
                         </form>
                     </React.Fragment> : null
                 }
+
+                <form onSubmit={this.submitKeyword}>
+                    <Input className="search-input" 
+                        placeholder="tìm câu hỏi..." 
+                        value={this.state.keyword}
+                        onChange={this.onKeywordChange}>
+                    </Input>
+                    <Button type="submit" color="primary">Tìm kiếm</Button>
+                </form>
+
                 {
-                    this.state.listQuestion.map((item, index) => {
+                    this.state.listQuestionRender.map((item, index) => {
                         if (index < itemPerPage * currentPage && index >= itemPerPage * currentPage - itemPerPage) {
                             return (
                                 <ListItemRoot item={item} key={index}/>
