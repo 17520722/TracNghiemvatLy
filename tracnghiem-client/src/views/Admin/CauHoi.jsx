@@ -285,7 +285,7 @@ class CauHoiPage extends Component {
         e.preventDefault();
         console.log("keyword");
 
-        let temp = this.state.listQuestionRender.filter(question => {
+        let temp = this.state.listQuestion.filter(question => {
             if (question.content.includes(this.state.keyword) || 
                 question._id.includes(this.state.keyword) || 
                 JSON.stringify(question.setOfAnswer).includes(this.state.keyword)) {
@@ -298,7 +298,8 @@ class CauHoiPage extends Component {
         }
 
         this.setState({
-            listQuestionRender: temp
+            listQuestionRender: temp,
+            currentPage: 1
         })
     }
 
