@@ -91,11 +91,11 @@
      padding: 0.5rem;
      border-radius: 3px;
      box-shadow: 0px 0px 6px 0px;
-     display: flex;
      align-items: center;
      position: relative;
      cursor: pointer;
      overflow: hidden;
+     transition: 0.2s;
 }
 
 .list-item__name {
@@ -141,6 +141,16 @@
      color: white;
 }
 
+.question-body {
+     display: flex;
+}
+
+.set-questions {
+     margin-top: 1rem;
+     margin-left: 1rem;
+     transition: 0.3s;
+}
+
 .logo {
      display: flex;
      align-items: center;
@@ -169,4 +179,10 @@
 .correct-rate {
      margin-right: 1rem;
      color: cadetblue;
+}
+
+.search-input {
+     margin-top: 1rem;
+     margin-bottom: 1rem;
+     width: 80%;
 }
