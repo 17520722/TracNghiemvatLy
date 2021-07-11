@@ -75,10 +75,13 @@ const ListItemRoot = ({ item }) => {
                                    item?.setOfAnswer.map(answer => {
                                         return (
                                              <div style={{ marginBottom: "0.5rem", 
-                                                           fontWeight: answer.isCorrect? "500" : "unset"
+                                                           color: answer.isCorrect? "green" : "unset"
                                                        }}
                                                   key={answer.index}>
-                                                  <MathJax>{answer.content}</MathJax>
+                                                  {/* {answer.isCorrect && "CORRECT ANS"} */}
+                                                  <MathJax>
+                                                       {answer.content}
+                                                  </MathJax>
                                              </div>
                                         )
                                    })

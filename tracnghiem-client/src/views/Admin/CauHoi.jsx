@@ -199,7 +199,8 @@ class CauHoiPage extends Component {
                     dapan4: "",
                 },
                 urlImage: ""
-            })
+            });
+            this.removeImg();
         });
     };
 
@@ -297,7 +298,6 @@ class CauHoiPage extends Component {
             temp = this.state.listQuestion;
         }
 
-        this.removeImg();
         this.setState({
             listQuestionRender: temp,
             currentPage: 1
