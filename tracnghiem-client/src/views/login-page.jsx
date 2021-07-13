@@ -128,12 +128,13 @@ const LoginPage = () => {
                let data = JSON.parse(result);
                console.log(data);
 
-               if (data?.message === "Authentication failed. User not found.") {
+               if (data?.message === "Authentication failed. User not found." || !data?.username) {
                     dispatch(set_toast("error", "Thông tin tài khoản hoặc mật khẩu không chính xác."));
                     dispatch(set_show_toast(true));
                     setLoading(false);
                     return;
                }
+
                sessionStorage.setItem("user", result);
                setLoading(false);
                window.location.href = '/';

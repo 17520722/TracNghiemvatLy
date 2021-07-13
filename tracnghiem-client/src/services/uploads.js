@@ -1,5 +1,5 @@
 import axios from 'axios'
-const API_URL = "http://localhost:5000/uploads"
+const API_URL = "https://vatlythpt.herokuapp.com/uploads"
 
 const cloudinaryUpload = async (fileToUpload) => {
      const uploadData = new FormData();
