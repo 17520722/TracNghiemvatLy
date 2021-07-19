@@ -65,7 +65,10 @@ class Question extends Component {
 
   render() {
     var { question, number } = this.props;
-    let showImage = question.image === null ? false : true;
+    let showImage = true;
+    if (question.image === null || question.image === "") {
+      showImage = false;
+    }
     return (
       <div className="font-text row question-container">
         <div className={`${showImage === true ? "col-8" : "col-12"}`}>

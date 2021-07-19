@@ -10,6 +10,7 @@ import is_end_test from "./testing_page/is_end_test";
 import current_chart from "./user_detail_page/current_chart";
 import evaluated_topics_user from "./user_detail_page/evaluated_topics_user";
 import evaluated_chart from "./user_detail_page/evaluated_chart";
+import choosen_class_home from "./home_page/choosen_class_home";
 
 const myReducer = combineReducers({
     selected_topics,
@@ -22,7 +23,8 @@ const myReducer = combineReducers({
     is_end_test,
     current_chart,
     evaluated_topics_user,
-    evaluated_chart
+    evaluated_chart,
+    choosen_class_home
 });
 
 export default myReducer;

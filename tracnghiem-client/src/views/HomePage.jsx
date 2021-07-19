@@ -1,12 +1,14 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import {Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { getAllQuestion } from "../graphql/question.service";
 import banner from "../img/banner.png";
 import { getEvaluatedTestsUser } from "../services/topicEvaluate";
+import * as homepage_actions from "../actions/home_page_actions";
 
-export default class HomePage extends Component {
+class HomePage extends Component {
   componentDidMount() {
     let questions = JSON.parse(sessionStorage.getItem("questions"));
     if (!questions) {
@@ -14,6 +16,10 @@ export default class HomePage extends Component {
         sessionStorage.setItem("questions", JSON.stringify(result.data.allQuestion));
       });
     }
+  }
+
+  onChooseClass = (classing) => {
+    this.props.onSetChoosenClass(classing);
   }
 
   render() {
@@ -28,17 +34,17 @@ export default class HomePage extends Component {
           <div className="botton-content">
             <div className="class-button-wrapper">
               <div className="class-container">
-                <Link to="#" className="link-prop">
+                <Link to="/home/create-test" className="link-prop" onClick={() => this.onChooseClass("10")}>
                     <div className="one-btn-link">
                       <p className="class-text-prop">Lớp 10</p>
                     </div>
                 </Link>
-                <Link to="#" className="link-prop">
+                <Link to="/home/create-test" className="link-prop" onClick={() => this.onChooseClass("11")}>
                     <div className="one-btn-link">
                       <p className="class-text-prop">Lớp 11</p>
                     </div>
                 </Link>
-                <Link to="#" className="link-prop">
+                <Link to="/home/create-test" className="link-prop" onClick={() => this.onChooseClass("12")}>
                     <div className="one-btn-link">
                       <p className="class-text-prop">Lớp 12</p>
                     </div>
@@ -52,3 +58,19 @@ export default class HomePage extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    choosen_class: state.choosen_class_home,
+  }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onSetChoosenClass: (classing) => {
+      dispatch(homepage_actions.choose_class_homepage(classing))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
