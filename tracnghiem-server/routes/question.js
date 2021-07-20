@@ -1,6 +1,7 @@
 const express = require('express');
 const { db } = require('../models/Question');
 const QuestionModel = require('../models/Question');
+const TopicModel = require('../models/Topic')
 const Test = require('../models/Test');
 const User = require('../models/User');
 const router = express.Router();
@@ -99,6 +100,31 @@ router.post('/resetScore', async (req, res) => {
      db.dropCollection('evaluateddocs', err => console.log(err));
 
      res.status(201).send({message: "OK"});
-})
+});
+
+router.post('/getAllQuestions', async (req, res) => {
+     console.log("?")
+     const objectRespone = await QuestionModel.find({}, (err, result) => {
+          if (err) console.log(err);
+     }).lean();
+     console.log("complete Question")
+     const topics = await TopicModel.find({}, (err, result) => {
+          if (err) console.log(err);
+     }).lean();
+     console.log("complete Topic")
+
+     let arrQuestion = [];
+     for (let item of objectRespone) { //this is questions
+          let question = JSON.parse(JSON.stringify(item));
+          question.topic = topics.find(topic => topic.topicId === question.topic);
+          arrQuestion.push(question);
+          if (arrQuestion.length === objectRespone.length) {
+               console.log("!");
+               return res.status(200).send({data: {
+                    allQuestion: arrQuestion
+               }});
+          }
+     }
+});
 
 module.exports = router;

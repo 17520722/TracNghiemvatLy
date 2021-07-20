@@ -9,7 +9,8 @@ import * as _ from "lodash";
 import { connect } from "react-redux"
 import Toast from "../../components/Toast";
 import ListItemRoot from "../../components/ListItem";
-import { createQuestion, getAllQuestion } from "../../graphql/question.service";
+import { createQuestion } from "../../graphql/question.service";
+import { getAllQuestion } from "../../services/question";
 import { resetScore } from "../../services/question";
 import { Pagination } from '@material-ui/lab';
 import cloudinaryUpload from "../../services/uploads";

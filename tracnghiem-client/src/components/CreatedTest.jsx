@@ -11,6 +11,7 @@ import {
   levelOfTest,
 } from "../constants/genaral_define";
 import * as graphsql_question from "../graphql/question.service";
+import * as questionSrv from "../services/question";
 import { getEvaluatedTopic } from "../services/topicEvaluate";
 
 let selectedTopic = [];
@@ -767,7 +768,7 @@ class CreatedTest extends Component {
       this.props.onSetNullAnswerSet();
     }
     else {
-      graphsql_question
+      questionSrv
       .getAllQuestion()
       .then((res) => res.text())
       .then(async (result) => {

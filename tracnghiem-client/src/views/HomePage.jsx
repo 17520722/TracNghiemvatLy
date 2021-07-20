@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import {Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { getAllQuestion } from "../graphql/question.service";
+import { getAllQuestion } from "../services/question";
 import banner from "../img/banner.png";
 import { getEvaluatedTestsUser } from "../services/topicEvaluate";
 
