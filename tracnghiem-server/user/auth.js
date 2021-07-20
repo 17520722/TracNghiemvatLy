@@ -53,6 +53,8 @@ auth_router.post('/signin', (req, res) => {
 						refreshToken = user.refreshToken;
 					}
 
+					console.log(user)
+
 					return res.json({token: jwt.sign({
 						username: user.username,
 						email: user.email,
@@ -62,6 +64,7 @@ auth_router.post('/signin', (req, res) => {
 						listOfTest: user.listOfTest,
 						listOfEvaluatedDoc: user.listOfEvaluatedDoc
 					}, "RESTFULAPIs"),
+								_id: user._id,
 								username: user.username,
 								email: user.email,
 								role: user.role,

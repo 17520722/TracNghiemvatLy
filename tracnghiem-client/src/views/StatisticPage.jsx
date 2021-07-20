@@ -6,24 +6,38 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import * as test_records from "../actions/test_records_actions";
 import * as act_ans_correct_topic from "../actions/ans_correct_per_topics_actions";
+import * as evaluated_actions from "../actions/evalue_topics_user_actions";
 import _ from "lodash";
+import { getOneUser } from "../graphql/user.service";
 
 class StatisticPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       question_arr: [],
+      testedId: "",
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     var { question_arr } = this.state;
     var { test_records } = this.props;
-    console.log(question_arr.length);
     if (question_arr.length === 0) {
       this.setState({
         question_arr: test_records.setOfQuestions,
       });
+    }
+    if (this.state.testedId === "") {
+      const userFromSession = JSON.parse(sessionStorage.getItem("user"));
+      await getOneUser(userFromSession._id)
+        .then((re) => re.json())
+        .then((result) => {
+          let arrTemp = result.data.user.listOfTest;
+          console.log(arrTemp[arrTemp.length - 1]);
+          this.setState({
+            testedId: arrTemp[arrTemp.length - 1],
+          });
+        });
     }
   };
 
@@ -119,21 +133,21 @@ class StatisticPage extends Component {
           topic: element.topic.content,
           remember: {
             correct: element.correctRemember,
-            all: element.remember
+            all: element.remember,
           },
           understand: {
             correct: element.correctUnderstand,
-            all: element.understand
+            all: element.understand,
           },
           apply: {
             correct: element.correctApply,
-            all: element.apply
+            all: element.apply,
           },
           analyzing: {
             correct: element.correctAnalyzing,
-            all: element.analyzing
-          }
-        }
+            all: element.analyzing,
+          },
+        };
         this.props.onAddStaticToRedux(staticItem);
         return (
           <tr key={index}>
@@ -164,8 +178,7 @@ class StatisticPage extends Component {
           </div>
           <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9">
             <div className="row info-test">
-              <div className="col-4">{`Mã đề: ${test_records.testId}`}</div>
-              <div className="col-4">Đề thứ: 1</div>
+              <div className="col-4">{`Mã đề: ${this.state.testedId}`}</div>
               <div className="col-4">{`Điểm: ${(
                 (10 / numberQuestion) *
                 test_records.correctAnsNumber
@@ -226,7 +239,7 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     onAddStaticToRedux: (item) => {
       dispatch(act_ans_correct_topic.add_ans_correct_per_topic(item));
-    }
+    },
   };
 };
 
