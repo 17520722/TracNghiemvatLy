@@ -55,11 +55,11 @@ function LeftContentUserDetail(props) {
     return (
       <div>
         <div className="bold-text">Lớp 10</div>
-        <TopicsClass classIndex="10" />
+        <TopicsClass classIndex="10"/>
         <div className="bold-text">Lớp 11</div>
-        <TopicsClass classIndex="11" />
+        <TopicsClass classIndex="11"/>
         <div className="bold-text">Lớp 12</div>
-        <TopicsClass classIndex="12" />
+        <TopicsClass classIndex="12"/>
       </div>
     );
   };

@@ -11,6 +11,7 @@ import current_chart from "./user_detail_page/current_chart";
 import evaluated_topics_user from "./user_detail_page/evaluated_topics_user";
 import evaluated_chart from "./user_detail_page/evaluated_chart";
 import choosen_class_home from "./home_page/choosen_class_home";
+import count_data from "./user_detail_page/count_data";
 
 const myReducer = combineReducers({
     selected_topics,
@@ -24,7 +25,8 @@ const myReducer = combineReducers({
     current_chart,
     evaluated_topics_user,
     evaluated_chart,
-    choosen_class_home
+    choosen_class_home,
+    count_data
 });
 
 export default myReducer;

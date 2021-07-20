@@ -2,17 +2,14 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import * as evaluated_actions from "../../actions/evalue_topics_user_actions";
 
-const LENGTH_OF_TOPIC_CHART = 10;
-
 function TopicsClass(props) {
   const onClick = (topic) => {
     props.onClearChartData();
     let topicChart = [];
     props.evaluated.forEach(element => {
       if (element.topicId === topic.topicId) {
-        console.log("AAA");
         topicChart.push(element);
-        if (topicChart.length > LENGTH_OF_TOPIC_CHART) {
+        if (topicChart.length > props.count_data) {
           topicChart.shift();
         }
       }
@@ -38,6 +35,7 @@ const mapsStateToProps = (state) => {
   return {
     topic_list: state.topic_list,
     evaluated: state.evaluated_topics_user,
+    count_data: state.count_data
   };
 };
 
