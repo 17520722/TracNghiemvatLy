@@ -22,7 +22,7 @@ class CreatedTest extends Component {
     super(props);
     this.state = {
       subject: "vatly",
-      classes: "thpt",
+      classes: this.props.choosen_class,
       term: "cn",
       time: "50",
       level: 2,
@@ -42,6 +42,7 @@ class CreatedTest extends Component {
   componentDidMount = () => {
     this.props.onClearInfoTest();
     this.props.onSetSeletedTopics(selectedTopic);
+    console.log(this.state);
   };
 
   handleSubmit = async (event) => {
@@ -1000,6 +1001,7 @@ const mapStateToProps = (state) => {
     selected_topics: state.selected_topics,
     test_records: state.test_records,
     topic_list: state.topic_list,
+    choosen_class: state.choosen_class_home,
   };
 };
 

@@ -28,8 +28,14 @@ export const set_evaluated_chart = (chart_data) => {
 }
 
 export const clear_evaluated_chart = () => {
-  console.log("A");
   return {
     type: Types.CLEAR_EVALUATED_CHART
+  }
+}
+
+export const on_change_count_data_chart = (count) => {
+  return {
+    type: Types.CHANGE_COUNT_DATA_CHART,
+    count
   }
 }

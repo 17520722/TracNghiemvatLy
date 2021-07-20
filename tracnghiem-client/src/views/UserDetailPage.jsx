@@ -13,6 +13,7 @@ function UserDetailPage(props) {
   const [labels, setLabels] = useState([]);
   const [datasets, setDatasets] = useState([]);
   const [title, setTitle] = useState({});
+  const [count, setCount] = useState(10);
 
   useEffect(() => {
     if (props.evaluated.length === 0) {
@@ -98,7 +99,6 @@ function UserDetailPage(props) {
     let develop = "";
     let ability = "";
     if (datasets[0] === undefined) {
-      console.log(datasets[0]);
       return <div></div>;
     } else {
       let lengthA = datasets[0].data.length - 1;
@@ -164,6 +164,29 @@ function UserDetailPage(props) {
     );
   };
 
+  const changeCount = (event) => {
+    let value = event.target.value;
+    value = parseInt(value);
+    setCount(value);
+
+    props.onClearChartData();
+
+    if (props.evaluated_chart[0]) {
+      let topicChart = [];
+      props.evaluated.forEach((element) => {
+        if (element.topicId === props.evaluated_chart[0].topicId) {
+          topicChart.push(element);
+          if (topicChart.length > value) {
+            topicChart.shift();
+          }
+        }
+      });
+      props.onSetChartData(topicChart);
+    }
+
+    props.onChangeCountDataChart(value);
+  };
+
   return (
     <div>
       <Header />
@@ -172,6 +195,24 @@ function UserDetailPage(props) {
         <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9 right-content">
           <p className="title-right-content">Những đề gần đây</p>
           <div className="static-wrapper">
+            <div className="col-3">
+              <form>
+                <div className="form-group">
+                  <label htmlFor="select_count">Số đề thi</label>
+                  <select
+                    className="form-control"
+                    id="select_count"
+                    value={count}
+                    onChange={changeCount}
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={15}>15</option>
+                    <option value={20}>20</option>
+                  </select>
+                </div>
+              </form>
+            </div>
             <div className="topic-name-text">
               <TopicName />
             </div>
@@ -182,7 +223,7 @@ function UserDetailPage(props) {
             </div>
           </div>
           <div>
-            <div>*Dữ liệu được lấy từ 10 đề thi gần nhất</div>
+            <div>*Dữ liệu được lấy từ {count} đề thi gần nhất</div>
             <span className="bold-text">Nhận xét: </span>
             <RenderEvaluatedText />
           </div>
@@ -205,6 +246,15 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     onGetEvaluatedTopics: (username) => {
       dispatch(actions_evaluated_topics.get_evaluated_topics_req(username));
+    },
+    onChangeCountDataChart: (count) => {
+      dispatch(actions_evaluated_topics.on_change_count_data_chart(count));
+    },
+    onClearChartData: () => {
+      dispatch(actions_evaluated_topics.clear_evaluated_chart());
+    },
+    onSetChartData: (data) => {
+      dispatch(actions_evaluated_topics.set_evaluated_chart(data));
     },
   };
 };

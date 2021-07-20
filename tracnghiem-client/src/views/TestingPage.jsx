@@ -137,7 +137,7 @@ class TestingPage extends Component {
         let question = listQuestion.find(element => element._id === ans.questionId);
         let objectAnswer = question.setOfAnswer.find(obj => obj.id === ans.answerId);
 
-        if (objectAnswer.isCorrect) {
+        if (objectAnswer?.isCorrect) {
           countCorrect++;
         }
       }

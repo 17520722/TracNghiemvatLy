@@ -12,25 +12,32 @@ import {
   REVIEW_TEST_WEAK,
   UNDERSTAND,
 } from "../constants/string_const";
+import { getOneUser } from "../graphql/user.service";
 
 class EvaluatedPage extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      testedId: ""
+    }
+  }
+
+  componentDidMount = async () => {
+    if (this.state.testedId === "") {
+      const userFromSession = JSON.parse(sessionStorage.getItem("user"));
+      await getOneUser(userFromSession._id)
+        .then((re) => re.json())
+        .then((result) => {
+          let arrTemp = result.data.user.listOfTest;
+          console.log(arrTemp[arrTemp.length - 1]);
+          this.setState({
+            testedId: arrTemp[arrTemp.length - 1],
+          });
+        });
+    }
+  }
+
   evaluatedFactor = (item_topic) => {
-    // let f_remember =
-    //   item_topic.remember.all === 0
-    //     ? 0
-    //     : (item_topic.remember.correct / item_topic.remember.all);
-    // let f_understand =
-    //   item_topic.understand.all === 0
-    //     ? 0
-    //     : (item_topic.understand.correct / item_topic.understand.all);
-    // let f_apply =
-    //   item_topic.apply.all === 0
-    //     ? 0
-    //     : (item_topic.apply.correct / item_topic.apply.all);
-    // let f_analyzing =
-    //   item_topic.analyzing.all === 0
-    //     ? 0
-    //     : (item_topic.analyzing.correct / item_topic.analyzing.all);
     let correct =
       item_topic.remember.correct +
       item_topic.understand.correct +
@@ -124,8 +131,7 @@ class EvaluatedPage extends Component {
           </div>
           <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9">
             <div className="row info-test">
-              <div className="col-4">{`Mã đề: ${test_records.testId}`}</div>
-              <div className="col-4">Đề thứ: 1</div>
+              <div className="col-4">{`Mã đề: ${this.state.testedId}`}</div>
               <div className="col-4">{`Điểm: ${point}`}</div>
             </div>
             <div className="table-responsive mt-4">

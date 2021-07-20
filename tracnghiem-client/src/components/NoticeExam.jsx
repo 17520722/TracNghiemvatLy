@@ -61,7 +61,6 @@ class NoticeExam extends Component {
         <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9">
           <div className="mr-3">
             <div>
-              <p className="title-create-test">{`MÃ ĐỀ: ${created_test_info.id}`}</p>
               <p className="title-create-test text-left">Lưu ý làm bài:</p>
               <p>
                 1. Đề thi trắc nghiệm có 40 câu với 50 phút làm bài. Đọc kỹ đề
