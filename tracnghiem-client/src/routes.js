@@ -11,6 +11,8 @@ import EvaluatedPage from "./views/EvaluatedPage";
 import StatisticPage from "./views/StatisticPage";
 import CreatedPage from "./views/CreatedTestPage";
 import UserDetailPage from "./views/UserDetailPage";
+import ExportTest from "./views/ExportTest";
+import ExportDocumentTest from "./views/ExportDocumentTest";
 
 const routes = [
   {
@@ -57,6 +59,16 @@ const routes = [
     path: "/home/user-detail",
     exact: false,
     component: UserDetailPage,
+  },
+  {
+    path: "/home/export-test-2",
+    exact: false,
+    component: ExportTest,
+  },
+  {
+    path: "/home/export-test",
+    exact: false,
+    component: ExportDocumentTest,
   },
   {
     path: "/login",

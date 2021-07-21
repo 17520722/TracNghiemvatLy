@@ -106,3 +106,15 @@
   max-width: 280px;
   margin-top: 2rem;
 }
+.note-color-text {
+  margin-left: 2rem;
+  font-weight: 700;
+  padding: 0.5rem;
+  border: 1px solid #eee;
+}
+.cgreen {
+  color: green;
+}
+.cred {
+  color: red;
+}

@@ -67,11 +67,7 @@ var myReducer = (state = initialState, action) => {
       return state;
 
     case Types.CLEAR_INFO_TEST:
-      state.setOfRemember = [];
-      state.setOfUnderstand = [];
-      state.setOfApply = [];
-      state.setOfAnalyzing = [];
-      state.setOfQuestions = [];
+      state = initialState;
       return state;
 
     case Types.ADD_ANSWERD_TO_TEST:

@@ -22,7 +22,7 @@ class Question extends Component {
     var name = event.target.name;
     var value = event.target.value;
     var id = event.target.id;
-    var { number, test_records, question } = this.props;
+    var { test_records, question } = this.props;
 
     if (value === "on") {
       this.onFillColor(name);

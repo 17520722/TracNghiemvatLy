@@ -4,7 +4,6 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { levelQuestions } from "../constants/genaral_define";
 import {
   ANALYZING,
   APPLY,

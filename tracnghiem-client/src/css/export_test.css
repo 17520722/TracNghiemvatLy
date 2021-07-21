@@ -1,0 +1,26 @@
+.pdf-page {
+    background-color: #eeeeee;
+    flex-direction: row;
+}
+.pdf-section {
+    margin: 10;
+    padding: 10;
+    flex-grow: 1;
+}
+.title-pdf-test {
+    margin-bottom: 3rem;
+}
+.pdf-wrap {
+    margin-top: 2rem;
+    text-align: center;
+}
+.font-times {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 13pt;
+}
+.margin-preview-test {
+    margin-left: 4rem;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    padding-right: 3rem;
+}

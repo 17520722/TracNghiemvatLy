@@ -1,6 +1,5 @@
-import { result } from "lodash";
 import * as Types from "../constants/TypeActions";
-import { getEvaluatedTestsUser, getEvaluatedTopic } from "../services/topicEvaluate";
+import { getEvaluatedTestsUser } from "../services/topicEvaluate";
 
 export const get_evaluated_topics = (list) => {
   return {

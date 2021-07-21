@@ -750,7 +750,6 @@ class CreatedTest extends Component {
   };
 
   getQuestionFromServer = async () => {
-    var { test_records } = this.props;
 
     let isQuestionInLocal = JSON.parse(sessionStorage.getItem("questions"));
     if (isQuestionInLocal) {

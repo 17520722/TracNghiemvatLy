@@ -120,7 +120,7 @@ router.post('/getAllQuestions', async (req, res) => {
           arrQuestion.push(question);
           if (arrQuestion.length === objectRespone.length) {
                console.log("!");
-               return res.status(200).send({data: {
+               res.status(200).json({data: {
                     allQuestion: arrQuestion
                }});
           }

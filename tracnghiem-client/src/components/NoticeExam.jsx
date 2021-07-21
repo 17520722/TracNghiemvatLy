@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import * as _ from "lodash";
 import { classes, level, term } from "../constants/genaral_define";
 import Loading from "./Loading";
-import * as test_records_actions from "../actions/test_records_actions"
+import * as test_records_actions from "../actions/test_records_actions";
 
 class NoticeExam extends Component {
   constructor(props) {
@@ -53,9 +53,7 @@ class NoticeExam extends Component {
       }
     }, 500);
     if (this.state.isLoadedQuestion === false) {
-      return (
-        <Loading />
-      );
+      return <Loading />;
     } else {
       return (
         <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9">
@@ -82,15 +80,21 @@ class NoticeExam extends Component {
             <div>
               <p className="title-create-test text-left">Thông tin đề thi:</p>
               <p>{`Thời gian làm bài: ${created_test_info.time} phút`}</p>
-              <p>{`Độ khó: ${this.findObj(created_test_info.level, level).level
-                }`}</p>
-              <p>{`Phạm vi: ${this.findObj(created_test_info.classes, classes).classes
-                }`}</p>
-              <p>{`Học kì: ${this.findObj(created_test_info.term, term).term
-                }`}</p>
+              <p>{`Độ khó: ${
+                this.findObj(created_test_info.level, level).level
+              }`}</p>
+              <p>{`Phạm vi: ${
+                this.findObj(created_test_info.classes, classes).classes
+              }`}</p>
+              <p>{`Học kì: ${
+                this.findObj(created_test_info.term, term).term
+              }`}</p>
               <p>{`Chủ đề: ${this.showSelectedTopics()}`}</p>
             </div>
             <div className="text-right mr-5">
+              <Link to="/home/export-test" className="mr-3">
+                <button className="btn btn-primary">PDF</button>
+              </Link>
               <button className="btn btn-secondary" onClick={this.removeTest}>
                 Tạo lại đề
               </button>
@@ -118,9 +122,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onResetTestRecords: () => {
-      dispatch(test_records_actions.clear_info_test())
-    }
-  }
-}
+      dispatch(test_records_actions.clear_info_test());
+    },
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(NoticeExam);

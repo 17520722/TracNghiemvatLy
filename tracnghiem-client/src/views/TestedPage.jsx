@@ -25,11 +25,11 @@ class TestedPage extends Component {
 
     if (questions_arr.length === 0) {
       this.setState({
-        questions_arr: test_records.setOfQuestions
+        questions_arr: test_records.setOfQuestions,
       });
     }
 
-    saveQuestionRecord()
+    saveQuestionRecord();
   };
 
   renderQuestion = (cauhoi) => {
@@ -50,7 +50,7 @@ class TestedPage extends Component {
                   let ans_true = true;
                   if (test_records.answerSet[index]) {
                     if (
-                      (index + 1) + abcArr[i] ===
+                      index + 1 + abcArr[i] ===
                       test_records.answerSet[index].answerId
                     ) {
                       ans_true = false;
@@ -59,12 +59,13 @@ class TestedPage extends Component {
                   return (
                     <p
                       key={i}
-                      className={`one-answer ${da.isCorrect
-                        ? "color-green"
-                        : ans_true === false
+                      className={`one-answer ${
+                        da.isCorrect
+                          ? "color-green"
+                          : ans_true === false
                           ? "color-red"
                           : ""
-                        }`}
+                      }`}
                     >
                       <MathJax>{`${abcArr[i]}. ${da.content} `}</MathJax>
                     </p>
@@ -72,7 +73,10 @@ class TestedPage extends Component {
                 })}
               </MathJaxContext>
             </div>
-            <div className={`${showImage === true ? "col-4" : ""}`} hidden={!showImage}>
+            <div
+              className={`${showImage === true ? "col-4" : ""}`}
+              hidden={!showImage}
+            >
               <img src={`${c.image}`} className="image-question" />
             </div>
           </div>
@@ -91,10 +95,9 @@ class TestedPage extends Component {
     } else {
       numberAfterDot = number % 10;
     }
-    let position =
-      (window.screen.height / 7.9) * number + (number - 1) * 120;
+    let position = (window.screen.height / 7.9) * number + (number - 1) * 120;
     window.scrollTo(0, position);
-  }
+  };
 
   showListNumber = () => {
     var { questions_arr } = this.state;
@@ -122,7 +125,12 @@ class TestedPage extends Component {
         }
       }
       result.push(
-        <div key={i} id={`num${i + 1}`} className={`number-of-list ${color}`} onClick={this.goToQuestion}>
+        <div
+          key={i}
+          id={`num${i + 1}`}
+          className={`number-of-list ${color}`}
+          onClick={this.goToQuestion}
+        >
           {i + 1}
         </div>
       );
@@ -141,6 +149,10 @@ class TestedPage extends Component {
       <div>
         <Header />
         <div className="row mt-3">
+          <div className="note-color-text">
+            LƯU Ý: Những đáp án đúng sẽ được tô <span className="cgreen">màu xanh</span>, những đáp án sai sẽ được tô 
+            <span className="cred"> màu đỏ</span>
+          </div>
           <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9 list-question-part">
             <div className="list-ques-wrapper">
               {this.renderQuestion(questions_arr)}
@@ -152,7 +164,10 @@ class TestedPage extends Component {
             </div>
             <div className="time-finnish row">
               <div className="col-12 time-title">{`Kết quả đúng: ${test_records.correctAnsNumber}/${numberQuestion}`}</div>
-              <div className="col-12 time-title">{`Điểm: ${((10 / numberQuestion) * test_records.correctAnsNumber).toFixed(2)}`}</div>
+              <div className="col-12 time-title">{`Điểm: ${(
+                (10 / numberQuestion) *
+                test_records.correctAnsNumber
+              ).toFixed(2)}`}</div>
               <div className="col-12 time-title">{`Thời gian làm bài còn: ${test_records.time}`}</div>
 
               <div className="col-6 time-title">
