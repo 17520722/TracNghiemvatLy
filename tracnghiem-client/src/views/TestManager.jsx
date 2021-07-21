@@ -121,28 +121,38 @@ const TestManager = () => {
                                         }
                                         
                                         return (
-                                             <MathJaxContext version={3} config={mathjax_config}>
-                                                  <div className="question-block">
-                                                       { "Câu " + questionNumber + ": "}
-                                                       { question?.content }
-                                                  </div>
+                                             <div>
+                                                  <MathJaxContext version={3} config={mathjax_config}>
+                                                       <div className="question-block">
+                                                            <MathJax>
+                                                                 { "Câu " + questionNumber + ": "}
+                                                                 { question?.content }
+                                                            </MathJax>
+                                                       </div>
+                                                  </MathJaxContext>     
                                                   {
                                                        question?.setOfAnswer.map((ans, ind) => {
                                                             const questionLabel = questionNumber + ansLabel[ind];
                                                             return (
-                                                                 <div className="answer-block" style={
-                                                                           styleAns(correctAnswer, answer.answerId, ans, questionLabel)}>
-                                                                      <span style={{
-                                                                           fontWeight: "bold"
-                                                                      }}>
-                                                                           { ansLabel[ind] + ". "}
-                                                                      </span>
-                                                                      { ans.content }
+                                                                 <div>
+                                                                      <MathJaxContext version={3} config={mathjax_config}>
+                                                                           <div className="answer-block" style={
+                                                                                     styleAns(correctAnswer, answer.answerId, ans, questionLabel)}>
+                                                                                <MathJax>
+                                                                                     <span style={{
+                                                                                          fontWeight: "bold"
+                                                                                     }}>
+                                                                                          { ansLabel[ind] + ". "}
+                                                                                     </span>
+                                                                                     { ans.content }
+                                                                                </MathJax>                                                                              
+                                                                           </div>
+                                                                      </MathJaxContext>
                                                                  </div>
                                                             )
                                                        })
-                                                  }
-                                             </MathJaxContext>
+                                                  }                               
+                                             </div>
                                         )
                                    })
                               }
