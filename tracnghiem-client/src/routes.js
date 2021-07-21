@@ -11,6 +11,7 @@ import EvaluatedPage from "./views/EvaluatedPage";
 import StatisticPage from "./views/StatisticPage";
 import CreatedPage from "./views/CreatedTestPage";
 import UserDetailPage from "./views/UserDetailPage";
+import TestManager from "./views/TestManager";
 
 const routes = [
   {
@@ -57,6 +58,11 @@ const routes = [
     path: "/home/user-detail",
     exact: false,
     component: UserDetailPage,
+  },
+  {
+    path: "/test-manager",
+    exact: false,
+    component: TestManager,
   },
   {
     path: "/login",

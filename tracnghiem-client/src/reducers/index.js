@@ -12,6 +12,7 @@ import evaluated_topics_user from "./user_detail_page/evaluated_topics_user";
 import evaluated_chart from "./user_detail_page/evaluated_chart";
 import choosen_class_home from "./home_page/choosen_class_home";
 import count_data from "./user_detail_page/count_data";
+import test_manager from "./test-manager"
 
 const myReducer = combineReducers({
     selected_topics,
@@ -26,7 +27,8 @@ const myReducer = combineReducers({
     evaluated_topics_user,
     evaluated_chart,
     choosen_class_home,
-    count_data
+    count_data,
+    test_manager,
 });
 
 export default myReducer;
