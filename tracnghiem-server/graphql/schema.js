@@ -23,6 +23,7 @@ const answerSchema = `
      type Answer {
           content: String
           isCorrect: Boolean
+          id: String
      }
 `
 
@@ -52,12 +53,12 @@ const questionSchema = `
 const answeredSchema = `
      input AnsweredInput {
           questionId: ID
-          trueAnswer: String
+          answerId: String
      }
 
      type Answered {
           questionId: ID
-          trueAnswer: String
+          answerId: String
      }
 `
 

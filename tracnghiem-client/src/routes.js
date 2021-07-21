@@ -13,9 +13,9 @@ import CreatedPage from "./views/CreatedTestPage";
 import UserDetailPage from "./views/UserDetailPage";
 import ExportTest from "./views/ExportTest";
 import ExportDocumentTest from "./views/ExportDocumentTest";
+import TestManager from "./views/TestManager";
 
-const routes = [
-  {
+const routes = [{
     path: "/",
     exact: true,
     component: Home,
@@ -69,6 +69,11 @@ const routes = [
     path: "/home/export-test",
     exact: false,
     component: ExportDocumentTest,
+  },
+  {
+    path: "/test-manager",
+    exact: false,
+    component: TestManager,
   },
   {
     path: "/login",

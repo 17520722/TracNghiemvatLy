@@ -29,3 +29,7 @@
 .navbar-brand {
   font-weight: bold;
 }
+
+.nav-menu {
+  display: flex;
+}
