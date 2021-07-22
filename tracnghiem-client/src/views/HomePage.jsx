@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import {Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { getAllQuestion } from "../services/question";
+import { getAllQuestion } from "../graphql/question.service";
 import banner from "../img/banner.png";
 import { getEvaluatedTestsUser } from "../services/topicEvaluate";
 import * as homepage_actions from "../actions/home_page_actions";

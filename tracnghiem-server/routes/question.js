@@ -1,7 +1,6 @@
 const express = require('express');
 const { db } = require('../models/Question');
 const QuestionModel = require('../models/Question');
-const TopicModel = require('../models/Topic')
 const Test = require('../models/Test');
 const User = require('../models/User');
 const router = express.Router();
